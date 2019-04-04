@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">웹툰 모의 앱</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="Send">button_send</string>
+    <string name="wt_name_world_of_girl">소녀의 세계</string>
+    <string name="facebook_app_id">269631800649040</string>
+    <string name="fb_login_protocol_scheme">fb269631800649040</string>
+    <string name="kakao_app_key">367572aeac50364facb72400162065b8</string>
+    <string name="kakao_scheme">kakao367572aeac50364facb72400162065b8</string>
+</resources>

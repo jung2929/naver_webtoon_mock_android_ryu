@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- 스플래시 스크린 액티비티용 테마 -->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:background">@drawable/splash_naver</item>
+    </style>
+</resources>

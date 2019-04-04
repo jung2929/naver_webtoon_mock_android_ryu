@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#320214</color>
+    <color name="clickedMenuBar">#536069</color>
+    <color name="unclickedMenuBar">#ABB5BA</color>
+    <color name="webtoonName">#191919</color>
+    <color name="webtoonCartoonist">#9c9c9c</color>
+    <color name="webtoonStarPoint">#f12727</color>
+    <color name="border">#dfdfdf</color>
+    <color name="webtoonBackground">#f7f7f7</color>
+    <color name="blackfont">#333333</color>
+    <color name="blackfontexplain">#868686</color>
+    <color name="greyfont">#b2b2b2</color>
+    <color name="greyfontbackground">#ededed</color>
+    <color name="naverGreen">#34B773</color>
+    <color name="colorWhite">#FFFFFF</color>
+</resources>
