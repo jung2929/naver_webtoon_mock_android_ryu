@@ -52,18 +52,11 @@ public class NaverLoginActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_naver_login);
-
-
         mContext = this;
-
-
         initData();
         initView();
-
         this.setTitle("NaverLoginActivity Ver." + OAuthLogin.getVersion());
     }
-
-
     private void initData() {
         mOAuthLoginInstance = OAuthLogin.getInstance();
 
@@ -76,7 +69,6 @@ public class NaverLoginActivity extends Activity {
          */
         //mOAuthLoginInstance.init(mContext, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME, OAUTH_callback_intent_url);
     }
-
     private void initView() {
         mApiResultText = (TextView) findViewById(R.id.api_result_text);
 
@@ -91,8 +83,6 @@ public class NaverLoginActivity extends Activity {
 
         updateView();
     }
-
-
     private void updateView() {
         mOauthAT.setText(mOAuthLoginInstance.getAccessToken(mContext));
         mOauthRT.setText(mOAuthLoginInstance.getRefreshToken(mContext));
@@ -100,14 +90,12 @@ public class NaverLoginActivity extends Activity {
         mOauthTokenType.setText(mOAuthLoginInstance.getTokenType(mContext));
         mOAuthState.setText(mOAuthLoginInstance.getState(mContext).toString());
     }
-
     @Override
     protected void onResume() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onResume();
 
     }
-
     /**
      * startOAuthLoginActivity() 호출시 인자로 넘기거나, OAuthLoginButton 에 등록해주면 인증이 종료되는 걸 알 수 있다.
      */
@@ -132,7 +120,6 @@ public class NaverLoginActivity extends Activity {
         }
 
     };
-
     public void onButtonClick(View v) throws Throwable {
 
         switch (v.getId()) {
@@ -161,8 +148,6 @@ public class NaverLoginActivity extends Activity {
                 break;
         }
     }
-
-
     private class DeleteTokenTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -182,7 +167,6 @@ public class NaverLoginActivity extends Activity {
             updateView();
         }
     }
-
     private class RequestApiTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -200,7 +184,6 @@ public class NaverLoginActivity extends Activity {
             mApiResultText.setText((String) content);
         }
     }
-
     private class RefreshTokenTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {

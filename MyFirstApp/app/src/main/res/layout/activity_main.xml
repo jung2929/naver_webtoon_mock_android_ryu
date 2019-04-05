@@ -145,15 +145,17 @@
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tlWebtoonDays"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    app:tabGravity="fill"
+                    android:layout_height="35dp"
                     app:tabIndicatorColor="@color/naverGreen"
                     app:tabIndicatorFullWidth="true"
-                    app:tabIndicatorHeight="40dp"
+                    app:tabIndicatorHeight="35dp"
+                    app:tabInlineLabel="false"
+                    app:tabMaxWidth="50dp"
                     app:tabMode="scrollable"
                     app:tabSelectedTextColor="@color/colorWhite"
                     app:tabTextColor="#000000"
-                    app:tabUnboundedRipple="false" />
+                    app:tabUnboundedRipple="true" />
+
 
                 <GridView
                     android:id="@+id/webtoonlist_main_grid"
@@ -162,8 +164,14 @@
                     android:layout_weight="1"
                     android:background="@color/border"
                     android:numColumns="3"
-                    android:stretchMode="columnWidth" />
+                    android:stretchMode="columnWidth"
+                    android:visibility="gone" />
 
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager_webtoonlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"></android.support.v4.view.ViewPager>
             </LinearLayout>
         </ScrollView>
 

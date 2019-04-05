@@ -12,8 +12,9 @@
         android:roundIcon="@drawable/ic_heart_unchecked"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".NaverLoginActivity"></activity>
-        <activity android:name=".KaKaoLoginActivity"></activity>
+        <activity android:name=".FacebookLoginActivity"></activity>
+        <activity android:name=".NaverLoginActivity" />
+        <activity android:name=".KaKaoLoginActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

@@ -25,7 +25,7 @@ import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
 
 public class LoginActivity extends AppCompatActivity {
 
-    CallbackManager callbackManager;
+    com.facebook.login.widget.LoginButton btnFacebookLogin;
     private OAuthLoginButton mOAuthLoginButton;
 
     @Override
@@ -33,28 +33,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 //페이스북
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_birthday"));
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                    }
 
-                    @Override
-                    public void onCancel() {
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(LoginActivity.this, exception.toString()+"", Toast.LENGTH_SHORT).show();
-                        // App code
-                    }
-                });
-
-
+        btnFacebookLogin=findViewById(R.id.login_button_facebook);
+        btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, FacebookLoginActivity.class);
+                startActivity(intent);
+            }
+        });
 //카카오
         View kakaoLoginButton = findViewById(R.id.com_kakao_login);
         kakaoLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -64,8 +51,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
 //네이버
         mOAuthLoginButton = findViewById(R.id.buttonOAuthLoginImg);
         mOAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
@@ -77,10 +62,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
 }

@@ -30,7 +30,6 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
     AccessTokenTracker accessTokenTracker;//facebook 로그인 토큰 트래커
     AccessToken accessToken;
-
     final int LAYOUT_NUM=5;
     View[] menuBar = new View[LAYOUT_NUM];
     int index=0;//changeLayout 함수 전용
@@ -39,13 +38,13 @@ public class MainActivity extends AppCompatActivity {
     public static String WebtoonNames[]={"소녀의 세계", "복학왕", "데드라이프", "abcd", "abcde", "aaa"};
     public static int WebtoonThumnails[]={R.drawable.thumbnail_world_of_girl, R.drawable.thumbnail_king, R.drawable.thumbnail_dead_life
     ,R.drawable.thumbnail_not_loaded, R.drawable.thumbnail_not_loaded,R.drawable.thumbnail_not_loaded};
-    GridView gridView;
+    GridView gridView[] = new GridView[days.length];
     GridThumnailAdapter gridThumbnailAdapter;
 
     ViewPager viewPager;
     TabLayout tabLayout;
     WebtoonDaysPageAdapter webtoonDaysPageAdapter;
-    ArrayList<GridView> gridList;
+    ArrayList<GridView> gridViewArrayList;
 
     ConstraintLayout tvGotoLogin;
     TextView tvLoginID;
@@ -64,34 +63,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        gridView = findViewById(R.id.webtoonlist_main_grid);
         gridThumbnailAdapter = new GridThumnailAdapter(this);
         gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12","모랑지",false,false);
         gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33","기안84",false,false);
         gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44","모랑지",false,false);
 
-        gridView.setAdapter(gridThumbnailAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ItemGridThumbnail item =(ItemGridThumbnail)gridView.getItemAtPosition(position);
-                if(item.isNone==true) return;
-                String webtoonName=item.getTitle();
-                Intent intent = new Intent(MainActivity.this, WebtoonList.class);
-                intent.putExtra("webtoonName", webtoonName);
-                startActivity(intent);
-            }
-        });
+        for(int i=0; i<days.length;i++) {
+            gridView[i]=new GridView(this);
+            gridView[i].setNumColumns(3);
+            gridView[i].setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+            gridView[i].setBackgroundResource(R.color.border);
 
+            gridView[i].setAdapter(gridThumbnailAdapter);
+            int finalI = i;
+            gridView[i].setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ItemGridThumbnail item = (ItemGridThumbnail) gridView[finalI].getItemAtPosition(position);
+                    if (item.isNone == true) return;
+                    String webtoonName = item.getTitle();
+                    Intent intent = new Intent(MainActivity.this, WebtoonList.class);
+                    intent.putExtra("webtoonName", webtoonName);
+                    startActivity(intent);
+                }
+            });
+        }
         tabLayout = findViewById(R.id.tlWebtoonDays);
-        for(int i=0; i<days.length; i++)
+        for(int i=0; i<days.length; i++) {
+           /* View customView = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
+            TextView tv = customView.findViewById(R.id.tab_text);
+            tv.setText(days[i]);*/
             tabLayout.addTab(tabLayout.newTab().setText(days[i]));
-   /*     gridList = new ArrayList<>();
-        gridList.add(gridView);
-        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridList,MainActivity.this);
+        }
+        gridViewArrayList = new ArrayList<>();
+        for(int i=0; i<days.length;i++){
+        gridViewArrayList.add(gridView[i]);
+        }
+        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewArrayList,MainActivity.this);
         viewPager=findViewById(R.id.viewpager_webtoonlist);
         viewPager.setAdapter(webtoonDaysPageAdapter);
-*/
+
         menuBar[0] = findViewById(R.id.WebtoonTabScrollView);
         menuBar[1] = findViewById(R.id.SettingTabScrollView);
         menuBar[2] = findViewById(R.id.SettingTabScrollView);

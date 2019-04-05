@@ -121,15 +121,23 @@
 
             <Button
                 android:id="@+id/buttonOAuth"
-                android:layout_height="50dp" android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:onClick="onButtonClick"
                 android:text="인증하기" />
+
             <Button
                 android:id="@+id/buttonOAuthLogout"
-                android:layout_height="50dp" android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:onClick="onButtonClick"
                 android:text="로그아웃" />
+
             <Button
                 android:id="@+id/buttonOAuthDeleteToken"
-                android:layout_height="50dp" android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:onClick="onButtonClick"
                 android:text="연동끊기" />
 
         </LinearLayout>
@@ -142,12 +150,16 @@
 
             <Button
                 android:id="@+id/buttonRefresh"
-                android:layout_height="50dp" android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:onClick="onButtonClick"
                 android:text="토큰다시받기" />
 
             <Button
                 android:id="@+id/buttonVerifier"
-                android:layout_height="50dp" android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:onClick="onButtonClick"
                 android:text="API호출" />
         </LinearLayout>
         <LinearLayout

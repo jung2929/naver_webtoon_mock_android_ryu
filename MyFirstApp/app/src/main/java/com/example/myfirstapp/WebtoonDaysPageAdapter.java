@@ -37,6 +37,6 @@ public class WebtoonDaysPageAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return view == (View)o;
+        return view.equals(o);
     }
 }
