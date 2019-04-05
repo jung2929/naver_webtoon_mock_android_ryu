@@ -34,7 +34,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 //페이스북
         callbackManager = CallbackManager.Factory.create();
-
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_birthday"));
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override

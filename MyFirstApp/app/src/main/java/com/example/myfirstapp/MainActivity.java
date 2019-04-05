@@ -2,6 +2,7 @@ package com.example.myfirstapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     WebtoonDaysPageAdapter webtoonDaysPageAdapter;
     ArrayList<GridView> gridList;
 
-    TextView tvGotoLogin;
+    ConstraintLayout tvGotoLogin;
     TextView tvLoginID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,13 +125,11 @@ public class MainActivity extends AppCompatActivity {
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         tvLoginID = findViewById(R.id.tvLoginID);
         if (isLoggedIn == true) {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_birthday"));
             GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     try {
+                        System.out.println(object);
                         String birth = object.getString("birthday");
                         String name = object.getString("name");
                         tvLoginID.setText(name);
