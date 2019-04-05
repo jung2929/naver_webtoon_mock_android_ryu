@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 
@@ -106,6 +108,8 @@ public class WebtoonListAdapter extends BaseAdapter{
             case ITEM_AD:
                 if (convertView == null) {
                     convertView = layoutInflater.inflate(R.layout.item_list_ad, null);
+                    ImageView iv = convertView.findViewById(R.id.item_ad);
+                    Glide.with(context).load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg").into(iv);
                 }
                 break;
             case ITEM_COOKIE:
