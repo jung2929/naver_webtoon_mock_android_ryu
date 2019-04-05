@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/WebtoonLayout"
@@ -160,10 +160,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:numColumns="3"
-                    android:stretchMode="columnWidth"
                     android:background="@color/border"
-                    />
+                    android:numColumns="3"
+                    android:stretchMode="columnWidth" />
 
             </LinearLayout>
         </ScrollView>
@@ -172,7 +171,7 @@
             android:id="@+id/SettingTabScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -194,7 +193,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/goto_login_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="1px"
@@ -208,6 +206,7 @@
                     android:textStyle="bold" />
 
                 <android.support.constraint.ConstraintLayout
+                    android:id="@+id/goto_login_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="1dp">
@@ -239,6 +238,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
+                            android:id="@+id/tvLoginID"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#ffffff"

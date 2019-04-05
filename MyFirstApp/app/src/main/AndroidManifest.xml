@@ -12,7 +12,7 @@
         android:roundIcon="@drawable/ic_heart_unchecked"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".NaverLogin"></activity>
+        <activity android:name=".NaverLoginActivity"></activity>
         <activity android:name=".KaKaoLoginActivity"></activity>
 
         <meta-data

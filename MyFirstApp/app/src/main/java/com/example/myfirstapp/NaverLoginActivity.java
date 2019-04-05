@@ -22,9 +22,9 @@ import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
  *
  * @author naver
  */
-public class NaverLogin extends Activity {
+public class NaverLoginActivity extends Activity {
 
-    private static final String TAG = "NaverLogin";
+    private static final String TAG = "NaverLoginActivity";
 
     /**
      * client 정보를 넣어준다.
@@ -60,7 +60,7 @@ public class NaverLogin extends Activity {
         initData();
         initView();
 
-        this.setTitle("NaverLogin Ver." + OAuthLogin.getVersion());
+        this.setTitle("NaverLoginActivity Ver." + OAuthLogin.getVersion());
     }
 
 
@@ -137,7 +137,7 @@ public class NaverLogin extends Activity {
 
         switch (v.getId()) {
             case R.id.buttonOAuth: {
-                mOAuthLoginInstance.startOauthLoginActivity(NaverLogin.this, mOAuthLoginHandler);
+                mOAuthLoginInstance.startOauthLoginActivity(NaverLoginActivity.this, mOAuthLoginHandler);
                 break;
             }
             case R.id.buttonVerifier: {

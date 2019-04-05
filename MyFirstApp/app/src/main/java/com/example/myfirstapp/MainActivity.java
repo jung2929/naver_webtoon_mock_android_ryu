@@ -13,9 +13,23 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
+    AccessTokenTracker accessTokenTracker;//facebook 로그인 토큰 트래커
+    AccessToken accessToken;
+
     final int LAYOUT_NUM=5;
     View[] menuBar = new View[LAYOUT_NUM];
     int index=0;//changeLayout 함수 전용
@@ -33,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<GridView> gridList;
 
     TextView tvGotoLogin;
-
+    TextView tvLoginID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         searchButton = findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -53,16 +68,6 @@ public class MainActivity extends AppCompatActivity {
         gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12","모랑지",false,false);
         gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33","기안84",false,false);
         gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_dead_life, WebtoonNames[2], "9.44","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_dead_life, WebtoonNames[2], "9.44","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_world_of_girl, WebtoonNames[0], "9.12","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_king, WebtoonNames[1], "9.33","기안84",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_world_of_girl, WebtoonNames[0], "9.12","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_king, WebtoonNames[1], "9.33","기안84",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_world_of_girl, WebtoonNames[0], "9.12","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_king, WebtoonNames[1], "9.33","기안84",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_dead_life, WebtoonNames[2], "9.44","모랑지",false,false);
-        gridThumbnailAdapter.addItem(R.drawable.thumbnail_world_of_girl, WebtoonNames[0], "9.12","모랑지",false,false);
 
         gridView.setAdapter(gridThumbnailAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -100,6 +105,51 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //페이스북 로그인
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+                accessToken=AccessToken.getCurrentAccessToken();
+            }
+        };
+        accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        tvLoginID = findViewById(R.id.tvLoginID);
+        if (isLoggedIn == true) {
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_birthday"));
+            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    try {
+                        String birth = object.getString("birthday");
+                        String name = object.getString("name");
+                        tvLoginID.setText(name);
+                        ;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            Bundle parameters = new Bundle();
+            //https://developers.facebook.com/docs/facebook-login/permissions/ 권한
+            //https://developers.facebook.com/docs/graph-api/using-graph-api/
+            parameters.putString("fields", "id,email,name,birthday");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
+        else {
+            tvLoginID.setText("로그인하세요.");
+        }
     }
 
     private void changeLayout(int n){

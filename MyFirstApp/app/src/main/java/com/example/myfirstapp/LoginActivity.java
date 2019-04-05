@@ -32,35 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        if(isLoggedIn == true) {
-            System.out.println(accessToken.getUserId());
-            System.out.println(accessToken.getToken());
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_birthday"));
-            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    try {
-                        String birth = object.getString("birthday");
-                        String name = object.getString("name");
-                        TextView tvName = findViewById(R.id.facebook_name);
-                        tvName.setText("Facebook 이름 : "+name +"\n"+"Facebook 생일 : "+birth);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            Bundle parameters = new Bundle();
-            //https://developers.facebook.com/docs/facebook-login/permissions/ 권한
-            //https://developers.facebook.com/docs/graph-api/using-graph-api/
-            parameters.putString("fields", "id,email,name,birthday");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
+//페이스북
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -98,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         mOAuthLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, NaverLogin.class);
+                Intent intent = new Intent(LoginActivity.this, NaverLoginActivity.class);
                 startActivity(intent);
             }
         });
