@@ -7,10 +7,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,14 +80,6 @@ public class MainActivity extends AppCompatActivity {
         gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
         gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
         gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
 
         for (int i = 0; i < days.length; i++) {
             gridView[i] = new GridView(this);
@@ -107,13 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        tabLayout = findViewById(R.id.tlWebtoonDays);
-        for (int i = 0; i < days.length; i++) {
-           /* View customView = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
-            TextView tv = customView.findViewById(R.id.tab_text);
-            tv.setText(days[i]);*/
-            tabLayout.addTab(tabLayout.newTab().setText(days[i]));
-        }
+
         gridViewArrayList = new ArrayList<>();
         for (int i = 0; i < days.length; i++) {
             gridViewArrayList.add(gridView[i]);
@@ -121,7 +109,48 @@ public class MainActivity extends AppCompatActivity {
         webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewArrayList, MainActivity.this);
         viewPager = findViewById(R.id.viewpager_webtoonlist);
         viewPager.setAdapter(webtoonDaysPageAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
 
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                //이게 네이버웹툰 방식인듯
+                tabLayout.setScrollPosition(i,0f,true);
+                //tabLayout.getTabAt(i).select();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        tabLayout = findViewById(R.id.tlWebtoonDays);
+        for (int i = 0; i < days.length; i++) {
+           //View customView = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
+           // TextView tv = customView.findViewById(R.id.tab_text);
+           // tv.setText(days[i]);
+           TabLayout.Tab t=tabLayout.newTab();
+           t.setText(days[i]);
+            tabLayout.addTab(t);
+        }
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
         menuBar[0] = findViewById(R.id.WebtoonTabScrollView);
         menuBar[1] = findViewById(R.id.SettingTabScrollView);
         menuBar[2] = findViewById(R.id.SettingTabScrollView);

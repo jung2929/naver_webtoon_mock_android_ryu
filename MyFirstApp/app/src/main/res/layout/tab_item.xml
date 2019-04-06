@@ -8,5 +8,7 @@
     android:layout_height="wrap_content"
     android:textColor="@color/blackfont"
     android:gravity="center_vertical|center_horizontal"
+    android:textSize="15sp"
+    android:background="@color/colorWhite"
     />
 </LinearLayout>

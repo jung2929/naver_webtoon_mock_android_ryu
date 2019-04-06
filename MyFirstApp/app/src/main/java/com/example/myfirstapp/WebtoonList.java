@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,6 +80,14 @@ public class WebtoonList extends AppCompatActivity {
             }
         });
         listView.setAdapter(adapter);
+
+        FrameLayout back = findViewById(R.id.btn_back_webtoon_list);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 }
