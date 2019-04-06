@@ -1,6 +1,7 @@
 package com.example.myfirstapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
@@ -184,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         tvLoginID = findViewById(R.id.tvLoginID);
+        ImageView ivMyPicture = findViewById(R.id.my_picture);
         if (isLoggedIn == true) {
             GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                 @Override
@@ -191,8 +195,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         System.out.println(object);
                         String birth = object.getString("birthday");
+                        String picture = "https://graph.facebook.com/"+object.getString("id")+"/picture?type=normal";
                         String name = object.getString("name");
                         tvLoginID.setText(name);
+                        Glide.with(MainActivity.this).load(picture).into(ivMyPicture);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -201,11 +207,12 @@ public class MainActivity extends AppCompatActivity {
             Bundle parameters = new Bundle();
             //https://developers.facebook.com/docs/facebook-login/permissions/ 권한
             //https://developers.facebook.com/docs/graph-api/using-graph-api/
-            parameters.putString("fields", "id,email,name,birthday");
+            parameters.putString("fields", "id,email,name,birthday,picture");
             request.setParameters(parameters);
             request.executeAsync();
         }
         else {
+            Glide.with(MainActivity.this).load("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png").into(ivMyPicture);
             tvLoginID.setText("로그인하세요.");
         }
 
