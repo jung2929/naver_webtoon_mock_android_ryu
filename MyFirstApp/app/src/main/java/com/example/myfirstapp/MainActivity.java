@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout tvGotoLogin;
     TextView tvLoginID;
 
+    Retrofit airRetrofit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,46 +135,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //------retrofit 사용------------------
+        /*Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();*/
+        airRetrofit = new Retrofit.Builder()
+                .baseUrl("http://openapi.airkorea.or.kr/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        Retrofit airRetrofit = new Retrofit.Builder()
-                .baseUrl("http://openapi.airkorea.or.kr/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
         GitHubService service = retrofit.create(GitHubService.class);
-
-        AirService airService = airRetrofit.create(AirService.class);
-        Call<AirKorea> airState = airService.getAir("종로구");
 
         String str = "veev23";
         Call<List<Repo>> repos = service.listRepos(str);
-
-     /*   RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setEndpoint(API_LOCATION)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setClient(new OkClient(new OkHttpClient()));
-*/
-        airState.enqueue(new Callback<AirKorea>() {
-            @Override
-            public void onResponse(Call<AirKorea> call, Response<AirKorea> response) {
-                AirKorea a = response.body();
-                System.out.println("------확인---------");
-                System.out.println("getList:"+a.getList());
-                System.out.println("getParm:"+a.getParm().getDataTerm()+","+a.getParm().getStationName());
-                System.out.println("gettotal:"+a.getTotalCount());
-            }
-            @Override
-            public void onFailure(Call<AirKorea> call, Throwable t) {
-                System.out.println("에러내용 : "+t.toString());
-                }
-        });
 
         repos.enqueue(new Callback<List<Repo>>() {
             @Override
@@ -230,6 +208,27 @@ public class MainActivity extends AppCompatActivity {
         else {
             tvLoginID.setText("로그인하세요.");
         }
+
+        //대기 상황
+        AirService airService = airRetrofit.create(AirService.class);
+        Call<AirKorea> airState = airService.getAir("종로구");
+
+        airState.enqueue(new Callback<AirKorea>() {
+            @Override
+            public void onResponse(Call<AirKorea> call, Response<AirKorea> response) {
+                AirKorea a = response.body();
+                try {
+                    Toast.makeText(MainActivity.this, a.getList().get(0).getDataTime() + "시 " + a.getParm().getStationName() + "의 일산화탄소농도 : " + a.getList().get(0).getCoValue(), Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<AirKorea> call, Throwable t) {
+                System.out.println("에러내용 : "+t.toString());
+            }
+        });
+
     }
 
     private void changeLayout(int n){
