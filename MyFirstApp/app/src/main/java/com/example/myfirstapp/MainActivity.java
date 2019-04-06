@@ -1,13 +1,11 @@
 package com.example.myfirstapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -16,16 +14,24 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public class MainActivity extends AppCompatActivity {
     AccessTokenTracker accessTokenTracker;//facebook 로그인 토큰 트래커
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     ConstraintLayout tvGotoLogin;
     TextView tvLoginID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +71,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         gridThumbnailAdapter = new GridThumnailAdapter(this);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12","모랑지",false,false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33","기안84",false,false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44","모랑지",false,false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
+        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
 
-        for(int i=0; i<days.length;i++) {
-            gridView[i]=new GridView(this);
+        for (int i = 0; i < days.length; i++) {
+            gridView[i] = new GridView(this);
             gridView[i].setNumColumns(3);
             gridView[i].setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
             gridView[i].setBackgroundResource(R.color.border);
@@ -89,18 +104,18 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         tabLayout = findViewById(R.id.tlWebtoonDays);
-        for(int i=0; i<days.length; i++) {
+        for (int i = 0; i < days.length; i++) {
            /* View customView = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
             TextView tv = customView.findViewById(R.id.tab_text);
             tv.setText(days[i]);*/
             tabLayout.addTab(tabLayout.newTab().setText(days[i]));
         }
         gridViewArrayList = new ArrayList<>();
-        for(int i=0; i<days.length;i++){
-        gridViewArrayList.add(gridView[i]);
+        for (int i = 0; i < days.length; i++) {
+            gridViewArrayList.add(gridView[i]);
         }
-        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewArrayList,MainActivity.this);
-        viewPager=findViewById(R.id.viewpager_webtoonlist);
+        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewArrayList, MainActivity.this);
+        viewPager = findViewById(R.id.viewpager_webtoonlist);
         viewPager.setAdapter(webtoonDaysPageAdapter);
 
         menuBar[0] = findViewById(R.id.WebtoonTabScrollView);
@@ -117,13 +132,69 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
+        //------retrofit 사용------------------
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+        Retrofit airRetrofit = new Retrofit.Builder()
+                .baseUrl("http://openapi.airkorea.or.kr/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        GitHubService service = retrofit.create(GitHubService.class);
+
+        AirService airService = airRetrofit.create(AirService.class);
+        Call<AirKorea> airState = airService.getAir("종로구");
+
+        String str = "veev23";
+        Call<List<Repo>> repos = service.listRepos(str);
+
+     /*   RestAdapter.Builder builder = new RestAdapter.Builder()
+                .setEndpoint(API_LOCATION)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setClient(new OkClient(new OkHttpClient()));
+*/
+        airState.enqueue(new Callback<AirKorea>() {
+            @Override
+            public void onResponse(Call<AirKorea> call, Response<AirKorea> response) {
+                AirKorea a = response.body();
+                System.out.println("------확인---------");
+                System.out.println("getList:"+a.getList());
+                System.out.println("getParm:"+a.getParm().getDataTerm()+","+a.getParm().getStationName());
+                System.out.println("gettotal:"+a.getTotalCount());
+            }
+            @Override
+            public void onFailure(Call<AirKorea> call, Throwable t) {
+                System.out.println("에러내용 : "+t.toString());
+                }
+        });
+
+        repos.enqueue(new Callback<List<Repo>>() {
+            @Override
+            public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
+                for(int i=0; i<response.body().size();i++){
+                    System.out.println(i+"번아이디 : "+response.body().get(i).getId());
+                    System.out.println(i+"번이름 : "+response.body().get(i).getName());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Repo>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "에러:"+t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     @Override
     protected void onResume() {
         super.onResume();
 
-        //페이스북 로그인
+        //페이스북 로그인 하였는지?
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(
@@ -144,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
                         String birth = object.getString("birthday");
                         String name = object.getString("name");
                         tvLoginID.setText(name);
-                        ;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -185,5 +255,39 @@ public class MainActivity extends AppCompatActivity {
     }
     public void changeToMenuBarSetting(View v){
         changeLayout(4);
+    }
+
+
+
+    public interface GitHubService {
+        @GET("/users/{user}/repos")
+        Call<List<Repo>> listRepos(@Path("user") String user);
+    }
+    public interface  AirService{
+        @GET("openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=IbUJs05q2%2B93Wy%2BKbqxYhI%2BnnNFOLoyRB8tKb66rp95UVccJ5ZTgRAX%2BV0ckS84k4bufsPzg7SRCwqGcuqWHnw%3D%3D&_returnType=json")
+        Call<AirKorea> getAir(@Query("stationName") String stationName);
+    }
+    private class Repo{
+        String id;
+        String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+    }
+    private class test {
+
     }
 }

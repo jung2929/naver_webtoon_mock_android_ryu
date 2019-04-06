@@ -38,8 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, FacebookLoginActivity.class);
-                startActivity(intent);
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                if(isLoggedIn==false) {
+                    Intent intent = new Intent(LoginActivity.this, FacebookLoginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 //카카오
