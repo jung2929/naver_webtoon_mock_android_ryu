@@ -1,13 +1,15 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.enitites;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AirKorea {
+import java.util.List;
+
+public class AirKoreaData {
 
     @SerializedName("list")
     @Expose
-    private java.util.List<com.example.myfirstapp.AirKorea.List> list = null;
+    private List<WeatherList> weatherList = null;
     @SerializedName("parm")
     @Expose
     private Parm Parm;
@@ -18,27 +20,27 @@ public class AirKorea {
     @Expose
     private Integer totalCount;
 
-    public java.util.List<com.example.myfirstapp.AirKorea.List> getList() {
-        return list;
+    public List<WeatherList> getWeatherList() {
+        return weatherList;
     }
 
-    public void setList(java.util.List<com.example.myfirstapp.AirKorea.List> list) {
-        this.list = list;
+    public void setWeatherList(List<WeatherList> weatherList) {
+        this.weatherList = weatherList;
     }
 
-    public AirKorea.Parm getParm() {
+    public AirKoreaData.Parm getParm() {
         return Parm;
     }
 
-    public void setParm(AirKorea.Parm parm) {
+    public void setParm(AirKoreaData.Parm parm) {
         Parm = parm;
     }
 
-    public AirKorea.ArpltnInforInqireSvcVo getArpltnInforInqireSvcVo() {
+    public AirKoreaData.ArpltnInforInqireSvcVo getArpltnInforInqireSvcVo() {
         return ArpltnInforInqireSvcVo;
     }
 
-    public void setArpltnInforInqireSvcVo(AirKorea.ArpltnInforInqireSvcVo arpltnInforInqireSvcVo) {
+    public void setArpltnInforInqireSvcVo(AirKoreaData.ArpltnInforInqireSvcVo arpltnInforInqireSvcVo) {
         ArpltnInforInqireSvcVo = arpltnInforInqireSvcVo;
     }
 
@@ -418,7 +420,7 @@ public class AirKorea {
 
     }
 
-    public class List {
+    public class WeatherList {
 
         @SerializedName("_returnType")
         @Expose

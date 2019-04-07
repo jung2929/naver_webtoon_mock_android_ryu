@@ -3,6 +3,8 @@ package com.example.myfirstapp;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.myfirstapp.enitites.WebtoonData;
+import com.example.myfirstapp.enitites.WebtoonListData;
 import com.kakao.auth.ApprovalType;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.IApplicationConfig;
@@ -10,7 +12,16 @@ import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
 
+import java.util.ArrayList;
+
 public class GlobalApplication extends Application {
+
+
+
+
+    public static ArrayList<WebtoonListData> webtoonList = new ArrayList<>();
+
+
     private static volatile GlobalApplication instance = null;
 
     public static GlobalApplication getGlobalApplicationContext() {
@@ -69,6 +80,9 @@ public class GlobalApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        DataManager.initWebtoonDummyData(webtoonList);
+
         KakaoSDK.init(new KakaoSDKAdapter());
     }
 }

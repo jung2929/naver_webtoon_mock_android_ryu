@@ -1,32 +1,27 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.activities;
 
 import android.content.Intent;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.myfirstapp.R;
+import com.example.myfirstapp.adapter.WebtoonContentsListAdapter;
+import com.example.myfirstapp.enitites.WebtoonContentsData;
 
-public class WebtoonList extends AppCompatActivity {
+public class WebtoonListActivity extends AppCompatActivity {
     Intent intentGet;
     TextView tvWebtoonName;
     String webtoonName;
 
     ListView listView;
-    WebtoonListAdapter adapter;
+    WebtoonContentsListAdapter adapter;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +38,9 @@ public class WebtoonList extends AppCompatActivity {
         else if(webtoonName.equals("소녀의 세계")) thumbnail = R.drawable.thumbnail_1_1;
         else if(webtoonName.equals("데드라이프")) thumbnail = R.drawable.thumbnail_dead_life_1;
 
-        adapter = new WebtoonListAdapter(this);
-        adapter.addItem(WebtoonListAdapter.ITEM_AD);
-        adapter.addItem(WebtoonListAdapter.ITEM_COOKIE);
+        adapter = new WebtoonContentsListAdapter(this);
+        adapter.addItem(WebtoonContentsListAdapter.ITEM_AD);
+        adapter.addItem(WebtoonContentsListAdapter.ITEM_COOKIE);
 
         for(int i=1; i<20; i++){
             adapter.addItem(thumbnail, webtoonName+" "+i+"화", "9.99", "19.03."+i, false);
@@ -55,24 +50,24 @@ public class WebtoonList extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListItem l = (ListItem)listView.getItemAtPosition(position);
-                switch (l.getItemtype()){
-                    case WebtoonListAdapter.ITEM_AD:
-                        Toast.makeText(WebtoonList.this, "광고", Toast.LENGTH_SHORT).show();
+                WebtoonContentsData l = (WebtoonContentsData)listView.getItemAtPosition(position);
+                switch (l.getmItemType()){
+                    case WebtoonContentsListAdapter.ITEM_AD:
+                        Toast.makeText(WebtoonListActivity.this, "광고", Toast.LENGTH_SHORT).show();
                         break;
-                    case WebtoonListAdapter.ITEM_COOKIE:
-                        Toast.makeText(WebtoonList.this, "미리보기", Toast.LENGTH_SHORT).show();
+                    case WebtoonContentsListAdapter.ITEM_COOKIE:
+                        Toast.makeText(WebtoonListActivity.this, "미리보기", Toast.LENGTH_SHORT).show();
                         break;
-                    case WebtoonListAdapter.ITEM_WEBTOON_LIST:
-                        Intent intent = new Intent(WebtoonList.this, WebtoonViewer.class);
+                    case WebtoonContentsListAdapter.ITEM_WEBTOON_LIST:
+                        Intent intent = new Intent(WebtoonListActivity.this, WebtoonViewerActivity.class);
                         l.setRead(true);
 
                         LinearLayout llPage = view.findViewById(R.id.list_page);//읽은척
-                        TextView tvTitle = view.findViewById(R.id.list_title);
+                        TextView tvTitle = view.findViewById(R.id.webtoon_title);
                         llPage.setBackgroundResource(R.drawable.read_mark);
                         tvTitle.setTextColor(getResources().getColor(R.color.blackfontexplain));
 
-                        String str = l.getTvTitle();
+                        String str = l.getmTitle();
                         intent.putExtra("webtoonTitle", str);//웹툰 회차 이름 전송
                         startActivity(intent);
                         break;

@@ -11,10 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_heart_unchecked"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".FacebookLoginActivity"></activity>
-        <activity android:name=".NaverLoginActivity" />
-        <activity android:name=".KaKaoLoginActivity" />
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:usesCleartextTraffic="true"
+        >
+        <activity android:name=".activities.FacebookLoginActivity"></activity>
+        <activity android:name=".activities.NaverLoginActivity" />
+        <activity android:name=".activities.KaKaoLoginActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -30,9 +32,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".activities.LoginActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,33 +42,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".WebtoonSearch"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.WebtoonSearchActivity"
+            android:parentActivityName=".activities.MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".WebtoonList"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.WebtoonListActivity"
+            android:parentActivityName=".activities.MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".WebtoonViewer"
-            android:parentActivityName=".WebtoonList">
+            android:name=".activities.WebtoonViewerActivity"
+            android:parentActivityName=".activities.WebtoonListActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".WebtoonList" />
+                android:value=".activities.WebtoonListActivity" />
         </activity>
 
         <meta-data

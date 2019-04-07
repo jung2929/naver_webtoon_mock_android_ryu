@@ -1,19 +1,15 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.myfirstapp.R;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
-import com.kakao.network.ErrorResult;
-import com.kakao.usermgmt.UserManagement;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class KaKaoLoginActivity extends AppCompatActivity {
     private SessionCallback callback;

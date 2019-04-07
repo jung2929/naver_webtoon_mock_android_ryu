@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.example.myfirstapp.WebtoonList">
+    tools:context="com.example.myfirstapp.activities.WebtoonListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

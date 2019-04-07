@@ -1,4 +1,4 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myfirstapp.R;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;

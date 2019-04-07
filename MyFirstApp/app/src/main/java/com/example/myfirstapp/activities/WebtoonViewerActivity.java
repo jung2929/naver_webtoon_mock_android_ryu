@@ -1,4 +1,4 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.activities;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class WebtoonViewer extends AppCompatActivity {
+import com.example.myfirstapp.R;
+
+public class WebtoonViewerActivity extends AppCompatActivity {
 
     MediaPlayer m;
     TextView tvTitle;
@@ -25,7 +27,7 @@ public class WebtoonViewer extends AppCompatActivity {
         tvTitle = findViewById(R.id.webtoonTitle);
         tvTitle.setText(str);
 
-        m = MediaPlayer.create(WebtoonViewer.this, R.raw.bgm);
+        m = MediaPlayer.create(WebtoonViewerActivity.this, R.raw.bgm);
         m.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {

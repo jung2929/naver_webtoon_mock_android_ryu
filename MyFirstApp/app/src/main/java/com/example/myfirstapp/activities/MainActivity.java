@@ -1,33 +1,39 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.activities;
 
 import android.content.Intent;
-import android.media.Image;
+import android.service.autofill.DateValueSanitizer;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.myfirstapp.adapter.WebtoonListAdapter;
+import com.example.myfirstapp.R;
+import com.example.myfirstapp.adapter.WebtoonDaysPageAdapter;
+import com.example.myfirstapp.enitites.AirKoreaData;
+import com.example.myfirstapp.enitites.WebtoonData;
+import com.example.myfirstapp.enitites.WebtoonListData;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +44,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+import static com.example.myfirstapp.GlobalApplication.webtoonList;
+
 public class MainActivity extends AppCompatActivity {
     AccessTokenTracker accessTokenTracker;//facebook 로그인 토큰 트래커
     AccessToken accessToken;
@@ -46,11 +54,9 @@ public class MainActivity extends AppCompatActivity {
     int index=0;//changeLayout 함수 전용
     View searchButton;
     String days[] = {"월","화","수","목","금","토","일","신작","완결"};
-    public static String WebtoonNames[]={"소녀의 세계", "복학왕", "데드라이프", "abcd", "abcde", "aaa"};
-    public static int WebtoonThumnails[]={R.drawable.thumbnail_world_of_girl, R.drawable.thumbnail_king, R.drawable.thumbnail_dead_life
-    ,R.drawable.thumbnail_not_loaded, R.drawable.thumbnail_not_loaded,R.drawable.thumbnail_not_loaded};
+
     GridView gridView[] = new GridView[days.length];
-    GridThumnailAdapter gridThumbnailAdapter;
+    WebtoonListAdapter gridThumbnailAdapter;
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -71,15 +77,17 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), WebtoonSearch.class);
+                Intent intent = new Intent(getApplicationContext(), WebtoonSearchActivity.class);
                 startActivity(intent);
             }
         });
 
-        gridThumbnailAdapter = new GridThumnailAdapter(this);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[0], WebtoonNames[0], "9.12", "모랑지", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[1], WebtoonNames[1], "9.33", "기안84", false, false);
-        gridThumbnailAdapter.addItem(WebtoonThumnails[2], WebtoonNames[2], "9.44", "모랑지", false, false);
+        gridThumbnailAdapter = new WebtoonListAdapter(this, R.layout.item_grid_webtoon,WebtoonListAdapter.TYPE_GRID);
+
+
+        for(WebtoonListData e : webtoonList){
+            gridThumbnailAdapter.addItem(e);
+        }
 
         for (int i = 0; i < days.length; i++) {
             gridView[i] = new GridView(this);
@@ -92,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
             gridView[i].setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ItemGridThumbnail item = (ItemGridThumbnail) gridView[finalI].getItemAtPosition(position);
-                    if (item.isNone == true) return;
+                    WebtoonListData item = (WebtoonListData) gridView[finalI].getItemAtPosition(position);
+                    if (item.isNone()) return;
                     String webtoonName = item.getTitle();
-                    Intent intent = new Intent(MainActivity.this, WebtoonList.class);
+                    Intent intent = new Intent(MainActivity.this, WebtoonListActivity.class);
                     intent.putExtra("webtoonName", webtoonName);
                     startActivity(intent);
                 }
@@ -199,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "에러:"+t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        //현재 요일에 따른 탭 자동선택
+        Calendar c=new GregorianCalendar(Locale.KOREA);
+        int day = (c.get(c.DAY_OF_WEEK)+5)%7;
+        tabLayout.getTabAt(day).select();
+       // Toast.makeText(this, c.get(c.MINUTE)+" "+day, Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onResume() {
@@ -247,20 +261,20 @@ public class MainActivity extends AppCompatActivity {
 
         //대기 상황
         AirService airService = airRetrofit.create(AirService.class);
-        Call<AirKorea> airState = airService.getAir("종로구");
+        Call<AirKoreaData> airState = airService.getAir("종로구");
 
-        airState.enqueue(new Callback<AirKorea>() {
+        airState.enqueue(new Callback<AirKoreaData>() {
             @Override
-            public void onResponse(Call<AirKorea> call, Response<AirKorea> response) {
-                AirKorea a = response.body();
+            public void onResponse(Call<AirKoreaData> call, Response<AirKoreaData> response) {
+                AirKoreaData a = response.body();
                 try {
-                    Toast.makeText(MainActivity.this, a.getList().get(0).getDataTime() + "시 " + a.getParm().getStationName() + "의 일산화탄소농도 : " + a.getList().get(0).getCoValue(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, a.getWeatherList().get(0).getDataTime() + "시 " + a.getParm().getStationName() + "의 일산화탄소농도 : " + a.getWeatherList().get(0).getCoValue(), Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }
             @Override
-            public void onFailure(Call<AirKorea> call, Throwable t) {
+            public void onFailure(Call<AirKoreaData> call, Throwable t) {
                 System.out.println("에러내용 : "+t.toString());
             }
         });
@@ -300,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public interface  AirService{
         @GET("openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=IbUJs05q2%2B93Wy%2BKbqxYhI%2BnnNFOLoyRB8tKb66rp95UVccJ5ZTgRAX%2BV0ckS84k4bufsPzg7SRCwqGcuqWHnw%3D%3D&_returnType=json")
-        Call<AirKorea> getAir(@Query("stationName") String stationName);
+        Call<AirKoreaData> getAir(@Query("stationName") String stationName);
     }
     private class Repo{
         String id;

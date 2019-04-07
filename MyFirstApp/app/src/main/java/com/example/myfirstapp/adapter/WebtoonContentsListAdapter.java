@@ -1,4 +1,4 @@
-package com.example.myfirstapp;
+package com.example.myfirstapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,22 +10,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.myfirstapp.R;
+import com.example.myfirstapp.enitites.WebtoonContentsData;
 
 import java.util.ArrayList;
 
 
-public class WebtoonListAdapter extends BaseAdapter{
+public class WebtoonContentsListAdapter extends BaseAdapter{
 
     public static final int ITEM_COOKIE = 0 ;
     public static final int ITEM_AD = 1 ;
     public static final int ITEM_WEBTOON_LIST = 2 ;
     private static final int ITEM_NUMBER = 3 ;
     Context context;
-    ArrayList<ListItem> listItems;
+    ArrayList<WebtoonContentsData> webtoonContentsData;
     LayoutInflater layoutInflater;
-    public WebtoonListAdapter(Context context) {
+    public WebtoonContentsListAdapter(Context context) {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        this.listItems = new ArrayList<>();
+        this.webtoonContentsData = new ArrayList<>();
         this.context = context;
     }
 
@@ -36,12 +38,12 @@ public class WebtoonListAdapter extends BaseAdapter{
 
     @Override
     public int getItemViewType(int position) {
-        return listItems.get(position).getItemtype();
+        return webtoonContentsData.get(position).getmItemType();
     }
 
     @Override
     public int getCount() {
-        return listItems.size();
+        return webtoonContentsData.size();
     }
 
     @Override
@@ -51,7 +53,7 @@ public class WebtoonListAdapter extends BaseAdapter{
 
     @Override
     public Object getItem(int position) {
-        return listItems.get(position);
+        return webtoonContentsData.get(position);
     }
 
     public static class ViewHolder {
@@ -60,31 +62,31 @@ public class WebtoonListAdapter extends BaseAdapter{
     }
 
     public void addItem(int ivThumbnail, String tvTitle, String tvStarPoint, String tvDate, boolean read){
-        ListItem item = new ListItem(ivThumbnail, tvTitle,tvStarPoint,tvDate,read);
-        item.setItemtype(ITEM_WEBTOON_LIST);
-        listItems.add(item);
+        WebtoonContentsData item = new WebtoonContentsData(ivThumbnail, tvTitle,tvStarPoint,tvDate,read);
+        item.setmItemType(ITEM_WEBTOON_LIST);
+        webtoonContentsData.add(item);
     }
     public void addItem(int type){
-        ListItem item = new ListItem();
-        item.setItemtype(type);
-        listItems.add(item);
+        WebtoonContentsData item = new WebtoonContentsData();
+        item.setmItemType(type);
+        webtoonContentsData.add(item);
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ListItem listItem = listItems.get(position);
-        int type = listItem.getItemtype();
+        WebtoonContentsData webtoonContentsData = this.webtoonContentsData.get(position);
+        int type = webtoonContentsData.getmItemType();
         switch (type) {
             case ITEM_WEBTOON_LIST:
                 ViewHolder holder;
                 if (convertView == null) {
-                    convertView = layoutInflater.inflate(R.layout.item_list, null);
+                    convertView = layoutInflater.inflate(R.layout.item_list_webtoon, null);
 
                     holder = new ViewHolder();
-                    holder.thumbnail = convertView.findViewById(R.id.list_thumbnail);
-                    holder.title = convertView.findViewById(R.id.list_title);
-                    holder.date = convertView.findViewById(R.id.list_date);
-                    holder.starPoint = convertView.findViewById(R.id.list_star_point);
+                    holder.thumbnail = convertView.findViewById(R.id.webtoon_thumbnail);
+                    holder.title = convertView.findViewById(R.id.webtoon_title);
+                    holder.date = convertView.findViewById(R.id.webtoon_date);
+                    holder.starPoint = convertView.findViewById(R.id.webtoon_starpoint);
                     holder.page = convertView.findViewById(R.id.list_page);
                     convertView.setTag(holder);
 
@@ -92,11 +94,11 @@ public class WebtoonListAdapter extends BaseAdapter{
                     holder = (ViewHolder) convertView.getTag();
                 }
 
-                holder.thumbnail.setImageResource(listItem.getIvThumbnail());
-                holder.title.setText(listItem.getTvTitle());
-                holder.date.setText(listItem.getTvDate());
-                holder.starPoint.setText(listItem.getTvStarPoint());
-                if (listItem.isRead() == true) {
+                holder.thumbnail.setImageResource(webtoonContentsData.getmThumbnailDrawableId());
+                holder.title.setText(webtoonContentsData.getmTitle());
+                holder.date.setText(webtoonContentsData.getmDate());
+                holder.starPoint.setText(webtoonContentsData.getmStarPoint());
+                if (webtoonContentsData.isRead() == true) {
                     holder.page.setBackgroundResource(R.drawable.read_mark);
                     holder.title.setTextColor(context.getResources().getColor(R.color.blackfontexplain));
                 }
