@@ -1,18 +1,23 @@
 package com.example.myfirstapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myfirstapp.R;
+import com.example.myfirstapp.activities.WebtoonListActivity;
 import com.example.myfirstapp.enitites.WebtoonData;
 import com.example.myfirstapp.enitites.WebtoonListData;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class WebtoonListAdapter extends BaseAdapter {
     public final static int TYPE_GRID=0;
@@ -69,6 +74,7 @@ public class WebtoonListAdapter extends BaseAdapter {
                 break;
         }
         webtoonNum++;
+        System.out.println(getCount()+"개");
     }
     public static class ViewHolder {
         TextView title; TextView writer; ImageView thumbnail;

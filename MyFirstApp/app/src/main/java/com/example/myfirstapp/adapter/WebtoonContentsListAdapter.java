@@ -80,7 +80,7 @@ public class WebtoonContentsListAdapter extends BaseAdapter{
             case ITEM_WEBTOON_LIST:
                 ViewHolder holder;
                 if (convertView == null) {
-                    convertView = layoutInflater.inflate(R.layout.item_list_webtoon, null);
+                    convertView = layoutInflater.inflate(R.layout.item_list_webtoon_contents, null);
 
                     holder = new ViewHolder();
                     holder.thumbnail = convertView.findViewById(R.id.webtoon_thumbnail);

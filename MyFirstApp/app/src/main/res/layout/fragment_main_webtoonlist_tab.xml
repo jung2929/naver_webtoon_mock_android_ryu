@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <ScrollView
+        android:id="@+id/WebtoonTabScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/WebtoonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <TextView
+                    android:id="@+id/alignStandard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center_vertical"
+                    android:text="조회수"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                    app:layout_constraintStart_toStartOf="@+id/frameLayout3" />
+
+                <FrameLayout
+                    android:id="@+id/frameLayout3"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/cookie"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_cookie" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/webtoonRightArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/alignStandard"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_arrow_right_ok" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/webtoonLeftArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/alignStandard"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_arrow_left_no" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="4dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/ic_kk" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/searchButton"
+                        android:layout_width="38dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/ic_search" />
+                    </FrameLayout>
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/Ad"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"></android.support.v4.view.ViewPager>
+
+            <ImageView
+                android:id="@+id/my_picture"
+                android:layout_width="match_parent"
+                android:layout_height="140dp" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tlWebtoonDays"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/naverGreen"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorHeight="35dp"
+                app:tabInlineLabel="false"
+                app:tabMaxWidth="50dp"
+                app:tabMode="scrollable"
+                app:tabPadding="0dp"
+                app:tabSelectedTextColor="@color/colorWhite"
+                app:tabTextColor="#000000"
+                app:tabUnboundedRipple="true" />
+
+
+            <GridView
+                android:id="@+id/webtoonlist_main_grid"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/border"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:visibility="gone" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager_webtoonlist"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"></android.support.v4.view.ViewPager>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -14,5 +14,8 @@ public class DataManager {
         //(int thumbnail, String title, String starPoint, String writer, Boolean isUpadate, Boolean isCuttoon) {
 
         webtoonDataList.add(new WebtoonListData(R.drawable.thumbnail_world_of_girl, "소녀의 세계", "5.0","모랑지"));
-       }
+        webtoonDataList.add(new WebtoonListData(R.drawable.thumbnail_king, "복학왕", "5.0","기안84"));
+        webtoonDataList.add(new WebtoonListData(R.drawable.thumbnail_world_of_girl, "소녀의 세계", "5.0","모랑지"));
+        webtoonDataList.add(new WebtoonListData(R.drawable.thumbnail_world_of_girl, "소녀의 세계", "5.0","모랑지"));
+    }
 }

@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
-import com.example.myfirstapp.enitites.WebtoonContentsData;
 import com.example.myfirstapp.enitites.WebtoonData;
 import com.example.myfirstapp.enitites.WebtoonListData;
-import com.example.myfirstapp.enitites.WebtoonSearchData;
 
 import java.util.ArrayList;
 
@@ -46,7 +44,7 @@ public class WebtoonSearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_webtoon_search);
 
         listView = findViewById(R.id.result_search);
-        adapter=new WebtoonListAdapter(WebtoonSearchActivity.this, R.layout.item_webtoon_search_result, WebtoonListAdapter.TYPE_LIST);
+        adapter=new WebtoonListAdapter(WebtoonSearchActivity.this, R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

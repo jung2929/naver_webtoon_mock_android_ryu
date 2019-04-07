@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.service.autofill.DateValueSanitizer;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.myfirstapp.adapter.MainPagerAdapter;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.adapter.WebtoonDaysPageAdapter;
@@ -47,24 +50,31 @@ import retrofit2.http.Query;
 import static com.example.myfirstapp.GlobalApplication.webtoonList;
 
 public class MainActivity extends AppCompatActivity {
-    AccessTokenTracker accessTokenTracker;//facebook 로그인 토큰 트래커
-    AccessToken accessToken;
-    final int LAYOUT_NUM=5;
-    View[] menuBar = new View[LAYOUT_NUM];
-    int index=0;//changeLayout 함수 전용
-    View searchButton;
-    String days[] = {"월","화","수","목","금","토","일","신작","완결"};
 
-    GridView gridView[] = new GridView[days.length];
-    WebtoonListAdapter gridThumbnailAdapter;
+    private class MenuTabItem{
+        int unClickedImage;
+        int clickedImage;
+        String text;
 
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    WebtoonDaysPageAdapter webtoonDaysPageAdapter;
-    ArrayList<GridView> gridViewArrayList;
+        public MenuTabItem(int unClickedImage, int clickedImage, String text) {
+            this.unClickedImage = unClickedImage;
+            this.clickedImage = clickedImage;
+            this.text = text;
+        }
 
-    ConstraintLayout tvGotoLogin;
-    TextView tvLoginID;
+        public int getUnClickedImage() {
+            return unClickedImage;
+        }
+
+        public int getClickedImage() {
+            return clickedImage;
+        }
+
+        public String getText() {
+            return text;
+        }
+    }
+    MenuTabItem menuTabItem[]=new MenuTabItem[5];
 
     Retrofit airRetrofit;
     @Override
@@ -72,82 +82,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        menuTabItem[0]=new MenuTabItem(R.drawable.ic_clicked_webtoon,R.drawable.ic_clicked_webtoon,"웹툰");
+        menuTabItem[1]=new MenuTabItem(R.drawable.ic_unclicked_best_challenge,R.drawable.ic_clicked_webtoon,"베스트도전");
+        menuTabItem[2]=new MenuTabItem(R.drawable.ic_unclicked_play,R.drawable.ic_clicked_webtoon,"PLAY");
+        menuTabItem[3]=new MenuTabItem(R.drawable.ic_unclicked_mymenu,R.drawable.ic_clicked_webtoon,"MY");
+        menuTabItem[4]=new MenuTabItem(R.drawable.ic_unclicked_setting,R.drawable.ic_clicked_webtoon,"설정");
 
-        searchButton = findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), WebtoonSearchActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        gridThumbnailAdapter = new WebtoonListAdapter(this, R.layout.item_grid_webtoon,WebtoonListAdapter.TYPE_GRID);
-
-
-        for(WebtoonListData e : webtoonList){
-            gridThumbnailAdapter.addItem(e);
+        final TabLayout menuTabLayout= findViewById(R.id.main_menu_tab);
+        final ViewPager mainViewPager = findViewById(R.id.main_viewpager);
+        final MainPagerAdapter mainPagerAdapter = new MainPagerAdapter
+                (getSupportFragmentManager(), menuTabLayout.getTabCount());
+        menuTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        for(int i=0; i<5; i++) {
+            View t = LayoutInflater.from(this).inflate(R.layout.item_menubar_tab, null);
+            TextView tv = t.findViewById(R.id.tab_text);
+            tv.setText(menuTabItem[i].getText());
+            tv.setTextColor(getResources().getColor(R.color.unclickedMenuBar));
+            ImageView iv=t.findViewById(R.id.tab_image);
+            iv.setImageResource(menuTabItem[i].getUnClickedImage());
+            menuTabLayout.getTabAt(i).setCustomView(t);
         }
-
-        for (int i = 0; i < days.length; i++) {
-            gridView[i] = new GridView(this);
-            gridView[i].setNumColumns(3);
-            gridView[i].setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-            gridView[i].setBackgroundResource(R.color.border);
-
-            gridView[i].setAdapter(gridThumbnailAdapter);
-            int finalI = i;
-            gridView[i].setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    WebtoonListData item = (WebtoonListData) gridView[finalI].getItemAtPosition(position);
-                    if (item.isNone()) return;
-                    String webtoonName = item.getTitle();
-                    Intent intent = new Intent(MainActivity.this, WebtoonListActivity.class);
-                    intent.putExtra("webtoonName", webtoonName);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        gridViewArrayList = new ArrayList<>();
-        for (int i = 0; i < days.length; i++) {
-            gridViewArrayList.add(gridView[i]);
-        }
-        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewArrayList, MainActivity.this);
-        viewPager = findViewById(R.id.viewpager_webtoonlist);
-        viewPager.setAdapter(webtoonDaysPageAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                //이게 네이버웹툰 방식인듯
-                tabLayout.setScrollPosition(i,0f,true);
-                //tabLayout.getTabAt(i).select();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
-        tabLayout = findViewById(R.id.tlWebtoonDays);
-        for (int i = 0; i < days.length; i++) {
-           //View customView = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
-           // TextView tv = customView.findViewById(R.id.tab_text);
-           // tv.setText(days[i]);
-           TabLayout.Tab t=tabLayout.newTab();
-           t.setText(days[i]);
-            tabLayout.addTab(t);
-        }
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mainViewPager.setAdapter(mainPagerAdapter);
+        menuTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                int i=tab.getPosition();
+                mainViewPager.setCurrentItem(i);
             }
 
             @Override
@@ -157,22 +117,28 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
-        menuBar[0] = findViewById(R.id.WebtoonTabScrollView);
-        menuBar[1] = findViewById(R.id.SettingTabScrollView);
-        menuBar[2] = findViewById(R.id.SettingTabScrollView);
-        menuBar[3] = findViewById(R.id.SettingTabScrollView);
-        menuBar[4] = findViewById(R.id.SettingTabScrollView);
 
-        tvGotoLogin = findViewById(R.id.goto_login_button);
-        tvGotoLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
             }
         });
+        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                menuTabLayout.setScrollPosition(i,0f,true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+
+
 
         //------retrofit 사용------------------
         /*Gson gson = new GsonBuilder()
@@ -208,56 +174,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //현재 요일에 따른 탭 자동선택
-        Calendar c=new GregorianCalendar(Locale.KOREA);
-        int day = (c.get(c.DAY_OF_WEEK)+5)%7;
-        tabLayout.getTabAt(day).select();
-       // Toast.makeText(this, c.get(c.MINUTE)+" "+day, Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onResume() {
         super.onResume();
-
-        //페이스북 로그인 하였는지?
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(
-                    AccessToken oldAccessToken,
-                    AccessToken currentAccessToken) {
-                accessToken=AccessToken.getCurrentAccessToken();
-            }
-        };
-        accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        tvLoginID = findViewById(R.id.tvLoginID);
-        ImageView ivMyPicture = findViewById(R.id.my_picture);
-        if (isLoggedIn == true) {
-            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    try {
-                        System.out.println(object);
-                        String birth = object.getString("birthday");
-                        String picture = "https://graph.facebook.com/"+object.getString("id")+"/picture?type=normal";
-                        String name = object.getString("name");
-                        tvLoginID.setText(name);
-                        Glide.with(MainActivity.this).load(picture).into(ivMyPicture);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            Bundle parameters = new Bundle();
-            //https://developers.facebook.com/docs/facebook-login/permissions/ 권한
-            //https://developers.facebook.com/docs/graph-api/using-graph-api/
-            parameters.putString("fields", "id,email,name,birthday,picture");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
-        else {
-            Glide.with(MainActivity.this).load("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png").into(ivMyPicture);
-            tvLoginID.setText("로그인하세요.");
-        }
 
         //대기 상황
         AirService airService = airRetrofit.create(AirService.class);
@@ -280,33 +200,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-    private void changeLayout(int n){
-        index = n;
-        for(int i=0; i<LAYOUT_NUM; i++){
-            if(index == i) {
-                menuBar[i].setVisibility(View.VISIBLE);
-            }
-            else {
-                menuBar[i].setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-    public void changeToMenuBarWebtoon(View v){ changeLayout(0); }
-    public void changeToMenuBarBestChallenge(View v){
-        changeLayout(1);
-    }
-    public void changeToMenuBarPlay(View v){
-        changeLayout(2);
-    }
-    public void changeToMenuBarMymenu(View v){
-        changeLayout(3);
-    }
-    public void changeToMenuBarSetting(View v){
-        changeLayout(4);
-    }
-
-
 
     public interface GitHubService {
         @GET("/users/{user}/repos")
@@ -335,8 +228,5 @@ public class MainActivity extends AppCompatActivity {
         public void setId(String id) {
             this.id = id;
         }
-    }
-    private class test {
-
     }
 }
