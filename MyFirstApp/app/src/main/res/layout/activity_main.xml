@@ -25,10 +25,17 @@
         android:id="@+id/main_menu_tab"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        app:tabMaxWidth="0dp"
+        app:tabGravity="fill"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
-        app:tabUnboundedRipple="true">
+        app:tabUnboundedRipple="true"
+        app:tabPaddingBottom="-1dp"
+        app:tabPaddingEnd="-1dp"
+        app:tabPaddingStart="-1dp"
+        app:tabPaddingTop="-1dp"
+        >
 
         <android.support.design.widget.TabItem
             android:layout_width="match_parent"

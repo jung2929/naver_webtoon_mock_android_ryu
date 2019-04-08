@@ -94,13 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 (getSupportFragmentManager(), menuTabLayout.getTabCount());
         menuTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         for(int i=0; i<5; i++) {
-            View t = LayoutInflater.from(this).inflate(R.layout.item_menubar_tab, null);
+            View t = LayoutInflater.from(this).inflate(R.layout.item_menubar_tab, menuTabLayout, false);
             TextView tv = t.findViewById(R.id.tab_text);
             tv.setText(menuTabItem[i].getText());
             tv.setTextColor(getResources().getColor(R.color.unclickedMenuBar));
             ImageView iv=t.findViewById(R.id.tab_image);
             iv.setImageResource(menuTabItem[i].getUnClickedImage());
             menuTabLayout.getTabAt(i).setCustomView(t);
+//            menuTabLayout.addTab(menuTabLayout.newTab().setCustomView(t));
         }
         mainViewPager.setAdapter(mainPagerAdapter);
         menuTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
