@@ -1,7 +1,6 @@
 package com.example.myfirstapp;
 
-import com.example.myfirstapp.enitites.WebtoonData;
-import com.example.myfirstapp.enitites.WebtoonListData;
+import com.example.myfirstapp.entities.WebtoonListData;
 
 import java.util.ArrayList;
 

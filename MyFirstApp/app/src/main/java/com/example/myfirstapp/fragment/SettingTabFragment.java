@@ -58,7 +58,6 @@ public class SettingTabFragment extends Fragment {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     try {
-                        System.out.println(object);
                        // String birth = object.getString("birthday");
                        // String picture = "https://graph.facebook.com/"+object.getString("id")+"/picture?type=normal";
                         String name = object.getString("name");

@@ -16,7 +16,7 @@ import com.example.myfirstapp.activities.WebtoonListActivity;
 import com.example.myfirstapp.activities.WebtoonSearchActivity;
 import com.example.myfirstapp.adapter.WebtoonDaysPageAdapter;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
-import com.example.myfirstapp.enitites.WebtoonListData;
+import com.example.myfirstapp.entities.WebtoonListData;
 
 import java.util.ArrayList;
 import java.util.Calendar;

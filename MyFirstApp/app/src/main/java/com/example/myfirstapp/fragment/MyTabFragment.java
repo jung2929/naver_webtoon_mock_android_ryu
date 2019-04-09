@@ -18,7 +18,7 @@ import com.example.myfirstapp.R;
 import com.example.myfirstapp.activities.WebtoonListActivity;
 import com.example.myfirstapp.adapter.MyTabPagerAdapter;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
-import com.example.myfirstapp.enitites.WebtoonListData;
+import com.example.myfirstapp.entities.WebtoonListData;
 
 import java.util.ArrayList;
 

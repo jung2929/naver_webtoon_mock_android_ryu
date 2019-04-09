@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.enitites.WebtoonContentsData;
+import com.example.myfirstapp.entities.WebtoonContentsData;
 
 import java.util.ArrayList;
 

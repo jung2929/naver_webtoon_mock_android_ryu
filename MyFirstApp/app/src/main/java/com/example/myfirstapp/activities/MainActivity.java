@@ -1,42 +1,20 @@
 package com.example.myfirstapp.activities;
 
-import android.content.Intent;
-import android.service.autofill.DateValueSanitizer;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.myfirstapp.adapter.MainPagerAdapter;
-import com.example.myfirstapp.adapter.WebtoonListAdapter;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.adapter.WebtoonDaysPageAdapter;
-import com.example.myfirstapp.enitites.AirKoreaData;
-import com.example.myfirstapp.enitites.WebtoonData;
-import com.example.myfirstapp.enitites.WebtoonListData;
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
+import com.example.myfirstapp.entities.AirKoreaData;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,8 +24,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-import static com.example.myfirstapp.GlobalApplication.webtoonList;
 
 public class MainActivity extends AppCompatActivity {
 

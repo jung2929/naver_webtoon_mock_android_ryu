@@ -1,4 +1,4 @@
-package com.example.myfirstapp.enitites;
+package com.example.myfirstapp.entities;
 
 public class WebtoonSearchData extends WebtoonData{
     public WebtoonSearchData(int thumbnail, String title, String starPoint, String writer) {

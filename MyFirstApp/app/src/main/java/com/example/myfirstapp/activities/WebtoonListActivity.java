@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.adapter.WebtoonContentsListAdapter;
-import com.example.myfirstapp.enitites.WebtoonContentsData;
+import com.example.myfirstapp.entities.WebtoonContentsData;
 
 public class WebtoonListActivity extends AppCompatActivity {
     Intent intentGet;

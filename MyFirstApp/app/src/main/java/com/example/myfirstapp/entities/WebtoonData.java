@@ -1,4 +1,4 @@
-package com.example.myfirstapp.enitites;
+package com.example.myfirstapp.entities;
 
 import com.example.myfirstapp.R;
 
