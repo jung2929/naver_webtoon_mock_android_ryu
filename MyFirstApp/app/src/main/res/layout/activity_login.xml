@@ -5,10 +5,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity"
-    android:background="@color/colorWhite"
+    android:background="#EEEEEE"
     android:orientation="vertical"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="아이디"
+            android:textSize="16sp"
+            android:textColor="@color/blackfont"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            />
 
+        <EditText
+            android:id="@+id/login_id_input"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/blackfont"
+            android:background="@color/colorWhite"
+            tools:text="input" />
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+android:orientation="horizontal"
+    android:padding="10dp"
+    >
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="비밀번호"
+        android:textSize="16sp"
+        android:textColor="@color/blackfont"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        />
+
+    <EditText
+        android:id="@+id/login_pw_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textSize="16sp"
+        tools:text="비밀"
+        android:textColor="@color/blackfont"
+        android:background="@color/colorWhite"
+        android:padding="5dp"
+        />
+</LinearLayout>
+
+        <Button
+            android:id="@+id/softcomics_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="SoftComics 로그인" />
+        <Button
+            android:id="@+id/go_to_signup_activity_button"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="SoftComics 회원가입" />
+    </LinearLayout>
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button_facebook"
         android:layout_width="wrap_content"

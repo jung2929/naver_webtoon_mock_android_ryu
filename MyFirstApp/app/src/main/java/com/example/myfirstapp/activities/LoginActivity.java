@@ -1,110 +1,92 @@
 package com.example.myfirstapp.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.entities.SignUpResponseData;
-import com.example.myfirstapp.entities.SoftComicsMemberData;
+import com.example.myfirstapp.entities.ResponseLoginData;
 import com.facebook.AccessToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.facebook.login.Login;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.io.IOException;
-
-
-import okhttp3.Request;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
 import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
 
 public class LoginActivity extends AppCompatActivity {
 
-    com.facebook.login.widget.LoginButton btnFacebookLogin;
+    private final int ID_INPUT=0;
+    private final int PW_INPUT=1;
+    private Button btnSignUp;
+    private Button btnLogin;
+    private EditText etLoginInput[]=new EditText[2];
+    private com.facebook.login.widget.LoginButton btnFacebookLogin;
     private OAuthLoginButton mOAuthLoginButton;
-    private Retrofit softRetrofit;
-    private SoftComicsMemberData softComicsMemberData;
-    private OkHttpClient client = new OkHttpClient.Builder()
-            .build();
-    public void requestPost(){
-
-        //Request Body에 서버에 보낼 데이터 작성
-        RequestBody requestBody = new FormBody.Builder().add("id", "id").add("pw", "pw").add("subpw", "pw").add("email", "pw@gmail.com").add("tel", "01111123123").build();
-
-        //작성한 Request Body와 데이터를 보낼 url을 Request에 붙임
-        Request request = new Request.Builder().url("http://softcomics.co.kr/user").post(requestBody).build();
-
-        //request를 Client에 세팅하고 Server로 부터 온 Response를 처리할 Callback 작성
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                System.out.println(e.toString()+" ok 에러");
-                Toast.makeText(LoginActivity.this, "failure", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                System.out.println("성공 :"+response.body().string());
-            }
-        });
-    }
-    public interface  softcomicsService {
-        @POST("user")
-        Call<SignUpResponseData> signUp(@Body SoftComicsMemberData memberData);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-        //softcomics.co.kr
-         Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        softRetrofit = new Retrofit.Builder()
-                .baseUrl("http://softcomics.co.kr/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        softcomicsService softcomicsservice=softRetrofit.create(softcomicsService.class);
-        softComicsMemberData = new SoftComicsMemberData("myid","pw","pw","email@gmail.com","00012341234");
-        Call<SignUpResponseData> data = softcomicsservice.signUp(softComicsMemberData);
-
-        requestPost();
-
-        data.enqueue(new Callback<SignUpResponseData>() {
+        //softcomics login
+        etLoginInput[ID_INPUT]=findViewById(R.id.login_id_input);
+        etLoginInput[PW_INPUT]=findViewById(R.id.login_pw_input);
+        btnLogin=findViewById(R.id.softcomics_login_button);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<SignUpResponseData> call, Response<SignUpResponseData> response) {
-                if(response.isSuccessful())
-                    Toast.makeText(LoginActivity.this, "회원가입 완료", Toast.LENGTH_SHORT).show();
-                else {
-                    System.out.println(response.code());
-                }
+            public void onClick(View v) {
+                String str[]=new String[2];
+                for(int i=0; i<2; i++) str[i]=new String(etLoginInput[i].getText().toString());
+                Call<ResponseLoginData> loginCall= GlobalApplication.softcomicsservice.login(str[ID_INPUT],str[PW_INPUT]);
+                loginCall.enqueue(new Callback<ResponseLoginData>() {
+                    @Override
+                    public void onResponse(Call<ResponseLoginData> call, Response<ResponseLoginData> response) {
+                        if(response.isSuccessful()){
+                            AlertDialog.Builder alert = new AlertDialog.Builder(LoginActivity.this);
+                            alert.setTitle("로그인");
+                            alert.setPositiveButton("확인",null);
+                            switch (response.body().getCode()){
+                                case 100://로그인 성공
+                                    Toast.makeText(LoginActivity.this, str[ID_INPUT]+"님 환영합니다.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    break;
+                                case 200://아이디없음
+                                    alert.setMessage("존재하지 않는 아이디입니다.");
+                                    alert.create();
+                                    etLoginInput[PW_INPUT].setText("");
+                                 break;
+                                case 201://비밀번호틀림
+                                    alert.setMessage("틀린 비밀번호입니다.");
+                                    alert.create();
+                                    etLoginInput[PW_INPUT].setText("");
+                                    break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseLoginData> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this, "에러 : "+t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-
+        });
+        //SignUpActivity 버튼
+        btnSignUp=findViewById(R.id.go_to_signup_activity_button);
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(Call<SignUpResponseData> call, Throwable t) {
-                System.out.println("에러 : " + t.toString());
-                Toast.makeText(LoginActivity.this, "에러 : " + t.toString(), Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
 //페이스북
@@ -140,5 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 }

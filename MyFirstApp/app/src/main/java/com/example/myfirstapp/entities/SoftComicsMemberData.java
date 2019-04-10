@@ -4,11 +4,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class SoftComicsMemberData {
-    public SoftComicsMemberData(String id, String pw, String subpw, String email, String tel) {
+    public SoftComicsMemberData(String id, String pw, String subpw, String mail, String tel) {
         this.id = id;
         this.pw = pw;
         this.subpw = subpw;
-        this.email = email;
+        this.mail = mail;
         this.tel = tel;
     }
 
@@ -21,9 +21,9 @@ public class SoftComicsMemberData {
     @SerializedName("subpw")
     @Expose
     private String subpw;
-    @SerializedName("email")
+    @SerializedName("mail")
     @Expose
-    private String email;
+    private String mail;
     @SerializedName("tel")
     @Expose
     private String tel;
@@ -53,11 +53,11 @@ public class SoftComicsMemberData {
     }
 
     public String getEmail() {
-        return email;
+        return mail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String mail) {
+        this.mail = mail;
     }
 
     public String getTel() {

@@ -12,9 +12,9 @@
         android:roundIcon="@drawable/ic_heart_unchecked"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:usesCleartextTraffic="true"
-        >
-        <activity android:name=".activities.FacebookLoginActivity"></activity>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity android:name=".activities.FacebookLoginActivity" />
         <activity android:name=".activities.NaverLoginActivity" />
         <activity android:name=".activities.KaKaoLoginActivity" />
 

@@ -3,11 +3,11 @@ package com.example.myfirstapp.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SignUpResponseData {
+public class ResponseLoginData {
 
-    @SerializedName("id")
+    @SerializedName("result")
     @Expose
-    private String id;
+    private Result result;
     @SerializedName("code")
     @Expose
     private Integer code;
@@ -15,12 +15,12 @@ public class SignUpResponseData {
     @Expose
     private String message;
 
-    public String getId() {
-        return id;
+    public Result getResult() {
+        return result;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setResult(Result result) {
+        this.result = result;
     }
 
     public Integer getCode() {
@@ -39,4 +39,19 @@ public class SignUpResponseData {
         this.message = message;
     }
 
+    public class Result {
+
+        @SerializedName("jwt")
+        @Expose
+        private String jwt;
+
+        public String getJwt() {
+            return jwt;
+        }
+
+        public void setJwt(String jwt) {
+            this.jwt = jwt;
+        }
+
+    }
 }
