@@ -6,22 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activities.SignUpActivity"
     android:background="#EEEEEE"
+    android:orientation="vertical"
     >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:padding="10dp"
             >
             <TextView
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="아이디"
                 android:textSize="16sp"
                 android:textColor="@color/blackfont"
@@ -32,7 +33,7 @@
             <EditText
                 android:id="@+id/signup_id_input"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textSize="16sp"
                 android:textColor="@color/blackfont"
                 android:background="@color/colorWhite"
@@ -42,13 +43,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:padding="10dp"
             >
             <TextView
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="비밀번호"
                 android:textSize="16sp"
                 android:textColor="@color/blackfont"
@@ -59,7 +60,7 @@
             <EditText
                 android:id="@+id/signup_pw_input"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:ems="10"
                 android:inputType="textPassword"
                 android:textSize="16sp"
@@ -71,13 +72,13 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:padding="10dp"
             >
             <TextView
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="재확인"
                 android:textSize="16sp"
                 android:textColor="@color/blackfont"
@@ -88,7 +89,7 @@
             <EditText
                 android:id="@+id/signup_subpw_input"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:ems="10"
                 android:inputType="textPassword"
                 android:textSize="16sp"
@@ -102,13 +103,13 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:padding="10dp"
             >
             <TextView
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="메일주소"
                 android:textSize="16sp"
                 android:textColor="@color/blackfont"
@@ -119,7 +120,7 @@
             <EditText
                 android:id="@+id/signup_mail_input"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:ems="10"
                 android:inputType="textEmailAddress"
                 android:textSize="16sp"
@@ -131,13 +132,13 @@
                 />
         </LinearLayout><LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:padding="10dp"
         >
         <TextView
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="연락처"
             android:textSize="16sp"
             android:textColor="@color/blackfont"
@@ -148,7 +149,7 @@
         <EditText
             android:id="@+id/signup_tel_input"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:ems="10"
             android:inputType="phone"
             android:textSize="16sp"

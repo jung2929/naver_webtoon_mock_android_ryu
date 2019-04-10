@@ -8,7 +8,7 @@ public class WebtoonListData extends WebtoonData {
         this.isNone = true;
     }
 
-    public WebtoonListData(int thumbnail, String title, String starPoint, String writer) {
+    public WebtoonListData(String thumbnail, String title, String starPoint, String writer) {
         super(thumbnail, title, starPoint, writer);
         this.isNone = false;
     }

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.entities.WebtoonListData;
 
@@ -17,6 +18,7 @@ public class WebtoonListAdapter extends BaseAdapter {
     public final static int TYPE_GRID=0;
     public final static int TYPE_LIST=1;
 
+    private Context context;
     private ArrayList<WebtoonListData> list;
     private LayoutInflater layoutInflater;
     private int webtoonNum, layout;
@@ -27,6 +29,7 @@ public class WebtoonListAdapter extends BaseAdapter {
         this.layout = layoutID;
         this.layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.viewType = viewType;
+        this.context = context;
     }
     public ArrayList<String> getWebtoonNames(){
         ArrayList<String> str=new ArrayList<>();
@@ -92,7 +95,13 @@ public class WebtoonListAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.thumbnail.setImageResource(item.getThumbnail());
+        if(item.getThumbnail()!=null)
+            Glide.with(context)
+                    .load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg")
+                    .into(holder.thumbnail);
+        else
+            holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
+
         holder.title.setText(item.getTitle());
         holder.starPoint.setText(item.getStarPoint());
         holder.writer.setText(item.getWriter());

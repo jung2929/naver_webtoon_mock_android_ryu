@@ -43,7 +43,8 @@ public class WebtoonListActivity extends AppCompatActivity {
         adapter.addItem(WebtoonContentsListAdapter.ITEM_COOKIE);
 
         for(int i=1; i<20; i++){
-            adapter.addItem(thumbnail, webtoonName+" "+i+"화", "9.99", "19.03."+i, false);
+            adapter.addItem(new WebtoonContentsData(
+                    null, webtoonName+" "+i+"화", "9.99", "19.03."+i, false));
         }
         listView = findViewById(R.id.listView);
         listView.setClickable(true);
@@ -51,7 +52,7 @@ public class WebtoonListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 WebtoonContentsData l = (WebtoonContentsData)listView.getItemAtPosition(position);
-                switch (l.getmItemType()){
+                switch (l.getItemType()){
                     case WebtoonContentsListAdapter.ITEM_AD:
                         Toast.makeText(WebtoonListActivity.this, "광고", Toast.LENGTH_SHORT).show();
                         break;
@@ -67,7 +68,7 @@ public class WebtoonListActivity extends AppCompatActivity {
                         llPage.setBackgroundResource(R.drawable.read_mark);
                         tvTitle.setTextColor(getResources().getColor(R.color.blackfontexplain));
 
-                        String str = l.getmTitle();
+                        String str = l.getTitle();
                         intent.putExtra("webtoonTitle", str);//웹툰 회차 이름 전송
                         startActivity(intent);
                         break;

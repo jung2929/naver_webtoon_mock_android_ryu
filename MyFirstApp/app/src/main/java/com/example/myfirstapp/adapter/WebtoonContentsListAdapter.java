@@ -38,7 +38,7 @@ public class WebtoonContentsListAdapter extends BaseAdapter{
 
     @Override
     public int getItemViewType(int position) {
-        return webtoonContentsData.get(position).getmItemType();
+        return webtoonContentsData.get(position).getItemType();
     }
 
     @Override
@@ -61,21 +61,20 @@ public class WebtoonContentsListAdapter extends BaseAdapter{
         TextView starPoint; LinearLayout page;
     }
 
-    public void addItem(int ivThumbnail, String tvTitle, String tvStarPoint, String tvDate, boolean read){
-        WebtoonContentsData item = new WebtoonContentsData(ivThumbnail, tvTitle,tvStarPoint,tvDate,read);
-        item.setmItemType(ITEM_WEBTOON_LIST);
+    public void addItem(WebtoonContentsData item){
+        item.setItemType(ITEM_WEBTOON_LIST);
         webtoonContentsData.add(item);
     }
     public void addItem(int type){
         WebtoonContentsData item = new WebtoonContentsData();
-        item.setmItemType(type);
+        item.setItemType(type);
         webtoonContentsData.add(item);
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        WebtoonContentsData webtoonContentsData = this.webtoonContentsData.get(position);
-        int type = webtoonContentsData.getmItemType();
+        WebtoonContentsData item = this.webtoonContentsData.get(position);
+        int type = item.getItemType();
         switch (type) {
             case ITEM_WEBTOON_LIST:
                 ViewHolder holder;
@@ -94,11 +93,18 @@ public class WebtoonContentsListAdapter extends BaseAdapter{
                     holder = (ViewHolder) convertView.getTag();
                 }
 
-                holder.thumbnail.setImageResource(webtoonContentsData.getmThumbnailDrawableId());
-                holder.title.setText(webtoonContentsData.getmTitle());
-                holder.date.setText(webtoonContentsData.getmDate());
-                holder.starPoint.setText(webtoonContentsData.getmStarPoint());
-                if (webtoonContentsData.isRead() == true) {
+
+                if(item.getThumbnail()!=null)
+                    Glide.with(context)
+                            .load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg")
+                            .into(holder.thumbnail);
+                else
+                    holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
+//                holder.thumbnail.setImageResource(item.getThumbnail());
+                holder.title.setText(item.getTitle());
+                holder.date.setText(item.getDate());
+                holder.starPoint.setText(item.getStarPoint());
+                if (item.isRead() == true) {
                     holder.page.setBackgroundResource(R.drawable.read_mark);
                     holder.title.setTextColor(context.getResources().getColor(R.color.blackfontexplain));
                 }

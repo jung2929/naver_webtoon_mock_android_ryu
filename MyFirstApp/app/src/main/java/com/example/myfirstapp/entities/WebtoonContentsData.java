@@ -2,41 +2,41 @@ package com.example.myfirstapp.entities;
 
 public class WebtoonContentsData {
     //WebtoonListActivity ListView 사용
-    private int mItemType;
-    private int mThumbnailDrawableId;
-    private String mTitle;
-    private String mStarPoint;
-    private String mDate;
+    private int itemType;
+    private String thumbnail;
+    private String title;
+    private String starPoint;
+    private String date;
     private boolean isRead;
 
     public WebtoonContentsData(){
 
     }
-    public WebtoonContentsData(String mTitle, int Thumbnail){
-        this.mTitle = mTitle;
-        this.mThumbnailDrawableId = Thumbnail;
+    public WebtoonContentsData(String title, String Thumbnail){
+        this.title = title;
+        this.thumbnail = Thumbnail;
     }
-    public WebtoonContentsData(int mThumbnailDrawableId, String mTitle, String mStarPoint, String mDate, boolean isRead) {
-        this.mThumbnailDrawableId = mThumbnailDrawableId;
-        this.mTitle = mTitle;
-        this.mStarPoint = mStarPoint;
-        this.mDate = mDate;
+    public WebtoonContentsData(String thumbnail, String title, String starPoint, String date, boolean isRead) {
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.starPoint = starPoint;
+        this.date = date;
         this.isRead = isRead;
     }
-    public int getmThumbnailDrawableId() {
-        return mThumbnailDrawableId;
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+    public String getTitle() {
+        return title;
     }
 
-    public String getmTitle() {
-        return mTitle;
+    public String getStarPoint() {
+        return starPoint;
     }
 
-    public String getmStarPoint() {
-        return mStarPoint;
-    }
-
-    public String getmDate() {
-        return mDate;
+    public String getDate() {
+        return date;
     }
 
     public boolean isRead() {
@@ -47,12 +47,12 @@ public class WebtoonContentsData {
         this.isRead = read;
     }
 
-    public int getmItemType() {
-        return mItemType;
+    public int getItemType() {
+        return itemType;
     }
 
-    public void setmItemType(int mItemType) {
-        this.mItemType = mItemType;
+    public void setItemType(int itemType) {
+        this.itemType = itemType;
     }
 
 
