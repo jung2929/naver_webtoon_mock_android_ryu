@@ -15,7 +15,7 @@ import android.widget.ListView;
 
 import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.activities.WebtoonListActivity;
+import com.example.myfirstapp.activities.WebtoonContentsListActivity;
 import com.example.myfirstapp.adapter.MyTabPagerAdapter;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
 import com.example.myfirstapp.entities.WebtoonListData;
@@ -54,8 +54,8 @@ public class MyTabFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     WebtoonListData item = (WebtoonListData) list.get(finalI).getItemAtPosition(position);
                     if (item.isNone()) return;
-                    String webtoonName = item.getTitle();
-                    Intent intent = new Intent(getApplicationContext(), WebtoonListActivity.class);
+                    String webtoonName = item.getComicName();
+                    Intent intent = new Intent(getApplicationContext(), WebtoonContentsListActivity.class);
                     intent.putExtra("webtoonName", webtoonName);
                     startActivity(intent);
                 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.example.myfirstapp.activities.WebtoonListActivity">
+    tools:context="com.example.myfirstapp.activities.WebtoonContentsListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -119,16 +119,68 @@
             android:textSize="15sp" />
 
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/listView"
+<android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    >
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@color/border"
-        android:dividerHeight="1dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+    <ImageView
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
 
-    </ListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#FFFFFF"
+        android:paddingStart="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="3개"
+            android:textColor="@color/naverGreen"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="의 미리보기가 있습니다"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/ic_more2" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+        <ListView
+            android:id="@+id/listview_webtoon_contents"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:divider="@color/border"
+            android:dividerHeight="1dp">
+
+        </ListView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
 <TextView
     android:layout_width="match_parent"
     android:layout_height="1dp"

@@ -36,7 +36,7 @@
 
                 android:textColor="@color/blackfont"
                 android:textSize="16sp"
-                tools:text="title" />
+                tools:text="comicName" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -66,12 +66,20 @@
                     tools:text="별점" />
 
                 <TextView
-                    android:id="@+id/webtoon_writer"
+                    android:id="@+id/webtoon_story_writer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textColor="@color/blackfontexplain"
                     android:textSize="13sp"
-                    tools:text="date" />
+                    tools:text="글" />
+
+                <TextView
+                    android:id="@+id/webtoon_painter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/blackfontexplain"
+                    android:textSize="13sp"
+                    tools:text="/그림" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

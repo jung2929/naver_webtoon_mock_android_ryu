@@ -53,7 +53,7 @@
                 android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.WebtoonListActivity"
+            android:name=".activities.WebtoonContentsListActivity"
             android:parentActivityName=".activities.MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
@@ -63,12 +63,12 @@
         </activity>
         <activity
             android:name=".activities.WebtoonViewerActivity"
-            android:parentActivityName=".activities.WebtoonListActivity">
+            android:parentActivityName=".activities.WebtoonContentsListActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.WebtoonListActivity" />
+                android:value=".activities.WebtoonContentsListActivity" />
         </activity>
 
         <meta-data

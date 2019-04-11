@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myfirstapp.NonSwipeableViewPager;
 import com.example.myfirstapp.adapter.MainPagerAdapter;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.entities.AirKoreaData;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         menuTabItem[4]=new MenuTabItem(R.drawable.ic_unclicked_setting,R.drawable.ic_clicked_webtoon,"설정");
 
         final TabLayout menuTabLayout= findViewById(R.id.main_menu_tab);
-        final ViewPager mainViewPager = findViewById(R.id.main_viewpager);
+        final NonSwipeableViewPager mainViewPager = findViewById(R.id.main_viewpager);
         final MainPagerAdapter mainPagerAdapter = new MainPagerAdapter
                 (getSupportFragmentManager(), menuTabLayout.getTabCount());
         menuTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+     /*   mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+*/
 
 
 

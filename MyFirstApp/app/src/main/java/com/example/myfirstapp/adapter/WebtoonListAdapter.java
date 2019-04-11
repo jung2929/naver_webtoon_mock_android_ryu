@@ -34,7 +34,7 @@ public class WebtoonListAdapter extends BaseAdapter {
     public ArrayList<String> getWebtoonNames(){
         ArrayList<String> str=new ArrayList<>();
         for(int i=0; i<list.size(); i++)
-            str.add(list.get(i).getTitle());
+            str.add(list.get(i).getComicName());
         return str;
     }
     public void clear(){
@@ -73,8 +73,8 @@ public class WebtoonListAdapter extends BaseAdapter {
         webtoonNum++;
     }
     public static class ViewHolder {
-        TextView title; TextView writer; ImageView thumbnail;
-        ImageView star; TextView starPoint;
+        TextView title; TextView storyWriter; TextView painter;
+        ImageView thumbnail; ImageView star; TextView starPoint;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -87,7 +87,8 @@ public class WebtoonListAdapter extends BaseAdapter {
             holder.title=convertView.findViewById(R.id.webtoon_title);
             holder.starPoint=convertView.findViewById(R.id.webtoon_starpoint);
             holder.star = convertView.findViewById(R.id.webtoon_star);
-            holder.writer = convertView.findViewById(R.id.webtoon_writer);
+            holder.storyWriter = convertView.findViewById(R.id.webtoon_story_writer);
+            holder.painter = convertView.findViewById(R.id.webtoon_painter);
             if(viewType==TYPE_GRID) {
             }
             convertView.setTag(holder);
@@ -102,9 +103,13 @@ public class WebtoonListAdapter extends BaseAdapter {
         else
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
 
-        holder.title.setText(item.getTitle());
-        holder.starPoint.setText(item.getStarPoint());
-        holder.writer.setText(item.getWriter());
+        holder.title.setText(item.getComicName());
+        holder.starPoint.setText(item.getComicRating());
+        holder.storyWriter.setText(item.getStoryWriter());
+
+        //그림작가 없는 경우
+        if(holder.painter==null) holder.painter.setText("");
+        else holder.painter.setText("/"+item.getPainter());
         if(viewType==TYPE_GRID){
             if(item.isNone()){
                 holder.star.setVisibility(View.INVISIBLE);

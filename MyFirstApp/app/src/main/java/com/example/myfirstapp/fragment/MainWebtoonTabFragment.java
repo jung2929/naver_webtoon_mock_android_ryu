@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.activities.WebtoonListActivity;
+import com.example.myfirstapp.activities.WebtoonContentsListActivity;
 import com.example.myfirstapp.activities.WebtoonSearchActivity;
 import com.example.myfirstapp.adapter.WebtoonDaysPageAdapter;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
@@ -29,7 +29,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class MainWebtoonTabFragment extends Fragment {
     private View searchButton;
 
-    private String days[] = {"월","화","수","목","금","토","일","신작","완결"};
+    private String days[] = {"월","화","수","목","금","토","일"};//,"신작","완결"};
     GridView gridView[] = new GridView[days.length];
     WebtoonListAdapter gridThumbnailAdapter;
 
@@ -69,8 +69,8 @@ public class MainWebtoonTabFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     WebtoonListData item = (WebtoonListData) gridView[finalI].getItemAtPosition(position);
                     if (item.isNone()) return;
-                    String webtoonName = item.getTitle();
-                    Intent intent = new Intent(getApplicationContext(), WebtoonListActivity.class);
+                    String webtoonName = item.getComicName();
+                    Intent intent = new Intent(getApplicationContext(), WebtoonContentsListActivity.class);
                     intent.putExtra("webtoonName", webtoonName);
                     startActivity(intent);
                 }

@@ -13,6 +13,11 @@ public class WebtoonListData extends WebtoonData {
         this.isNone = false;
     }
 
+    public WebtoonListData(int comicNO, String comicName, String storyWriter, String paintWriter, String thumbnail, String comicExplain, String comicDay, int comicHeart, String comicRating) {
+        super(comicNO, comicName, storyWriter, paintWriter, thumbnail, comicExplain, comicDay, comicHeart, comicRating);
+        this.isNone = false;
+    }
+
     public boolean isNone() {
         return isNone;
     }

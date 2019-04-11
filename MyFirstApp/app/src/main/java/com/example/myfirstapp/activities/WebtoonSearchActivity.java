@@ -30,7 +30,7 @@ public class WebtoonSearchActivity extends AppCompatActivity {
     private void search(){
         String str = atvSearch.getText().toString();
         for(WebtoonListData webtoon : webtoonList){
-            if(webtoon.getTitle().contains(str)){
+            if(webtoon.getComicName().contains(str)){
                 adapter.addItem(webtoon);
             }
         }
@@ -50,8 +50,8 @@ public class WebtoonSearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 WebtoonData item = (WebtoonData)listView.getItemAtPosition(position);
-                String webtoonName=item.getTitle();
-                Intent intent = new Intent(WebtoonSearchActivity.this, WebtoonListActivity.class);
+                String webtoonName=item.getComicName();
+                Intent intent = new Intent(WebtoonSearchActivity.this, WebtoonContentsListActivity.class);
                 intent.putExtra("webtoonName", webtoonName);
                 startActivity(intent);
             }
@@ -62,7 +62,7 @@ public class WebtoonSearchActivity extends AppCompatActivity {
         ArrayList<String> webtoonNameList = new ArrayList<>();
 
         for(WebtoonData e : webtoonList){
-            webtoonNameList.add(e.getTitle());
+            webtoonNameList.add(e.getComicName());
         }
 
         atvSearch = findViewById(R.id.autoCompleteTextView);
