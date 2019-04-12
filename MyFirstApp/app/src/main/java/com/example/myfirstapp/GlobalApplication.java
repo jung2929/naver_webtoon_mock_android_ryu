@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.example.myfirstapp.entities.ResponseLoginData;
 import com.example.myfirstapp.entities.ResponseSignUpData;
+import com.example.myfirstapp.entities.ResponseWithdrawalData;
 import com.example.myfirstapp.entities.SoftComicsMemberData;
 import com.example.myfirstapp.entities.WebtoonListData;
 import com.kakao.auth.ApprovalType;
@@ -25,7 +26,10 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -118,11 +122,13 @@ public class GlobalApplication extends Application {
             }
         });
     }
-    public static interface  softcomicsService {
+    public interface  softcomicsService {
         @POST("user")
         Call<ResponseSignUpData> signUp(@Body SoftComicsMemberData memberData);
         @GET("token/{id}/{pw}")
         Call<ResponseLoginData> login(@Path("id") String id, @Path("pw") String pw);
+        @HTTP(method = "DELETE", path = "user", hasBody = true)
+        Call<ResponseWithdrawalData> withdrawal(@Body String pw, @Header ("x-access-token") String token);
     }
     @Override
     public void onCreate() {

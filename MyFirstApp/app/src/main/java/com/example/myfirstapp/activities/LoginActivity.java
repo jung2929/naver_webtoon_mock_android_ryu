@@ -1,7 +1,9 @@
 package com.example.myfirstapp.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private Context context;
     private final int ID_INPUT=0;
     private final int PW_INPUT=1;
     private Button btnSignUp;
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        context=LoginActivity.this;
 
         //softcomics login
         etLoginInput[ID_INPUT]=findViewById(R.id.login_id_input);
@@ -58,6 +62,11 @@ public class LoginActivity extends AppCompatActivity {
                             switch (response.body().getCode()){
                                 case 100://로그인 성공
                                     Toast.makeText(LoginActivity.this, str[ID_INPUT]+"님 환영합니다.", Toast.LENGTH_SHORT).show();
+                                    SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor edit = sharedPreferences.edit();
+                                    edit.putString("user_id",str[ID_INPUT]);
+                                    edit.putString("token", response.body().getResult().getJwt());
+                                    edit.commit();
                                     finish();
                                     break;
                                 case 200://아이디없음

@@ -59,18 +59,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //메뉴바 설정
         menuTabItem[0]=new MenuTabItem(R.drawable.ic_clicked_webtoon,R.drawable.ic_clicked_webtoon,"웹툰");
         menuTabItem[1]=new MenuTabItem(R.drawable.ic_unclicked_best_challenge,R.drawable.ic_clicked_webtoon,"베스트도전");
         menuTabItem[2]=new MenuTabItem(R.drawable.ic_unclicked_play,R.drawable.ic_clicked_webtoon,"PLAY");
         menuTabItem[3]=new MenuTabItem(R.drawable.ic_unclicked_mymenu,R.drawable.ic_clicked_webtoon,"MY");
         menuTabItem[4]=new MenuTabItem(R.drawable.ic_unclicked_setting,R.drawable.ic_clicked_webtoon,"설정");
-
         final TabLayout menuTabLayout= findViewById(R.id.main_menu_tab);
         final NonSwipeableViewPager mainViewPager = findViewById(R.id.main_viewpager);
         final MainPagerAdapter mainPagerAdapter = new MainPagerAdapter
-                (getSupportFragmentManager(), menuTabLayout.getTabCount());
+                (getSupportFragmentManager(), menuTabLayout.getTabCount(), this);
         menuTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        for(int i=0; i<5; i++) {
+        for(int i=0; i<5; i++) {//탭레이아웃 꾸미기
             View t = LayoutInflater.from(this).inflate(R.layout.item_menubar_tab, menuTabLayout, false);
             TextView tv = t.findViewById(R.id.tab_text);
             tv.setText(menuTabItem[i].getText());
@@ -98,23 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-     /*   mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                menuTabLayout.setScrollPosition(i,0f,true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
-*/
 
 
 
@@ -126,32 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("http://openapi.airkorea.or.kr/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        GitHubService service = retrofit.create(GitHubService.class);
-
-        String str = "veev23";
-        Call<List<Repo>> repos = service.listRepos(str);
-
-        repos.enqueue(new Callback<List<Repo>>() {
-            @Override
-            public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
-                for(int i=0; i<response.body().size();i++){
-                    System.out.println(i+"번아이디 : "+response.body().get(i).getId());
-                    System.out.println(i+"번이름 : "+response.body().get(i).getName());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Repo>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "에러:"+t.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
     @Override
     protected void onResume() {
@@ -178,33 +135,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-    public interface GitHubService {
-        @GET("/users/{user}/repos")
-        Call<List<Repo>> listRepos(@Path("user") String user);
-    }
     public interface  AirService{
         @GET("openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=IbUJs05q2%2B93Wy%2BKbqxYhI%2BnnNFOLoyRB8tKb66rp95UVccJ5ZTgRAX%2BV0ckS84k4bufsPzg7SRCwqGcuqWHnw%3D%3D&_returnType=json")
         Call<AirKoreaData> getAir(@Query("stationName") String stationName);
-    }
-    private class Repo{
-        String id;
-        String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
     }
 }

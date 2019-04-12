@@ -1,5 +1,7 @@
 package com.example.myfirstapp.adapter;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,9 +12,11 @@ import com.example.myfirstapp.fragment.SettingTabFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
     private int numOfTab;
-    public MainPagerAdapter(FragmentManager fm, int numOfTab) {
+    private Context context;
+    public MainPagerAdapter(FragmentManager fm, int numOfTab, Context context) {
         super(fm);
         this.numOfTab=numOfTab;
+        this.context=context;
     }
 
     @Override
@@ -22,6 +26,8 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+        Bundle bundle = new Bundle();
+
         switch (i){
             case 0:
                 MainWebtoonTabFragment t0= new MainWebtoonTabFragment();
