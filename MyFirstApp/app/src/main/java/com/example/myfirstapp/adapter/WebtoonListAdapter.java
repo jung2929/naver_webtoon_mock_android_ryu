@@ -63,7 +63,9 @@ public class WebtoonListAdapter extends BaseAdapter {
                     list.set(webtoonNum, item);
                 }
                 while (list.size() % 3 != 0) {
-                    list.add(new WebtoonListData());
+                    WebtoonListData tmp = new WebtoonListData();
+                    tmp.setNone(true);
+                    list.add(tmp);
                 }
                 break;
             case TYPE_LIST:
@@ -98,7 +100,7 @@ public class WebtoonListAdapter extends BaseAdapter {
 
         if(item.getThumbnail()!=null)
             Glide.with(context)
-                    .load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg")
+                    .load(item.getThumbnail())
                     .into(holder.thumbnail);
         else
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
@@ -108,7 +110,7 @@ public class WebtoonListAdapter extends BaseAdapter {
         holder.storyWriter.setText(item.getStoryWriter());
 
         //그림작가 없는 경우
-        if(holder.painter==null) holder.painter.setText("");
+        if(item.getPainter()==null) holder.painter.setText("");
         else holder.painter.setText("/"+item.getPainter());
         if(viewType==TYPE_GRID){
             if(item.isNone()){

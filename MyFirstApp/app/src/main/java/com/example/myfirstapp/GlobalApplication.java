@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.example.myfirstapp.entities.ResponseLoginData;
 import com.example.myfirstapp.entities.ResponseSignUpData;
+import com.example.myfirstapp.entities.ResponseWebtoonListData;
 import com.example.myfirstapp.entities.ResponseWithdrawalData;
 import com.example.myfirstapp.entities.SoftComicsMemberData;
 import com.example.myfirstapp.entities.WebtoonListData;
@@ -129,6 +130,10 @@ public class GlobalApplication extends Application {
         Call<ResponseLoginData> login(@Path("id") String id, @Path("pw") String pw);
         @HTTP(method = "DELETE", path = "user", hasBody = true)
         Call<ResponseWithdrawalData> withdrawal(@Body String pw, @Header ("x-access-token") String token);
+        @GET("comic/all")
+        Call<ResponseWebtoonListData> getAllWebtoonList();
+        @GET("comic/day/{day}")
+        Call<ResponseWebtoonListData> getDaysWebtoonList(@Path("day") String day);
     }
     @Override
     public void onCreate() {
@@ -144,7 +149,6 @@ public class GlobalApplication extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         softcomicsservice=softRetrofit.create(softcomicsService.class);
-        // requestPost();
 
 
 

@@ -1,11 +1,11 @@
 package com.example.myfirstapp.entities;
 
 public class WebtoonListData extends WebtoonData {
-    //MainActivity GridView 사용
+    //MainActivity GridView 사용, WebtoonListActivity ListView
     private boolean isNone;
 
     public WebtoonListData() {
-        this.isNone = true;
+        this.isNone = false;
     }
 
     public WebtoonListData(String thumbnail, String title, String starPoint, String writer) {

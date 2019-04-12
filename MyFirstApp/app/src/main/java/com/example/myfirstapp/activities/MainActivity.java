@@ -101,20 +101,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //------retrofit 사용------------------
-        /*Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();*/
+        /*------retrofit 사용------------------
         airRetrofit = new Retrofit.Builder()
                 .baseUrl("http://openapi.airkorea.or.kr/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+                */
     }
     @Override
     protected void onResume() {
         super.onResume();
 
-        //대기 상황
+        /*//대기 상황
         AirService airService = airRetrofit.create(AirService.class);
         Call<AirKoreaData> airState = airService.getAir("종로구");
 
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<AirKoreaData> call, Throwable t) {
                 System.out.println("에러내용 : "+t.toString());
             }
-        });
+        });*/
 
     }
     public interface  AirService{
