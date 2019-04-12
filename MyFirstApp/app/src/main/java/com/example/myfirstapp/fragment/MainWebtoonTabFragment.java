@@ -117,7 +117,6 @@ public class MainWebtoonTabFragment extends Fragment {
                     String comicName = item.getComicName();
                     int comicNo = item.getComicNO();
                     Intent intent = new Intent(getApplicationContext(), WebtoonContentsListActivity.class);
-                    Toast.makeText(getContext(), comicName+", "+comicNo, Toast.LENGTH_SHORT).show();
                     intent.putExtra("comic_name", comicName);
                     intent.putExtra("comic_no", comicNo);
                     startActivity(intent);

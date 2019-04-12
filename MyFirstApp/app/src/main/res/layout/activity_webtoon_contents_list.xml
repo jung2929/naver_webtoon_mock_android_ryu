@@ -66,9 +66,8 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_heart_unchecked"
                 android:layout_gravity="center_vertical"
-                />
+                android:src="@drawable/ic_heart_unchecked" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,9 +89,8 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_add"
                 android:layout_gravity="center_vertical"
-                />
+                android:src="@drawable/ic_add" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -119,75 +117,76 @@
             android:textSize="15sp" />
 
     </LinearLayout>
-<android.support.v4.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-    <ImageView
-        android:id="@+id/ad"
-        android:layout_width="match_parent"
-        android:layout_height="60dp" />
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#FFFFFF"
-        android:paddingStart="20dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="3개"
-            android:textColor="@color/naverGreen"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="의 미리보기가 있습니다"
-            android:textColor="#000000"
-            android:textSize="15sp" />
-
-        <FrameLayout
-            android:layout_width="40dp"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:src="@drawable/ic_more2" />
+                android:id="@+id/ad"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
 
-        </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#FFFFFF"
+                android:paddingStart="20dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="3개"
+                    android:textColor="@color/naverGreen"
+                    android:textSize="15sp" />
 
-        <ListView
-            android:id="@+id/listview_webtoon_contents"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:divider="@color/border"
-            android:dividerHeight="1dp"
-            android:footerDividersEnabled="true"
-            android:headerDividersEnabled="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="의 미리보기가 있습니다"
+                    android:textColor="#000000"
+                    android:textSize="15sp" />
 
-        </ListView>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/border"
-    />
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:src="@drawable/ic_more2" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listview_webtoon_contents"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:divider="@color/border"
+                android:dividerHeight="1dp"
+                android:footerDividersEnabled="true"
+                android:headerDividersEnabled="true">
+
+            </ListView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border" />
 
     <LinearLayout
         android:id="@+id/MenuBar"

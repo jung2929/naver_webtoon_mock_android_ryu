@@ -1,6 +1,8 @@
 package com.example.myfirstapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,11 +38,13 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
     private ListView listView;
     private WebtoonContentsListAdapter adapter;
 
+    private Context context;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webtoon_contents_list);
-
+        context = this;
         //이전의 activity에서 얻어와 웹툰 제목 설정
         intentGet = getIntent();
         comicName = intentGet.getExtras().getString("comic_name");
@@ -61,8 +65,10 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                     switch (response.body().getCode()){
                         case 100://성공
                             List<WebtoonContentsData> list = response.body().getResult();
-                            System.out.println("성공 !! comicNo:" +comicNo+", "+ list.size() +"개의 목록");
+                            SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
                             for(int i=0; i<list.size(); i++){
+                                boolean read = sharedPreferences.getBoolean(comicName+i, false);
+                                list.get(i).setRead(read);
                                 adapter.addItem(list.get(i));
                             }
                             adapter.notifyDataSetChanged();
@@ -79,7 +85,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseWebtoonContentsListData> call, Throwable t) {
-                Toast.makeText(WebtoonContentsListActivity.this, "서버로부터 가져오지 못함 : ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WebtoonContentsListActivity.this, "서버로부터 가져오지 못함", Toast.LENGTH_SHORT).show();
                 System.out.println("실패원인 " +t.toString());
             }
         });
@@ -92,11 +98,11 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                 WebtoonContentsData l = (WebtoonContentsData) listView.getItemAtPosition(position);
                 Intent intent = new Intent(WebtoonContentsListActivity.this, WebtoonViewerActivity.class);
                 l.setRead(true);
-
-                LinearLayout llPage = view.findViewById(R.id.list_page);//읽은척
-                TextView tvTitle = view.findViewById(R.id.webtoon_title);
-                llPage.setBackgroundResource(R.drawable.read_mark);
-                tvTitle.setTextColor(getResources().getColor(R.color.blackfontexplain));
+                SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor edit = sharedPreferences.edit();
+                edit.putBoolean(comicName+position, true);
+                edit.commit();
+                adapter.notifyDataSetChanged();
 
                 String str = l.getContentName();
                 intent.putExtra("webtoonTitle", str);//웹툰 회차 이름 전송

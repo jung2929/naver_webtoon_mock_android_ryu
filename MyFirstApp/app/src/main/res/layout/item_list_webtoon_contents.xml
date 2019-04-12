@@ -49,8 +49,8 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_star_point" />
@@ -58,7 +58,7 @@
 
                 <TextView
                     android:id="@+id/webtoon_starpoint"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:textColor="@color/webtoonStarPoint"

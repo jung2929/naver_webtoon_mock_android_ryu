@@ -75,12 +75,12 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
         }
 
 
-        if (item.getContentImg() != null)
-            Glide.with(context)
-                    .load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg")
-                    .into(holder.thumbnail);
-        else
+        if (item.getContentImg().equals(""))//이미지가 없을 때
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
+        else Glide.with(context)
+                    .load(item.getContentImg())
+                    .into(holder.thumbnail);
+
         holder.title.setText(item.getContentName());
         holder.date.setText(item.getContentDate());
         holder.starPoint.setText(item.getContentRating());
