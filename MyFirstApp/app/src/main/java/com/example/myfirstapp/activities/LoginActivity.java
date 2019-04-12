@@ -51,6 +51,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String str[]=new String[2];
                 for(int i=0; i<2; i++) str[i]=new String(etLoginInput[i].getText().toString());
+                if(str[ID_INPUT].equals("")){
+                    Toast.makeText(context, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(str[PW_INPUT].equals("")){
+                    Toast.makeText(context, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Call<ResponseLoginData> loginCall= GlobalApplication.softcomicsservice.login(str[ID_INPUT],str[PW_INPUT]);
                 loginCall.enqueue(new Callback<ResponseLoginData>() {
                     @Override
@@ -72,11 +79,13 @@ public class LoginActivity extends AppCompatActivity {
                                 case 200://아이디없음
                                     alert.setMessage("존재하지 않는 아이디입니다.");
                                     alert.create();
+                                    alert.show();
                                     etLoginInput[PW_INPUT].setText("");
                                  break;
                                 case 201://비밀번호틀림
                                     alert.setMessage("틀린 비밀번호입니다.");
                                     alert.create();
+                                    alert.show();
                                     etLoginInput[PW_INPUT].setText("");
                                     break;
                             }

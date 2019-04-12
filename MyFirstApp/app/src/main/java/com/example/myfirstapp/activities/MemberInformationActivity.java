@@ -25,8 +25,11 @@ public class MemberInformationActivity extends AppCompatActivity {
 
     private Context context;
     private Button btnWithdrawal;
+    private Button btnLogout;
     private String userId;
     private TextView tvUserId;
+
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,10 @@ public class MemberInformationActivity extends AppCompatActivity {
         userId = intentGet.getExtras().getString("user_id");
         tvUserId=findViewById(R.id.member_information_id);
         tvUserId.setText(userId);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token","");
+        SharedPreferences.Editor edit = sharedPreferences.edit();
 
         //회원 탈퇴 버튼
         btnWithdrawal = findViewById(R.id.softcomics_withdrawal_button);
@@ -71,9 +78,7 @@ public class MemberInformationActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //정보 가져옴
-                                SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
                                 String pw = etPassword.getText().toString();
-                                String token = sharedPreferences.getString("token","");
 
                                 Call<ResponseWithdrawalData> withdrawal =//서버로부터 회원탈퇴 요구 보냄
                                         GlobalApplication.softcomicsservice.withdrawal(pw, token);
@@ -93,7 +98,6 @@ public class MemberInformationActivity extends AppCompatActivity {
                                                 break;
                                                 case 205://존재하지않는 토큰
                                                     Toast.makeText(MemberInformationActivity.this, "존재하지 않는 아이디입니다.", Toast.LENGTH_SHORT).show();
-                                                    SharedPreferences.Editor edit = sharedPreferences.edit();
                                                     edit.putString("user_id", "");
                                                     edit.putString("token", "");
                                                     edit.commit();
@@ -117,6 +121,18 @@ public class MemberInformationActivity extends AppCompatActivity {
                     }
                 });
                 msg.show();
+            }
+        });
+
+        //로그아웃 버튼
+        btnLogout = findViewById(R.id.softcomics_logout_button);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit.putString("user_id", "");
+                edit.putString("token", "");
+                edit.commit();
+                finish();
             }
         });
     }

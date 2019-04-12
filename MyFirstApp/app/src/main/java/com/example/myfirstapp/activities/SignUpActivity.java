@@ -38,7 +38,14 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String str[]=new String[5];
-                for(int i=0; i<5; i++) str[i]=new String(etSignUpInput[i].getText().toString());
+                for(int i=0; i<5; i++) {
+                    str[i]=new String(etSignUpInput[i].getText().toString());
+                    if(str[i].equals("")){
+                        Toast.makeText(SignUpActivity.this, "빈 칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        etSignUpInput[i].requestFocus();
+                        return;
+                    }
+                }
                 softComicsMemberData = new SoftComicsMemberData(
                         str[0],str[1],str[2],str[3],str[4]);
                 Call<ResponseSignUpData> data = GlobalApplication.softcomicsservice.signUp(softComicsMemberData);
@@ -53,23 +60,28 @@ public class SignUpActivity extends AppCompatActivity {
                                 case 100://회원가입 성공
                                     alert.setMessage("회원가입이 완료되었습니다.\n로그인해주세요.");
                                     alert.create();
+                                    alert.show();
                                     finish();
                                     break;
                                 case 200://아이디 중복
                                     alert.setMessage("이미 존재하는 아이디입니다.");
                                     alert.create();
+                                    alert.show();
                                     break;
                                 case 201://비밀번호 비일치
                                     alert.setMessage("비밀번호 재확인이 틀렸습니다.");
                                     alert.create();
+                                    alert.show();
                                     break;
                                 case 202://이메일 중복
                                     alert.setMessage("이미 존재하는 email입니다.");
                                     alert.create();
+                                    alert.show();
                                     break;
                                 case 203://이메일 형식 틀림
                                     alert.setMessage("이메일 형식이 잘못되었습니다.");
                                     alert.create();
+                                    alert.show();
                                     break;
                             }
                         }

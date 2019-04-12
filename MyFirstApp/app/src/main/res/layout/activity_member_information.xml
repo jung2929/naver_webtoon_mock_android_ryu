@@ -45,6 +45,11 @@
         android:padding="5dp"
         tools:text="input" />
 </LinearLayout>
+        <Button
+            android:id="@+id/softcomics_logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="로그아웃"/>
     <Button
         android:id="@+id/softcomics_withdrawal_button"
         android:layout_width="match_parent"
