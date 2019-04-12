@@ -3,7 +3,9 @@ package com.example.myfirstapp.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class WebtoonData {
+import java.io.Serializable;
+
+public class WebtoonData implements Serializable {
     @SerializedName("Comic_No")
     @Expose
     private int comicNO;

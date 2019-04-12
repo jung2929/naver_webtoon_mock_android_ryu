@@ -115,6 +115,7 @@ public class MemberInformationActivity extends AppCompatActivity {
                                         Toast.makeText(MemberInformationActivity.this, "전송 실패", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+
                             }
                         });
                         pwMsg.show();

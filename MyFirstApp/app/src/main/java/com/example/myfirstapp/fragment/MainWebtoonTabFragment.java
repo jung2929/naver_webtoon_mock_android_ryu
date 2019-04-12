@@ -114,11 +114,8 @@ public class MainWebtoonTabFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     WebtoonListData item = (WebtoonListData) gridView[finalI].getItemAtPosition(position);
                     if (item.isNone()) return;
-                    String comicName = item.getComicName();
-                    int comicNo = item.getComicNO();
                     Intent intent = new Intent(getApplicationContext(), WebtoonContentsListActivity.class);
-                    intent.putExtra("comic_name", comicName);
-                    intent.putExtra("comic_no", comicNo);
+                    intent.putExtra("comic", item);
                     startActivity(intent);
                 }
             });

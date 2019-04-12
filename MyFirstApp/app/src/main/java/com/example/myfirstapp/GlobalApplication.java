@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.myfirstapp.entities.ResponseAddAttentionWebtoonData;
 import com.example.myfirstapp.entities.ResponseLoginData;
 import com.example.myfirstapp.entities.ResponseSignUpData;
 import com.example.myfirstapp.entities.ResponseWebtoonContentsListData;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -36,12 +38,11 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public class GlobalApplication extends Application {
-
-
 
 
     public static ArrayList<WebtoonListData> webtoonList = new ArrayList<>();
@@ -50,14 +51,16 @@ public class GlobalApplication extends Application {
     private static volatile GlobalApplication instance = null;
 
     public static GlobalApplication getGlobalApplicationContext() {
-        if(instance == null)
+        if (instance == null)
             throw new IllegalStateException("this application does not inherit com.kakao.GlobalApplication");
         return instance;
     }
+
     private static class KakaoSDKAdapter extends KakaoAdapter {
         /**
          * Session Config에 대해서는 default값들이 존재한다.
          * 필요한 상황에서만 override해서 사용하면 됨.
+         *
          * @return Session의 설정값.
          */
         @Override
@@ -65,7 +68,7 @@ public class GlobalApplication extends Application {
             return new ISessionConfig() {
                 @Override
                 public AuthType[] getAuthTypes() {
-                    return new AuthType[] {AuthType.KAKAO_LOGIN_ALL};
+                    return new AuthType[]{AuthType.KAKAO_LOGIN_ALL};
                 }
 
                 @Override
@@ -108,56 +111,74 @@ public class GlobalApplication extends Application {
     private OkHttpClient client = new OkHttpClient.Builder()
             .build();
 
-    public void requestGet(int comicno){
-        Request request = new Request.Builder().url("http://softcomics.co.kr/comic/contentAll/"+comicno).get().build();
+    public void requestGet(int comicno) {
+        Request request = new Request.Builder().url("http://softcomics.co.kr/comic/contentAll/" + comicno).get().build();
         //request를 Client에 세팅하고 Server로 부터 온 Response를 처리할 Callback 작성
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                System.out.println(e.toString()+" ok 에러");
+                System.out.println(e.toString() + " ok 에러");
             }
 
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                System.out.println("성공 :"+response.body().string());
+                System.out.println("성공 :" + response.body().string());
             }
         });
     }
-    public void requestPost(){
+
+    public void requestPost() {
 
         //Request Body에 서버에 보낼 데이터 작성
-        RequestBody requestBody = new FormBody.Builder().add("id", "id").add("pw", "pw").add("subpw", "pw").add("email", "pw@gmail.com").add("tel", "01111123123").build();
+        RequestBody requestBody = new FormBody.Builder().add("comicno", "1").build();
 
         //작성한 Request Body와 데이터를 보낼 url을 Request에 붙임
-        Request request = new Request.Builder().url("http://softcomics.co.kr/user").post(requestBody).build();
+        Request request = new Request.Builder().url("http://softcomics.co.kr/my/comic").post(requestBody).build();
 
         //request를 Client에 세팅하고 Server로 부터 온 Response를 처리할 Callback 작성
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                System.out.println(e.toString()+" ok 에러");
-                }
+                System.out.println(e.toString() + " ok 에러");
+            }
 
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                System.out.println("성공 :"+response.body().string());
+                System.out.println("okhttp성공 :" + response.body().string());
             }
         });
     }
-    public interface  softcomicsService {
+
+    public interface softcomicsService {
+        //API 1번 회원가입
         @POST("user")
         Call<ResponseSignUpData> signUp(@Body SoftComicsMemberData memberData);
+
+        //API 2번 회원탈퇴
+        @HTTP(method = "DELETE", path = "user", hasBody = true)
+        Call<ResponseWithdrawalData> withdrawal(@Body String pw, @Header("x-access-token") String token);
+
+        //API 3번 로그인
         @GET("token/{id}/{pw}")
         Call<ResponseLoginData> login(@Path("id") String id, @Path("pw") String pw);
-        @HTTP(method = "DELETE", path = "user", hasBody = true)
-        Call<ResponseWithdrawalData> withdrawal(@Body String pw, @Header ("x-access-token") String token);
+
+        //API 5번 웹툰 전체보기
         @GET("comic/all")
         Call<ResponseWebtoonListData> getAllWebtoonList();
+
+        //API 6번 요일별 웹툰 보기
         @GET("comic/day/{day}")
         Call<ResponseWebtoonListData> getDaysWebtoonList(@Path("day") String day);
+
+        //API 9번 웹툰 컨텐츠 보기
         @GET("comic/contentAll/{comicno}")
         Call<ResponseWebtoonContentsListData> getWebtoonContentsList(@Path("comicno") int num);
+        //API 10번 관심 웹툰 등록
+        //@HTTP(method = "POST", path = "my/comic", hasBody = true)
+        @POST("my/comic")
+        Call<ResponseAddAttentionWebtoonData> addAttentionWebtoon(@Body int comicno, @Header("x-access-token") String token);
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -171,8 +192,9 @@ public class GlobalApplication extends Application {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        softcomicsservice=softRetrofit.create(softcomicsService.class);
+        softcomicsservice = softRetrofit.create(softcomicsService.class);
 
+        //requestPost();
 
         KakaoSDK.init(new KakaoSDKAdapter());
     }

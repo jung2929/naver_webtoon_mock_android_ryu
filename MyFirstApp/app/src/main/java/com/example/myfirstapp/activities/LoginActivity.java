@@ -78,13 +78,11 @@ public class LoginActivity extends AppCompatActivity {
                                     break;
                                 case 200://아이디없음
                                     alert.setMessage("존재하지 않는 아이디입니다.");
-                                    alert.create();
                                     alert.show();
                                     etLoginInput[PW_INPUT].setText("");
                                  break;
                                 case 201://비밀번호틀림
                                     alert.setMessage("틀린 비밀번호입니다.");
-                                    alert.create();
                                     alert.show();
                                     etLoginInput[PW_INPUT].setText("");
                                     break;

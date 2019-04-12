@@ -3,8 +3,10 @@ package com.example.myfirstapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,8 +22,10 @@ import com.bumptech.glide.Glide;
 import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.adapter.WebtoonContentsListAdapter;
+import com.example.myfirstapp.entities.ResponseAddAttentionWebtoonData;
 import com.example.myfirstapp.entities.ResponseWebtoonContentsListData;
 import com.example.myfirstapp.entities.WebtoonContentsData;
+import com.example.myfirstapp.entities.WebtoonListData;
 
 import java.util.List;
 
@@ -32,8 +36,11 @@ import retrofit2.Response;
 public class WebtoonContentsListActivity extends AppCompatActivity {
     private Intent intentGet;
     private TextView tvcomicName;
-    private String comicName;
-    private int comicNo;
+    private LinearLayout llAttention;
+    private TextView tvHeart;
+    private ImageView ivAttention;
+
+    private WebtoonListData comic;
 
     private ListView listView;
     private WebtoonContentsListAdapter adapter;
@@ -47,17 +54,18 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         context = this;
         //이전의 activity에서 얻어와 웹툰 제목 설정
         intentGet = getIntent();
-        comicName = intentGet.getExtras().getString("comic_name");
-        comicNo = intentGet.getExtras().getInt("comic_no");
+        comic = (WebtoonListData)intentGet.getExtras().getSerializable("comic");
         tvcomicName = findViewById(R.id.webtoonName);
-        tvcomicName.setText(comicName);
+        tvcomicName.setText(comic.getComicName());
+        tvHeart = findViewById(R.id.number_of_heart);
+        tvHeart.setText(Integer.toString(comic.getComicHeart()));
 
         listView = findViewById(R.id.listview_webtoon_contents);
-        //서버로부터 가져오기
+        //서버로부터 웹툰 컨텐츠 데이터 가져오기
         adapter = new WebtoonContentsListAdapter(this);
         listView.setAdapter(adapter);//어댑터 연결
         Call<ResponseWebtoonContentsListData> responseWebtoonContentsListDataCall =
-                GlobalApplication.softcomicsservice.getWebtoonContentsList(comicNo);
+                GlobalApplication.softcomicsservice.getWebtoonContentsList(comic.getComicNO());
         responseWebtoonContentsListDataCall.enqueue(new Callback<ResponseWebtoonContentsListData>() {
             @Override
             public void onResponse(Call<ResponseWebtoonContentsListData> call, Response<ResponseWebtoonContentsListData> response) {
@@ -67,7 +75,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                             List<WebtoonContentsData> list = response.body().getResult();
                             SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
                             for(int i=0; i<list.size(); i++){
-                                boolean read = sharedPreferences.getBoolean(comicName+i, false);
+                                boolean read = sharedPreferences.getBoolean(comic.getComicName()+i, false);
                                 list.get(i).setRead(read);
                                 adapter.addItem(list.get(i));
                             }
@@ -100,7 +108,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                 l.setRead(true);
                 SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
                 SharedPreferences.Editor edit = sharedPreferences.edit();
-                edit.putBoolean(comicName+position, true);
+                edit.putBoolean(comic.getComicName()+position, true);
                 edit.commit();
                 adapter.notifyDataSetChanged();
 
@@ -112,6 +120,48 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         });
         ImageView ad = findViewById(R.id.ad);
         Glide.with(this).load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg").into(ad);
+
+        //관심웹툰 추가
+        llAttention=findViewById(R.id.attention_linear_layout);
+        llAttention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                String token = sharedPreferences.getString("token", "");
+                Call<ResponseAddAttentionWebtoonData> attentionCall =
+                        GlobalApplication.softcomicsservice
+                       .addAttentionWebtoon(comic.getComicNO(), token);
+                attentionCall.enqueue(new Callback<ResponseAddAttentionWebtoonData>() {
+                    @Override
+                    public void onResponse(Call<ResponseAddAttentionWebtoonData> call, Response<ResponseAddAttentionWebtoonData> response) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("관심웹툰");
+                        alert.setPositiveButton("확인", null);
+                        if(response.isSuccessful()){
+                            switch (response.body().getCode()){
+                                case 100:
+                                    alert.setMessage(response.body().getMessage());
+                                    alert.show();
+                                    break;
+                                    default:
+                                        alert.setMessage("에러코드 "+response.body().getCode()+" : "+response.body().getMessage());
+                                        alert.show();
+                            }
+                        }
+                        else{
+                            Log.d("관심웹툰에서 에러", call.toString());
+                            alert.setMessage("에러 내용 : "+call.toString());
+                            alert.show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseAddAttentionWebtoonData> call, Throwable t) {
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_SHORT).show();
+                        System.out.println("로그 : "+t.toString());
+                    }
+                });
+            }
+        });
 
         //뒤로가기
         FrameLayout back = findViewById(R.id.btn_back_webtoon_list);
