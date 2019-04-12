@@ -83,6 +83,7 @@ public class MainWebtoonTabFragment extends Fragment {
                                 for (int j = 0; j < list.size(); j++) {
                                     webtoonListAdapter[finalI].addItem(list.get(j));
                                 }
+                                webtoonListAdapter[finalI].notifyDataSetChanged();
                                 break;
                             default:
                                 Toast.makeText(getContext(), "code : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
@@ -113,9 +114,12 @@ public class MainWebtoonTabFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     WebtoonListData item = (WebtoonListData) gridView[finalI].getItemAtPosition(position);
                     if (item.isNone()) return;
-                    String webtoonName = item.getComicName();
+                    String comicName = item.getComicName();
+                    int comicNo = item.getComicNO();
                     Intent intent = new Intent(getApplicationContext(), WebtoonContentsListActivity.class);
-                    intent.putExtra("webtoonName", webtoonName);
+                    Toast.makeText(getContext(), comicName+", "+comicNo, Toast.LENGTH_SHORT).show();
+                    intent.putExtra("comic_name", comicName);
+                    intent.putExtra("comic_no", comicNo);
                     startActivity(intent);
                 }
             });

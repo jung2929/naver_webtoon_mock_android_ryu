@@ -13,15 +13,6 @@ public class ResponseLoginData extends ResponseBaseData{
         super(code, message);
         this.result = result;
     }
-
-    /*
-        @SerializedName("code")
-        @Expose
-        private Integer code;
-        @SerializedName("message")
-        @Expose
-        private String message;
-    */
     public Result getResult() {
         return result;
     }

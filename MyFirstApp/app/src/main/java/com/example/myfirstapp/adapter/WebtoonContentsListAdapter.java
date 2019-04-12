@@ -75,15 +75,15 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
         }
 
 
-        if (item.getThumbnail() != null)
+        if (item.getContentImg() != null)
             Glide.with(context)
                     .load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg")
                     .into(holder.thumbnail);
         else
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
-        holder.title.setText(item.getTitle());
-        holder.date.setText(item.getDate());
-        holder.starPoint.setText(item.getComicRating());
+        holder.title.setText(item.getContentName());
+        holder.date.setText(item.getContentDate());
+        holder.starPoint.setText(item.getContentRating());
         if (item.isRead() == true) {
             holder.page.setBackgroundResource(R.drawable.read_mark);
             holder.title.setTextColor(context.getResources().getColor(R.color.blackfontexplain));

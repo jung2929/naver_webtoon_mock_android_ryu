@@ -2,9 +2,11 @@ package com.example.myfirstapp;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.myfirstapp.entities.ResponseLoginData;
 import com.example.myfirstapp.entities.ResponseSignUpData;
+import com.example.myfirstapp.entities.ResponseWebtoonContentsListData;
 import com.example.myfirstapp.entities.ResponseWebtoonListData;
 import com.example.myfirstapp.entities.ResponseWithdrawalData;
 import com.example.myfirstapp.entities.SoftComicsMemberData;
@@ -19,10 +21,13 @@ import com.kakao.auth.KakaoSDK;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -102,6 +107,22 @@ public class GlobalApplication extends Application {
     public static softcomicsService softcomicsservice;
     private OkHttpClient client = new OkHttpClient.Builder()
             .build();
+
+    public void requestGet(int comicno){
+        Request request = new Request.Builder().url("http://softcomics.co.kr/comic/contentAll/"+comicno).get().build();
+        //request를 Client에 세팅하고 Server로 부터 온 Response를 처리할 Callback 작성
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                System.out.println(e.toString()+" ok 에러");
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                System.out.println("성공 :"+response.body().string());
+            }
+        });
+    }
     public void requestPost(){
 
         //Request Body에 서버에 보낼 데이터 작성
@@ -134,6 +155,8 @@ public class GlobalApplication extends Application {
         Call<ResponseWebtoonListData> getAllWebtoonList();
         @GET("comic/day/{day}")
         Call<ResponseWebtoonListData> getDaysWebtoonList(@Path("day") String day);
+        @GET("comic/contentAll/{comicno}")
+        Call<ResponseWebtoonContentsListData> getWebtoonContentsList(@Path("comicno") int num);
     }
     @Override
     public void onCreate() {
@@ -149,7 +172,6 @@ public class GlobalApplication extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         softcomicsservice=softRetrofit.create(softcomicsService.class);
-
 
 
         KakaoSDK.init(new KakaoSDKAdapter());

@@ -10,14 +10,6 @@ public class ResponseBaseData {
     @SerializedName("message")
     @Expose
     private String message;
-
-    /**
-     * No args constructor for use in serialization
-     *
-     */
-    public ResponseBaseData() {
-    }
-
     /**
      *
      * @param message

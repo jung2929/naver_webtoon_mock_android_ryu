@@ -71,7 +71,7 @@
                     android:layout_height="match_parent"
                     android:textColor="@color/blackfontexplain"
                     android:textSize="13sp"
-                    tools:text="date" />
+                    tools:text="contentDate" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

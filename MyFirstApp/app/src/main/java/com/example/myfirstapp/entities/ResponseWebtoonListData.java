@@ -10,13 +10,6 @@ public class ResponseWebtoonListData extends ResponseBaseData{
     @Expose
     private List<WebtoonListData> result = null;
     /**
-     * No args constructor for use in serialization
-     *
-     */
-    public ResponseWebtoonListData() {
-    }
-
-    /**
      *
      * @param message
      * @param result
