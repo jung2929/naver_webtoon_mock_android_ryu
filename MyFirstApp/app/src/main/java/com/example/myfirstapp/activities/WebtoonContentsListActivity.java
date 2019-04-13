@@ -26,6 +26,7 @@ import com.example.myfirstapp.entities.ResponseAddAttentionWebtoonData;
 import com.example.myfirstapp.entities.ResponseWebtoonContentsListData;
 import com.example.myfirstapp.entities.WebtoonContentsData;
 import com.example.myfirstapp.entities.WebtoonListData;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -128,9 +129,11 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
                 String token = sharedPreferences.getString("token", "");
+                Gson gson = new Gson();
                 Call<ResponseAddAttentionWebtoonData> attentionCall =
                         GlobalApplication.softcomicsservice
-                       .addAttentionWebtoon(comic.getComicNO(), token);
+                       .addAttentionWebtoon(
+                               new GlobalApplication.SoftcomicsService.Comicno(comic.getComicNO()));//,token);
                 attentionCall.enqueue(new Callback<ResponseAddAttentionWebtoonData>() {
                     @Override
                     public void onResponse(Call<ResponseAddAttentionWebtoonData> call, Response<ResponseAddAttentionWebtoonData> response) {
@@ -149,6 +152,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                             }
                         }
                         else{
+                            Log.d("Gson변환", gson.toJson(comic.getComicNO()));
                             Log.d("관심웹툰에서 에러", call.toString());
                             alert.setMessage("에러 내용 : "+call.toString());
                             alert.show();

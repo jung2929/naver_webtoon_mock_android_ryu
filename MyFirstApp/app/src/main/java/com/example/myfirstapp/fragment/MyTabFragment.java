@@ -29,7 +29,7 @@ public class MyTabFragment extends Fragment {
     private ViewPager viewPager;
     private MyTabPagerAdapter myTabPagerAdapter;
     private ArrayList<ListView> list;
-    private WebtoonListAdapter webtoonListAdapter;
+    private WebtoonListAdapter webtoonListAdapter[] =new WebtoonListAdapter[5];
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,23 +40,21 @@ public class MyTabFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("임시저장 웹툰"));
         tabLayout.addTab(tabLayout.newTab().setText("보관함"));
         tabLayout.addTab(tabLayout.newTab().setText("결제내역"));
-        webtoonListAdapter = new WebtoonListAdapter(getContext(), R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
-        for(WebtoonListData e : GlobalApplication.webtoonList){
-            webtoonListAdapter.addItem(e);
-        }
+
+        //관심웹툰 리스트 세팅
         list= new ArrayList<>();
         for(int i=0; i<tabLayout.getTabCount(); i++){
+            webtoonListAdapter[i] = new WebtoonListAdapter(getContext(), R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
             list.add(new ListView(getContext()));
-            list.get(i).setAdapter(webtoonListAdapter);
+            list.get(i).setAdapter(webtoonListAdapter[i]);
             int finalI = i;
             list.get(i).setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     WebtoonListData item = (WebtoonListData) list.get(finalI).getItemAtPosition(position);
                     if (item.isNone()) return;
-                    String webtoonName = item.getComicName();
                     Intent intent = new Intent(getApplicationContext(), WebtoonContentsListActivity.class);
-                    intent.putExtra("webtoonName", webtoonName);
+                    intent.putExtra("comic", item);
                     startActivity(intent);
                 }
             });

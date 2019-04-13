@@ -88,6 +88,9 @@ public class LoginActivity extends AppCompatActivity {
                                     break;
                             }
                         }
+                        else{
+                            Toast.makeText(context, "에러내용 : "+call.toString(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                     @Override
                     public void onFailure(Call<ResponseLoginData> call, Throwable t) {

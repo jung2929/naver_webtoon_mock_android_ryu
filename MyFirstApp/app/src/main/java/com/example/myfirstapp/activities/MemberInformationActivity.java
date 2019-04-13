@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.entities.ResponseWithdrawalData;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,9 +80,9 @@ public class MemberInformationActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 //정보 가져옴
                                 String pw = etPassword.getText().toString();
-
                                 Call<ResponseWithdrawalData> withdrawal =//서버로부터 회원탈퇴 요구 보냄
-                                        GlobalApplication.softcomicsservice.withdrawal(pw, token);
+                                        GlobalApplication.softcomicsservice.withdrawal(
+                                                new GlobalApplication.SoftcomicsService.Pw(pw), token);
                                 withdrawal.enqueue(new Callback<ResponseWithdrawalData>() {
                                     @Override
                                     public void onResponse(Call<ResponseWithdrawalData> call, Response<ResponseWithdrawalData> response) {
