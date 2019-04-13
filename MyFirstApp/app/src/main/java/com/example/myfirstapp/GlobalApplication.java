@@ -1,8 +1,10 @@
 package com.example.myfirstapp;
 
 import android.app.Application;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.example.myfirstapp.entities.ResponseAddAttentionWebtoonData;
 import com.example.myfirstapp.entities.ResponseLoginData;
@@ -43,7 +45,7 @@ import retrofit2.http.Path;
 
 public class GlobalApplication extends Application {
 
-
+public static DataManager dataManager;
     public static ArrayList<WebtoonListData> webtoonList = new ArrayList<>();
 
 
@@ -200,7 +202,7 @@ public class GlobalApplication extends Application {
             }
         }
         @POST("my/comic")
-        Call<ResponseAddAttentionWebtoonData> addAttentionWebtoon(@Body Comicno comicno);//, @Header("x-access-token") String token);
+        Call<ResponseAddAttentionWebtoonData> addAttentionWebtoon(@Body Comicno comicno, @Header("x-access-token") String token);
 
 
     }
@@ -210,31 +212,35 @@ public class GlobalApplication extends Application {
         super.onCreate();
         instance = this;
 
+        KakaoSDK.init(new KakaoSDKAdapter());
         DataManager.initWebtoonDummyData(webtoonList);
+        dataManager = new DataManager();
 
         //softcomics.co.kr
-        builder.addInterceptor(new Interceptor(){
-            @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                String token = sharedPreferences.getString("token","");
-                Request request = chain.request();
-                Request newRequest =request.newBuilder()
-                        .header("x-access-token", token)
-                        .build();
-                return chain.proceed(newRequest);
-            }
-        });
+        builder.addInterceptor(new AddHeaderInterceptor());
         headerClient = builder.build();
         softRetrofit = new Retrofit.Builder()
                 .baseUrl("http://softcomics.co.kr/")
-                .client(client)
+                .client(headerClient)
+                .client(client)//테스트용 클라이언트
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         softcomicsservice = softRetrofit.create(SoftcomicsService.class);
 
         //requestPost();
 
-        KakaoSDK.init(new KakaoSDKAdapter());
+    }
+    public class AddHeaderInterceptor implements Interceptor{
+            @Override
+            public Response intercept(Interceptor.Chain chain) throws IOException {
+            Toast.makeText(getGlobalApplicationContext(), "인터셉트!", Toast.LENGTH_SHORT).show();
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            String token = sharedPreferences.getString("token","");
+            Request request = chain.request();
+            Request newRequest = request.newBuilder()
+                    .header("x-access-token", token)
+                    .build();
+            return chain.proceed(newRequest);
+        }
     }
 }

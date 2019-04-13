@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ResponseMyWebtoonListData extends ResponseBaseData{
-
     @SerializedName("list")
     @Expose
     private List<WebtoonListData> webtoonList = null;
@@ -20,4 +19,12 @@ public class ResponseMyWebtoonListData extends ResponseBaseData{
         super(code, message);
         this.webtoonList = webtoonList;
     }
+    public List<WebtoonListData> getWebtoonList() {
+        return webtoonList;
+    }
+
+    public void setWebtoonList(List<WebtoonListData> webtoonList) {
+        this.webtoonList = webtoonList;
+    }
+
 }

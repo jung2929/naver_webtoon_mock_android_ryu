@@ -32,7 +32,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.myfirstapp.GlobalApplication.webtoonList;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MainWebtoonTabFragment extends Fragment {

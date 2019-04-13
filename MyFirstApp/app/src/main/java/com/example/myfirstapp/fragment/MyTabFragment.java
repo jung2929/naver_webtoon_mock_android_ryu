@@ -1,6 +1,8 @@
 package com.example.myfirstapp.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,15 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.myfirstapp.DataManager;
 import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.activities.WebtoonContentsListActivity;
 import com.example.myfirstapp.adapter.MyTabPagerAdapter;
 import com.example.myfirstapp.adapter.WebtoonListAdapter;
+import com.example.myfirstapp.entities.ResponseMyWebtoonListData;
 import com.example.myfirstapp.entities.WebtoonListData;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -30,10 +40,13 @@ public class MyTabFragment extends Fragment {
     private MyTabPagerAdapter myTabPagerAdapter;
     private ArrayList<ListView> list;
     private WebtoonListAdapter webtoonListAdapter[] =new WebtoonListAdapter[5];
+
+    private final int ATTENTION = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_tab, container, false);
+        //탭레이아웃 세팅
         tabLayout = v.findViewById(R.id.my_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("관심웹툰"));
         tabLayout.addTab(tabLayout.newTab().setText("최근 본 웹툰"));
@@ -41,7 +54,7 @@ public class MyTabFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("보관함"));
         tabLayout.addTab(tabLayout.newTab().setText("결제내역"));
 
-        //관심웹툰 리스트 세팅
+        //리스트뷰 세팅
         list= new ArrayList<>();
         for(int i=0; i<tabLayout.getTabCount(); i++){
             webtoonListAdapter[i] = new WebtoonListAdapter(getContext(), R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
@@ -59,6 +72,43 @@ public class MyTabFragment extends Fragment {
                 }
             });
         }
+        //관심웹툰 세팅
+        SharedPreferences sharedPreferences = getContext()
+                .getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "오타남");
+        Call<ResponseMyWebtoonListData> getAttentionList =
+                GlobalApplication.softcomicsservice.getMyWebtoonList(token);
+        getAttentionList.enqueue(new Callback<ResponseMyWebtoonListData>() {
+            @Override
+            public void onResponse(Call<ResponseMyWebtoonListData> call, Response<ResponseMyWebtoonListData> response) {
+                if(response.isSuccessful()){
+                    switch (response.body().getCode()) {
+                        case 100://성공적
+                        List<WebtoonListData> myList = response.body().getWebtoonList();
+                        for (WebtoonListData e : myList) {
+                            webtoonListAdapter[ATTENTION].addItem(e);
+                        }
+                        webtoonListAdapter[ATTENTION].notifyDataSetChanged();
+                        break;
+                        case 200://로그인필요
+                           break;
+                            default://?
+                                Toast.makeText(getContext(), "코드 "+response.body().getCode()+" : 관심웹툰 불러오기 실패", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(getContext(), "에러내용 : "+call.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMyWebtoonListData> call, Throwable t) {
+                Toast.makeText(getContext(), "서버로부터 받아오지 못했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        //뷰페이저 세팅
         viewPager = v.findViewById(R.id.my_tab_viewpager);
         myTabPagerAdapter = new MyTabPagerAdapter(list, getContext());
         viewPager.setAdapter(myTabPagerAdapter);

@@ -133,7 +133,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                 Call<ResponseAddAttentionWebtoonData> attentionCall =
                         GlobalApplication.softcomicsservice
                        .addAttentionWebtoon(
-                               new GlobalApplication.SoftcomicsService.Comicno(comic.getComicNO()));//,token);
+                               new GlobalApplication.SoftcomicsService.Comicno(comic.getComicNO()), token);
                 attentionCall.enqueue(new Callback<ResponseAddAttentionWebtoonData>() {
                     @Override
                     public void onResponse(Call<ResponseAddAttentionWebtoonData> call, Response<ResponseAddAttentionWebtoonData> response) {
