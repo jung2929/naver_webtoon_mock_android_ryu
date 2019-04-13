@@ -27,7 +27,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         Bundle bundle = new Bundle();
-
         switch (i){
             case 0:
                 MainWebtoonTabFragment t0= new MainWebtoonTabFragment();

@@ -45,7 +45,6 @@ import retrofit2.http.Path;
 
 public class GlobalApplication extends Application {
 
-public static DataManager dataManager;
     public static ArrayList<WebtoonListData> webtoonList = new ArrayList<>();
 
 
@@ -214,14 +213,12 @@ public static DataManager dataManager;
 
         KakaoSDK.init(new KakaoSDKAdapter());
         DataManager.initWebtoonDummyData(webtoonList);
-        dataManager = new DataManager();
-
         //softcomics.co.kr
         builder.addInterceptor(new AddHeaderInterceptor());
         headerClient = builder.build();
         softRetrofit = new Retrofit.Builder()
                 .baseUrl("http://softcomics.co.kr/")
-                .client(headerClient)
+            //    .client(headerClient) 안됨...
                 .client(client)//테스트용 클라이언트
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

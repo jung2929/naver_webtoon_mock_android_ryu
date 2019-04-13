@@ -127,7 +127,8 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         llAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = context
+                        .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
                 String token = sharedPreferences.getString("token", "");
                 Gson gson = new Gson();
                 Call<ResponseAddAttentionWebtoonData> attentionCall =

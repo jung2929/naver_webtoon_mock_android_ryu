@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myfirstapp.DataManager;
 import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.activities.WebtoonContentsListActivity;
@@ -41,11 +41,23 @@ public class MyTabFragment extends Fragment {
     private ArrayList<ListView> list;
     private WebtoonListAdapter webtoonListAdapter[] =new WebtoonListAdapter[5];
 
+    private TextView tvLoginID;
+    private boolean loggedIn;
+    private String token;
+    private String userId;
+
+    private Context context;
+
     private final int ATTENTION = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_tab, container, false);
+        context = getContext();
+
+        tvLoginID = v.findViewById(R.id.my_tab_login_id);
+
+
         //탭레이아웃 세팅
         tabLayout = v.findViewById(R.id.my_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("관심웹툰"));
@@ -74,7 +86,7 @@ public class MyTabFragment extends Fragment {
         }
         //관심웹툰 세팅
         SharedPreferences sharedPreferences = getContext()
-                .getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "오타남");
         Call<ResponseMyWebtoonListData> getAttentionList =
                 GlobalApplication.softcomicsservice.getMyWebtoonList(token);
@@ -145,5 +157,24 @@ public class MyTabFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //로그인 했는지 확인
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename),Context.MODE_PRIVATE);
+        token=sharedPreferences.getString("token","");
+        userId = sharedPreferences.getString("user_id","");
+        if(token.length()==0){
+            tvLoginID.setText("로그인하세요.");
+            tvLoginID.setTextColor(context.getResources().getColor(R.color.blackfontexplain));
+            loggedIn=false;
+        }else{
+            tvLoginID.setText(userId+"님");
+            tvLoginID.setTextColor(context.getResources().getColor(R.color.blackfont));
+            loggedIn=true;
+        }
     }
 }

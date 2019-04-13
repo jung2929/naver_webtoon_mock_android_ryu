@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.example.myfirstapp.GlobalApplication;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.entities.ResponseWithdrawalData;
-import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +42,8 @@ public class MemberInformationActivity extends AppCompatActivity {
         tvUserId=findViewById(R.id.member_information_id);
         tvUserId.setText(userId);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token","");
         SharedPreferences.Editor edit = sharedPreferences.edit();
 
