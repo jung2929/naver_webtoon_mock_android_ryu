@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.myfirstapp.GlobalApplication;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.WebtoonViewerActivity.WebtoonViewerActivity;
 import com.example.myfirstapp.WebtoonContentsListActivity.adapter.WebtoonContentsListAdapter;
@@ -73,7 +73,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         adapter = new WebtoonContentsListAdapter(this);
         listView.setAdapter(adapter);//어댑터 연결
         Call<ResponseWebtoonContentsListData> responseWebtoonContentsListDataCall =
-                GlobalApplication.softcomicsService.getWebtoonContentsList(comic.getComicNO());
+                Singleton.softcomicsService.getWebtoonContentsList(comic.getComicNO());
         responseWebtoonContentsListDataCall.enqueue(new Callback<ResponseWebtoonContentsListData>() {
             @Override
             public void onResponse(Call<ResponseWebtoonContentsListData> call, Response<ResponseWebtoonContentsListData> response) {
@@ -141,7 +141,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                 RequestBody body =
                         RequestBody.create(MediaType.parse("text/plain"), Integer.toString(comicNo));
                 Call<ResponseAddAttentionWebtoonData> attentionCall =
-                        GlobalApplication.softcomicsService
+                        Singleton.softcomicsService
                        .addAttentionWebtoon(
                                body, token);
                 attentionCall.enqueue(new Callback<ResponseAddAttentionWebtoonData>() {

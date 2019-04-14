@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.myfirstapp.GlobalApplication;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.SignUpActivity.SignUpActivity;
 import com.example.myfirstapp.LoginActivity.entities.ResponseLoginData;
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(context, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Call<ResponseLoginData> loginCall= GlobalApplication.softcomicsService.login(userInput[ID_INPUT],userInput[PW_INPUT]);
+                Call<ResponseLoginData> loginCall= Singleton.softcomicsService.login(userInput[ID_INPUT],userInput[PW_INPUT]);
                 loginCall.enqueue(new Callback<ResponseLoginData>() {
                     @Override
                     public void onResponse(Call<ResponseLoginData> call, Response<ResponseLoginData> response) {

@@ -16,11 +16,10 @@ import com.example.myfirstapp.WebtoonContentsListActivity.WebtoonContentsListAct
 import com.example.myfirstapp.common.adapter.WebtoonListAdapter;
 import com.example.myfirstapp.baseClass.BaseWebtoonData;
 import com.example.myfirstapp.common.entities.WebtoonData;
-import com.example.myfirstapp.entities.WebtoonSearchData;
 
 import java.util.ArrayList;
 
-import static com.example.myfirstapp.GlobalApplication.webtoonList;
+import static com.example.myfirstapp.Singleton.webtoonList;
 
 public class WebtoonSearchActivity extends AppCompatActivity {
 

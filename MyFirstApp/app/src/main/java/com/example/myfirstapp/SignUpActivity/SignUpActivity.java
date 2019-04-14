@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.myfirstapp.GlobalApplication;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.SignUpActivity.entities.ResponseSignUpData;
 import com.example.myfirstapp.SignUpActivity.entities.SoftComicsSignUpMemberData;
@@ -49,7 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 softComicsSignUpMemberData = new SoftComicsSignUpMemberData(
                         str[0],str[1],str[2],str[3],str[4]);
-                Call<ResponseSignUpData> data = GlobalApplication.softcomicsService.signUp(softComicsSignUpMemberData);
+                Call<ResponseSignUpData> data = Singleton.softcomicsService.signUp(softComicsSignUpMemberData);
                 data.enqueue(new Callback<ResponseSignUpData>() {
                     @Override
                     public void onResponse(Call<ResponseSignUpData> call, Response<ResponseSignUpData> response) {

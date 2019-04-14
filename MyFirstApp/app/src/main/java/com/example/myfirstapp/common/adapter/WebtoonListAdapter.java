@@ -43,6 +43,10 @@ public class WebtoonListAdapter extends BaseAdapter {
             str.add(list.get(i).getComicName());
         return str;
     }
+    public void setDataList(ArrayList<WebtoonData> list){
+        this.list = list;
+        this.notifyDataSetChanged();
+    }
     public void clear(){
         list.clear();
     }
@@ -52,6 +56,7 @@ public class WebtoonListAdapter extends BaseAdapter {
             return 0;
         }
         else {
+            setGridColumn(3);
             return list.size();
         }
     }
@@ -64,6 +69,13 @@ public class WebtoonListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+    private void setGridColumn(int col){
+        while(list.size()%col != 0){
+            WebtoonData item = new WebtoonData();
+            item.setNone(true);
+            list.add(item);
+        }
     }
     public void addItem(WebtoonData item){
         switch (viewType) {

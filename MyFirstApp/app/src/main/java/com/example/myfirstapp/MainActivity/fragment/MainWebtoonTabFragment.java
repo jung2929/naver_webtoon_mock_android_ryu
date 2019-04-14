@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.example.myfirstapp.GlobalApplication;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.WebtoonContentsListActivity.WebtoonContentsListActivity;
 import com.example.myfirstapp.WebtoonSearchActivity.WebtoonSearchActivity;
@@ -81,12 +81,12 @@ public class MainWebtoonTabFragment extends Fragment {
 
         init(v);
         toSearchActivitySetting();
+        setWebtoonGridView();
+        selectTabByCurrentTime();
         for (int day = MONDAY; day <= SUNDAY; day++) {
             getWebtoonListBy(day);
         }
-        setWebtoonGridView();
         bindViewPagerAndTabLayout();
-        selectTabByCurrentTime();
         return v;
     }
 
@@ -112,7 +112,7 @@ public class MainWebtoonTabFragment extends Fragment {
     viewPager.setAdapter(webtoonDaysPageAdapter);
 }
     void getWebtoonListBy(final int day) {
-        Call<ResponseWebtoonListData> webtoonListDataCall = GlobalApplication.softcomicsService.getDaysWebtoonList(mDaysEng[day]);
+        Call<ResponseWebtoonListData> webtoonListDataCall = Singleton.softcomicsService.getDaysWebtoonList(mDaysEng[day]);
         webtoonListDataCall.enqueue(new Callback<ResponseWebtoonListData>() {
             @Override
             public void onResponse(Call<ResponseWebtoonListData> call, Response<ResponseWebtoonListData> response) {
@@ -120,9 +120,9 @@ public class MainWebtoonTabFragment extends Fragment {
                     switch (response.body().getCode()) {
                         case 100://가져오기 성공
                             List<WebtoonData> list = response.body().getResult();
-                            webtoonDataList[day] = (ArrayList)list;
-                            Log.d("웹툰 출력", webtoonDataList[day].size() + " : " + webtoonDataList[day]);
-                            webtoonListAdapter[day].notifyDataSetChanged();
+                            webtoonDataList[day] = new ArrayList<>(list);
+                            Log.d("웹툰 개수", webtoonListAdapter[day].getCount() + ":" + day + "번");
+                            webtoonListAdapter[day].setDataList(webtoonDataList[day]);
                             break;
                         default:
                             Toast.makeText(getContext(), "code : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
@@ -137,7 +137,6 @@ public class MainWebtoonTabFragment extends Fragment {
                 Toast.makeText(getContext(), "서버로부터 웹툰 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
     void toSearchActivitySetting(){
         searchButton.setOnClickListener(new View.OnClickListener() {

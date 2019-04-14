@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myfirstapp.GlobalApplication;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.WebtoonContentsListActivity.WebtoonContentsListActivity;
 import com.example.myfirstapp.MainActivity.adpater.MyTabPagerAdapter;
@@ -57,6 +57,7 @@ public class MyTabFragment extends Fragment {
 
         tvLoginID = v.findViewById(R.id.my_tab_login_id);
         tabLayout = v.findViewById(R.id.my_tab_layout);
+        viewPager = v.findViewById(R.id.my_tab_viewpager);
 
         list = new ArrayList<>();
         for(int tabIndex = 0; tabIndex< tabNames.length; tabIndex++) {
@@ -65,6 +66,8 @@ public class MyTabFragment extends Fragment {
                     new WebtoonListAdapter(getContext(), webtoonDataList[tabIndex], R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
             list.add(new ListView(getContext()));
         }
+
+        myTabPagerAdapter = new MyTabPagerAdapter(list, getContext());
     }
     @Nullable
     @Override
@@ -92,7 +95,7 @@ public class MyTabFragment extends Fragment {
                 .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
         Call<ResponseMyWebtoonListData> getAttentionList =
-                GlobalApplication.softcomicsService.getMyWebtoonList(token);
+                Singleton.softcomicsService.getMyWebtoonList(token);
         getAttentionList.enqueue(new Callback<ResponseMyWebtoonListData>() {
             @Override
             public void onResponse(Call<ResponseMyWebtoonListData> call, Response<ResponseMyWebtoonListData> response) {
@@ -100,8 +103,8 @@ public class MyTabFragment extends Fragment {
                     switch (response.body().getCode()) {
                         case 100://성공적
                         List<WebtoonData> myList = response.body().getWebtoonList();
-                        webtoonDataList[ATTENTION] = (ArrayList)myList;
-                        webtoonListAdapter[ATTENTION].notifyDataSetChanged();
+                        webtoonDataList[ATTENTION] = new ArrayList<>(myList);
+                        webtoonListAdapter[ATTENTION].setDataList(webtoonDataList[ATTENTION]);
                         break;
                         case 200://로그인필요
                            break;
@@ -118,8 +121,6 @@ public class MyTabFragment extends Fragment {
 
 
         //뷰페이저 세팅
-        viewPager = v.findViewById(R.id.my_tab_viewpager);
-        myTabPagerAdapter = new MyTabPagerAdapter(list, getContext());
         viewPager.setAdapter(myTabPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

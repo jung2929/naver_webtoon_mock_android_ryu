@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myfirstapp.GlobalApplication;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.MemberInformationActivity.entities.ResponseWithdrawalData;
 
@@ -85,7 +85,7 @@ public class MemberInformationActivity extends AppCompatActivity {
                                 RequestBody body =
                                         RequestBody.create(MediaType.parse("text/plain"), pw);
                                 Call<ResponseWithdrawalData> withdrawal =//서버로부터 회원탈퇴 요구 보냄
-                                        GlobalApplication.softcomicsService.withdrawal(
+                                        Singleton.softcomicsService.withdrawal(
                                                 body, token);
                                 withdrawal.enqueue(new Callback<ResponseWithdrawalData>() {
                                     @Override
