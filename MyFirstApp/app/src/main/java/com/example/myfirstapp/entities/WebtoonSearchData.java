@@ -1,6 +1,8 @@
 package com.example.myfirstapp.entities;
 
-public class WebtoonSearchData extends WebtoonData{
+import com.example.myfirstapp.baseClass.BaseWebtoonData;
+
+public class WebtoonSearchData extends BaseWebtoonData {
     public WebtoonSearchData(String thumbnail, String title, String starPoint, String writer) {
         super(thumbnail, title, starPoint, writer);
     }

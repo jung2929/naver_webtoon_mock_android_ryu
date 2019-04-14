@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.example.myfirstapp.activities.MainActivity">
+    tools:context="com.example.myfirstapp.MainActivity.MainActivity">
 
     <com.example.myfirstapp.NonSwipeableViewPager
         android:id="@+id/main_viewpager"
@@ -37,25 +37,6 @@
         app:tabPaddingTop="-1dp"
         >
 
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </android.support.design.widget.TabLayout>
 
 </LinearLayout>

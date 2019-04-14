@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity"
+    tools:context=".LoginActivity.LoginActivity"
     android:background="#EEEEEE"
     android:orientation="vertical"
     >
@@ -81,15 +81,6 @@ android:orientation="horizontal"
             android:layout_height="55dp"
             android:text="SoftComics 회원가입" />
     </LinearLayout>
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button_facebook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:text="페이스북으로 로그인"
-        android:textColor="@color/colorWhite" />
 
     <TextView
         android:id="@+id/facebook_name"
@@ -98,16 +89,4 @@ android:orientation="horizontal"
         android:textColor="@color/blackfont"
         />
 
-    <com.kakao.usermgmt.LoginButton
-        android:id="@+id/com_kakao_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp" />
-
-    <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
-        android:id="@+id/buttonOAuthLoginImg"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp" />
 </LinearLayout>
