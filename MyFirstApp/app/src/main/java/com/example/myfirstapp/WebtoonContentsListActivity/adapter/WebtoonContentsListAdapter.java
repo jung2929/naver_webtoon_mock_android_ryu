@@ -21,18 +21,25 @@ import java.util.ArrayList;
  ***************************/
 public class WebtoonContentsListAdapter extends BaseAdapter {
     Context context;
-    ArrayList<WebtoonContentsData> webtoonContentsData;
+    ArrayList<WebtoonContentsData> webtoonContentsDataList;
     LayoutInflater layoutInflater;
 
-    public WebtoonContentsListAdapter(Context context) {
+    public WebtoonContentsListAdapter(Context context, ArrayList<WebtoonContentsData> list) {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        this.webtoonContentsData = new ArrayList<>();
+        this.webtoonContentsDataList = list;
         this.context = context;
+    }
+    public void setDataList(ArrayList<WebtoonContentsData> list){
+        this.webtoonContentsDataList = list;
+        this.notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return webtoonContentsData.size();
+        if(webtoonContentsDataList==null){
+            return 0;
+        }
+        return webtoonContentsDataList.size();
     }
 
     @Override
@@ -42,11 +49,7 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return webtoonContentsData.get(position);
-    }
-
-    public void addItem(WebtoonContentsData item) {
-        webtoonContentsData.add(item);
+        return webtoonContentsDataList.get(position);
     }
 
     public static class ViewHolder {
@@ -60,11 +63,10 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        WebtoonContentsData item = this.webtoonContentsData.get(position);
+        WebtoonContentsData item = this.webtoonContentsDataList.get(position);
         ViewHolder holder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.item_list_webtoon_contents, null);
-
             holder = new ViewHolder();
             holder.thumbnail = convertView.findViewById(R.id.webtoon_thumbnail);
             holder.title = convertView.findViewById(R.id.webtoon_title);

@@ -45,6 +45,9 @@ public class WebtoonListAdapter extends BaseAdapter {
     }
     public void setDataList(ArrayList<WebtoonData> list){
         this.list = list;
+        if(viewType==TYPE_GRID) {
+            setGridColumn(3);
+        }
         this.notifyDataSetChanged();
     }
     public void clear(){
@@ -56,7 +59,6 @@ public class WebtoonListAdapter extends BaseAdapter {
             return 0;
         }
         else {
-            setGridColumn(3);
             return list.size();
         }
     }

@@ -3,8 +3,8 @@ package com.example.myfirstapp.SignUpActivity.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SoftComicsSignUpMemberData {
-    public SoftComicsSignUpMemberData(String id, String pw, String subpw, String mail, String tel) {
+public class RequestSignUpData {
+    public RequestSignUpData(String id, String pw, String subpw, String mail, String tel) {
         this.id = id;
         this.pw = pw;
         this.subpw = subpw;

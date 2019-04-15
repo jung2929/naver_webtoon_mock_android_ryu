@@ -14,73 +14,47 @@ import android.widget.TextView;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.LoginActivity.LoginActivity;
 import com.example.myfirstapp.MemberInformationActivity.MemberInformationActivity;
+
+import org.jetbrains.annotations.NotNull;
+
 public class SettingTabFragment extends Fragment {
 
     private Context context;
+    private SharedPreferences sharedPreferences;
 
     private ConstraintLayout tvGotoLoginInfo;
     private TextView tvLoginID;
-private String token;
-private String userId;
+    private String token;
+    private String userId;
     private boolean loggedIn;
 
+
+    @NotNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.fragment_setting_tab, container, false);
 
-        context = getContext();
+        init(v);
 
-        tvLoginID = v.findViewById(R.id.tvLoginID);
-        tvGotoLoginInfo = v.findViewById(R.id.goto_login_info_button);
-
-
-        //페이스북 로그인 하였는지?
-        /*
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(
-                    AccessToken oldAccessToken,
-                    AccessToken currentAccessToken) {
-                accessToken=AccessToken.getCurrentAccessToken();
-            }
-        };
-        accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        tvLoginID = v.findViewById(R.id.tvLoginID);
-        if (isLoggedIn == true) {
-            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    try {
-                       // String birth = object.getString("birthday");
-                       // String picture = "https://graph.facebook.com/"+object.getString("id")+"/picture?type=normal";
-                        String name = object.getString("name");
-                        tvLoginID.setText(name);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            Bundle parameters = new Bundle();
-            //https://developers.facebook.com/docs/facebook-login/permissions/ 권한
-            //https://developers.facebook.com/docs/graph-api/using-graph-api/
-            parameters.putString("fields", "id,email,name,birthday,picture");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
-        else {
-            tvLoginID.setText("로그인하세요.");
-        }
-        */
         return v;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //로그인 했는지 확인
+        loginCheck();
+        setLoginInfo();
+    }
+    @NotNull
+    private void init(View v){
+        context = getContext();
+        sharedPreferences = context.getSharedPreferences("UserData",Context.MODE_PRIVATE);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("UserData",Context.MODE_PRIVATE);
+        tvLoginID = v.findViewById(R.id.tvLoginID);
+        tvGotoLoginInfo = v.findViewById(R.id.goto_login_info_button);
+
+    }
+    private void loginCheck(){
         token=sharedPreferences.getString("token","");
         userId = sharedPreferences.getString("user_id","");
         if(token.length()==0){
@@ -90,8 +64,8 @@ private String userId;
             tvLoginID.setText(userId);
             loggedIn=true;
         }
-
-        //로그인 정보
+    }
+    private void setLoginInfo(){
         tvGotoLoginInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

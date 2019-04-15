@@ -25,6 +25,8 @@ import com.example.myfirstapp.common.adapter.WebtoonListAdapter;
 import com.example.myfirstapp.MainActivity.entities.ResponseMyWebtoonListData;
 import com.example.myfirstapp.common.entities.WebtoonData;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class MyTabFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private MyTabPagerAdapter myTabPagerAdapter;
-    private ArrayList<ListView> list;
+    private ArrayList<ListView> listViewList;
     private WebtoonListAdapter webtoonListAdapter[] =new WebtoonListAdapter[5];
     private ArrayList<WebtoonData> webtoonDataList[] = new ArrayList[5];
 
@@ -50,7 +52,23 @@ public class MyTabFragment extends Fragment {
     private String tabNames[] = {"관심웹툰","최근 본 웹툰","임시저장 웹툰","보관함","결제내역"};
     private final int ATTENTION = 0;
 
-    void init(View v){
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_my_tab, container, false);
+
+        init(v);
+        bindViewPagerWithTabLayout();
+        return v;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoginCheck();
+        getWebtoonListByMyAttention();
+    }
+    private void init(@NotNull View v){
         context = getContext();
         sharedPreferences = context
                 .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename),Context.MODE_PRIVATE);
@@ -58,70 +76,19 @@ public class MyTabFragment extends Fragment {
         tvLoginID = v.findViewById(R.id.my_tab_login_id);
         tabLayout = v.findViewById(R.id.my_tab_layout);
         viewPager = v.findViewById(R.id.my_tab_viewpager);
+        listViewList = new ArrayList<>();
+        myTabPagerAdapter = new MyTabPagerAdapter(listViewList, getContext());
 
-        list = new ArrayList<>();
         for(int tabIndex = 0; tabIndex< tabNames.length; tabIndex++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabNames[tabIndex]));
             webtoonListAdapter[tabIndex] =
                     new WebtoonListAdapter(getContext(), webtoonDataList[tabIndex], R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
-            list.add(new ListView(getContext()));
+            listViewList.add(new ListView(getContext()));
+            tabListViewSetting(listViewList.get(tabIndex), tabIndex);
         }
-
-        myTabPagerAdapter = new MyTabPagerAdapter(list, getContext());
-    }
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_my_tab, container, false);
-
-        init(v);
-        //리스트뷰 세팅
-        for(int kindsOfTab=0; kindsOfTab<tabLayout.getTabCount(); kindsOfTab++){
-            list.get(kindsOfTab).setAdapter(webtoonListAdapter[kindsOfTab]);
-            int finalI = kindsOfTab;
-            list.get(kindsOfTab).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    WebtoonData item = (WebtoonData) list.get(finalI).getItemAtPosition(position);
-                    if (item.isNone()) return;
-                    Intent intent = new Intent(getContext(), WebtoonContentsListActivity.class);
-                    intent.putExtra("comic", item);
-                    startActivity(intent);
-                }
-            });
-        }
-        //관심웹툰 세팅
-        SharedPreferences sharedPreferences = getContext()
-                .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
-        Call<ResponseMyWebtoonListData> getAttentionList =
-                Singleton.softcomicsService.getMyWebtoonList(token);
-        getAttentionList.enqueue(new Callback<ResponseMyWebtoonListData>() {
-            @Override
-            public void onResponse(Call<ResponseMyWebtoonListData> call, Response<ResponseMyWebtoonListData> response) {
-                if(response.isSuccessful()){
-                    switch (response.body().getCode()) {
-                        case 100://성공적
-                        List<WebtoonData> myList = response.body().getWebtoonList();
-                        webtoonDataList[ATTENTION] = new ArrayList<>(myList);
-                        webtoonListAdapter[ATTENTION].setDataList(webtoonDataList[ATTENTION]);
-                        break;
-                        case 200://로그인필요
-                           break;
-                            default://?
-                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseMyWebtoonListData> call, Throwable t) {
-                Toast.makeText(getContext(), "서버로부터 받아오지 못했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        //뷰페이저 세팅
         viewPager.setAdapter(myTabPagerAdapter);
+    }
+    private  void bindViewPagerWithTabLayout(){
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -154,16 +121,9 @@ public class MyTabFragment extends Fragment {
 
             }
         });
-        return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        LoginCheck();
-
-    }
-    void LoginCheck(){
+    private void LoginCheck(){
         token=sharedPreferences.getString("token","");
         userId = sharedPreferences.getString("user_id","");
         if(token.length()==0){
@@ -173,5 +133,46 @@ public class MyTabFragment extends Fragment {
             tvLoginID.setText(userId+"님");
             tvLoginID.setTextColor(context.getResources().getColor(R.color.blackfont));
         }
+    }
+
+    private void tabListViewSetting(@NotNull ListView listView, final int tabIndex){
+        listView.setAdapter(webtoonListAdapter[tabIndex]);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                WebtoonData item = (WebtoonData) listView.getItemAtPosition(position);
+                if (item.isNone()) return;
+                Intent intent = new Intent(getContext(), WebtoonContentsListActivity.class);
+                intent.putExtra("comic", item);
+                startActivity(intent);
+            }
+        });
+    }
+    private void getWebtoonListByMyAttention(){
+        Call<ResponseMyWebtoonListData> getAttentionList =
+                Singleton.softcomicsService.getMyWebtoonList(token);
+        getAttentionList.enqueue(new Callback<ResponseMyWebtoonListData>() {
+            @Override
+            public void onResponse(Call<ResponseMyWebtoonListData> call, Response<ResponseMyWebtoonListData> response) {
+                if(response.isSuccessful()){
+                    switch (response.body().getCode()) {
+                        case 100://성공적
+                            List<WebtoonData> myList = response.body().getWebtoonList();
+                            webtoonDataList[ATTENTION] = new ArrayList<>(myList);
+                            webtoonListAdapter[ATTENTION].setDataList(webtoonDataList[ATTENTION]);
+                            break;
+                        case 200://로그인필요
+                            break;
+                        default://?
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMyWebtoonListData> call, Throwable t) {
+                Toast.makeText(getContext(), "서버로부터 받아오지 못했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

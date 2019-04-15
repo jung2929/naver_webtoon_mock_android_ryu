@@ -93,7 +93,6 @@ public class Singleton extends Application {
                 .baseUrl("http://softcomics.co.kr/")
             //    .client(headerClient) 안됨...
                 .client(client)//테스트용 클라이언트
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         softcomicsService = softRetrofit.create(SoftcomicsService.class);

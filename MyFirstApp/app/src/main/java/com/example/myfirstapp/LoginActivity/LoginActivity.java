@@ -29,12 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText etLoginInput[]=new EditText[2];
 
-    void init(){
-        etLoginInput[ID_INPUT]=findViewById(R.id.login_id_input);
-        etLoginInput[PW_INPUT]=findViewById(R.id.login_pw_input);
-        btnSignUp=findViewById(R.id.go_to_signup_activity_button);
-        btnLogin=findViewById(R.id.softcomics_login_button);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +40,12 @@ public class LoginActivity extends AppCompatActivity {
         loginSetting();
         toSignUpActivitySetting();
 
+    }
+    void init(){
+        etLoginInput[ID_INPUT]=findViewById(R.id.login_id_input);
+        etLoginInput[PW_INPUT]=findViewById(R.id.login_pw_input);
+        btnSignUp=findViewById(R.id.go_to_signup_activity_button);
+        btnLogin=findViewById(R.id.softcomics_login_button);
     }
     void loginSetting(){
         btnLogin.setOnClickListener(new View.OnClickListener() {

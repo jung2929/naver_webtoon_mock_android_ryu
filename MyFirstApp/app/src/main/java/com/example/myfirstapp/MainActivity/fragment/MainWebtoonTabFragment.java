@@ -23,6 +23,8 @@ import com.example.myfirstapp.common.adapter.WebtoonListAdapter;
 import com.example.myfirstapp.MainActivity.entities.ResponseWebtoonListData;
 import com.example.myfirstapp.common.entities.WebtoonData;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -58,23 +60,7 @@ public class MainWebtoonTabFragment extends Fragment {
 
     private int mDay;
 
-    void init(View v){
-        context = getContext();
-        searchButton = v.findViewById(R.id.searchButton);
-        viewPager = v.findViewById(R.id.viewpager_webtoonlist);
-        tabLayout = v.findViewById(R.id.tlWebtoonDays);
-        gridViewList = new ArrayList<>();
-        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewList, context);
-
-        for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
-            webtoonListAdapter[mDay] = new WebtoonListAdapter(getContext(), webtoonDataList[mDay],R.layout.item_list_webtoon_square_form, WebtoonListAdapter.TYPE_GRID);
-            gridViewList.add(new GridView(context));
-            TabLayout.Tab t = tabLayout.newTab();
-            t.setText(DAYS[mDay]);
-            tabLayout.addTab(t);
-        }
-    }
-
+    @NotNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main_webtoonlist_tab, container, false);
@@ -90,7 +76,23 @@ public class MainWebtoonTabFragment extends Fragment {
         return v;
     }
 
-    void setWebtoonGridView(){
+    private void init(@NotNull View v){
+        context = getContext();
+        searchButton = v.findViewById(R.id.searchButton);
+        viewPager = v.findViewById(R.id.viewpager_webtoonlist);
+        tabLayout = v.findViewById(R.id.tlWebtoonDays);
+        gridViewList = new ArrayList<>();
+        webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewList, context);
+
+        for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
+            webtoonListAdapter[mDay] = new WebtoonListAdapter(getContext(), webtoonDataList[mDay],R.layout.item_list_webtoon_square_form, WebtoonListAdapter.TYPE_GRID);
+            gridViewList.add(new GridView(context));
+            TabLayout.Tab t = tabLayout.newTab();
+            t.setText(DAYS[mDay]);
+            tabLayout.addTab(t);
+        }
+    }
+    private void setWebtoonGridView(){
     for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
         gridViewList.get(mDay).setNumColumns(3);
         gridViewList.get(mDay).setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
@@ -111,7 +113,7 @@ public class MainWebtoonTabFragment extends Fragment {
     }
     viewPager.setAdapter(webtoonDaysPageAdapter);
 }
-    void getWebtoonListBy(final int day) {
+    private void getWebtoonListBy(final int day) {
         Call<ResponseWebtoonListData> webtoonListDataCall = Singleton.softcomicsService.getDaysWebtoonList(mDaysEng[day]);
         webtoonListDataCall.enqueue(new Callback<ResponseWebtoonListData>() {
             @Override
@@ -138,7 +140,7 @@ public class MainWebtoonTabFragment extends Fragment {
             }
         });
     }
-    void toSearchActivitySetting(){
+    private void toSearchActivitySetting(){
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +150,7 @@ public class MainWebtoonTabFragment extends Fragment {
         });
 
     }
-    void bindViewPagerAndTabLayout(){
+    private void bindViewPagerAndTabLayout(){
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -184,7 +186,7 @@ public class MainWebtoonTabFragment extends Fragment {
         });
 
     }
-    void selectTabByCurrentTime(){
+    private void selectTabByCurrentTime(){
         Calendar c = new GregorianCalendar(Locale.KOREA);
         int day = (c.get(c.DAY_OF_WEEK) + 5) % 7;
         tabLayout.getTabAt(day).select();

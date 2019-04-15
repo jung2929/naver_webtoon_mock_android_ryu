@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.SignUpActivity.entities.ResponseSignUpData;
-import com.example.myfirstapp.SignUpActivity.entities.SoftComicsSignUpMemberData;
+import com.example.myfirstapp.SignUpActivity.entities.RequestSignUpData;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,36 +20,43 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    Button btnSignUp;
-    EditText etSignUpInput[]=new EditText[5];
-    private SoftComicsSignUpMemberData softComicsSignUpMemberData;
+    private Button btnSignUp;
+    private EditText etSignUpInput[]=new EditText[5];
+    private RequestSignUpData requestSignUpData;
+    private final int INFO_NUM=5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        init();
+        setSignUpButton();
+    }
+    private void init(){
         etSignUpInput[0]=findViewById(R.id.signup_id_input);
         etSignUpInput[1]=findViewById(R.id.signup_pw_input);
         etSignUpInput[2]=findViewById(R.id.signup_subpw_input);
         etSignUpInput[3]=findViewById(R.id.signup_mail_input);
         etSignUpInput[4]=findViewById(R.id.signup_tel_input);
-
         btnSignUp=findViewById(R.id.softcomics_signup_button);
+
+    }
+    private void setSignUpButton(){
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str[]=new String[5];
-                for(int i=0; i<5; i++) {
-                    str[i]=new String(etSignUpInput[i].getText().toString());
-                    if(str[i].equals("")){
+                String str[]=new String[INFO_NUM];
+                for(int info=0; info<INFO_NUM; info++) {
+                    str[info]=etSignUpInput[info].getText().toString();
+                    if(str[info].equals("")){
                         Toast.makeText(SignUpActivity.this, "빈 칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                        etSignUpInput[i].requestFocus();
+                        etSignUpInput[info].requestFocus();
                         return;
                     }
                 }
-                softComicsSignUpMemberData = new SoftComicsSignUpMemberData(
+                requestSignUpData = new RequestSignUpData(
                         str[0],str[1],str[2],str[3],str[4]);
-                Call<ResponseSignUpData> data = Singleton.softcomicsService.signUp(softComicsSignUpMemberData);
+                Call<ResponseSignUpData> data = Singleton.softcomicsService.signUp(requestSignUpData);
                 data.enqueue(new Callback<ResponseSignUpData>() {
                     @Override
                     public void onResponse(Call<ResponseSignUpData> call, Response<ResponseSignUpData> response) {

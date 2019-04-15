@@ -24,13 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private NonSwipeableViewPager mainViewPager;
     private MainPagerAdapter mainPagerAdapter;
     final int MAIN_TAB_COUNT=5;
-    private void init(){
-        menuTabLayout= findViewById(R.id.main_menu_tab);
-        mainViewPager = findViewById(R.id.main_viewpager);
-        mainPagerAdapter = new MainPagerAdapter
-                (getSupportFragmentManager(), MAIN_TAB_COUNT, this);
-
-        }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +37,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+    }
+    private void init(){
+        menuTabLayout= findViewById(R.id.main_menu_tab);
+        mainViewPager = findViewById(R.id.main_viewpager);
+        mainPagerAdapter = new MainPagerAdapter
+                (getSupportFragmentManager(), MAIN_TAB_COUNT, this);
 
     }
     private void setMenuTabLayout(){
