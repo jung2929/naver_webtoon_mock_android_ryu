@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_attention_unchecked"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_heart_unchecked"
+        android:roundIcon="@drawable/ic_like_unchecked"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">

@@ -94,7 +94,7 @@ public class MemberInformationActivity extends AppCompatActivity {
                 new RequestWithdrawalData(pw);
         Call<ResponseWithdrawalData> withdrawal =//서버로부터 회원탈퇴 요구 보냄
                 Singleton.softcomicsService.withdrawal(
-                        requestWithdrawalData, token);
+                        requestWithdrawalData);
         withdrawal.enqueue(new Callback<ResponseWithdrawalData>() {
             @Override
             public void onResponse(Call<ResponseWithdrawalData> call, Response<ResponseWithdrawalData> response) {

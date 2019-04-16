@@ -10,6 +10,7 @@ public class ResponseBaseData {
     @SerializedName("message")
     @Expose
     private String message;
+
     /**
      *
      * @param message

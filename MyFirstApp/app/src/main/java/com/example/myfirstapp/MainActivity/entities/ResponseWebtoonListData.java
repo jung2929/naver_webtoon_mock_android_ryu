@@ -12,6 +12,7 @@ public class ResponseWebtoonListData extends ResponseBaseData {
     @SerializedName("result")
     @Expose
     private List<WebtoonData> result = null;
+
     /**
      *
      * @param message

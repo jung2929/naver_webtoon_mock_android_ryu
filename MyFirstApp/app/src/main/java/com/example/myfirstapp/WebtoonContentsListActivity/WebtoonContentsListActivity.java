@@ -20,7 +20,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.RequestAddAttentionData;
+import com.example.myfirstapp.WebtoonContentsListActivity.entities.RequestComicNoData;
+import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseAddLikeWebtoonData;
+import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseGetFirstStoryData;
 import com.example.myfirstapp.WebtoonViewerActivity.WebtoonViewerActivity;
 import com.example.myfirstapp.WebtoonContentsListActivity.adapter.WebtoonContentsListAdapter;
 import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseAddAttentionWebtoonData;
@@ -28,6 +30,7 @@ import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseWebto
 import com.example.myfirstapp.WebtoonContentsListActivity.entities.WebtoonContentsData;
 import com.example.myfirstapp.common.entities.WebtoonData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +41,12 @@ import retrofit2.Response;
 public class WebtoonContentsListActivity extends AppCompatActivity {
     private Intent intentGet;
     private TextView tvcomicName;
+    private TextView tvLike;
     private LinearLayout llAttention;
-    private TextView tvHeart;
+    private LinearLayout llLike;
     private ImageView ivAttention;
+    private ImageView ivLike;
+    private TextView tvToFirstStory;
     private FrameLayout back;
     private ImageView ad;
 
@@ -56,6 +62,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
     private SharedPreferences.Editor WebtoonDataSharedPreferenceEdit;
     private SharedPreferences userDataSharedPreferences;
     private String token;
+    RequestComicNoData requestComicNoData;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -66,6 +73,8 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         getWebtoonContentsList();
         setContentsListView();
         requestAddAttentionWebtoon();
+        requestAddLikeWebtoon();
+        requestGetFirstStory();
         setBackButton();
     }
 
@@ -89,45 +98,52 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
-    private void init(){
+
+    private void init() {
         context = this;
 
         tvcomicName = findViewById(R.id.webtoonName);
-        tvHeart = findViewById(R.id.number_of_heart);
         listView = findViewById(R.id.listview_webtoon_contents);
         ad = findViewById(R.id.ad);
-        llAttention=findViewById(R.id.attention_linear_layout);
+        llAttention = findViewById(R.id.add_attention_linear_layout);
+        llLike = findViewById(R.id.add_like_linear_layout);
+        tvLike = findViewById(R.id.number_of_like);
+        tvToFirstStory = findViewById(R.id.text_view_first_story);
+
         back = findViewById(R.id.btn_back_webtoon_list);
         webtoonContentsAdapter = new WebtoonContentsListAdapter(this, contentsList);
 
 
         intentGet = getIntent();
-        comic = (WebtoonData)intentGet.getExtras().getSerializable("comic");
+        comic = (WebtoonData) intentGet.getExtras().getSerializable("comic");
         Glide.with(this).load("https://ssl.pstatic.net/tveta/libs/1228/1228325/8900f29613ccef494352_20190405142447995.jpg").into(ad);
+        requestComicNoData = new RequestComicNoData(comic.getComicNO());
+
 
         tvcomicName.setText(comic.getComicName());
-        tvHeart.setText(Integer.toString(comic.getComicHeart()));
+        tvLike.setText(Integer.toString(comic.getComicHeart()));
 
         WebtoonDataSharedPreference =
                 context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
         WebtoonDataSharedPreferenceEdit = WebtoonDataSharedPreference.edit();
         userDataSharedPreferences = context
                 .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
-        token= userDataSharedPreferences.getString("token", "");
+        token = userDataSharedPreferences.getString("token", "");
     }
-    private void getWebtoonContentsList(){
+
+    private void getWebtoonContentsList() {
         Call<ResponseWebtoonContentsListData> responseWebtoonContentsListDataCall =
                 Singleton.softcomicsService.getWebtoonContentsList(comic.getComicNO());
         responseWebtoonContentsListDataCall.enqueue(new Callback<ResponseWebtoonContentsListData>() {
             @Override
             public void onResponse(Call<ResponseWebtoonContentsListData> call, Response<ResponseWebtoonContentsListData> response) {
-                if(response.isSuccessful()){
-                    switch (response.body().getCode()){
+                if (response.isSuccessful()) {
+                    switch (response.body().getCode()) {
                         case 100://성공
                             List<WebtoonContentsData> list = response.body().getResult();
                             SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
-                            for(int i=0; i<list.size(); i++){
-                                boolean read = sharedPreferences.getBoolean(comic.getComicName()+i, false);
+                            for (int i = 0; i < list.size(); i++) {
+                                boolean read = sharedPreferences.getBoolean(comic.getComicName() + i, false);
                                 list.get(i).setRead(read);
                             }
                             contentsList = new ArrayList<>(list);
@@ -135,10 +151,9 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                             setListViewHeightBasedOnChildren(listView);
                             break;
                         default:
-                            Toast.makeText(WebtoonContentsListActivity.this, "에러코드 : " +response.body().getCode(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WebtoonContentsListActivity.this, "에러코드 : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(WebtoonContentsListActivity.this, "못불러옴", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -146,11 +161,12 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseWebtoonContentsListData> call, Throwable t) {
                 Toast.makeText(WebtoonContentsListActivity.this, "서버로부터 가져오지 못함", Toast.LENGTH_SHORT).show();
-                System.out.println("실패원인 " +t.toString());
+                System.out.println("실패원인 " + t.toString());
             }
         });
     }
-    private void setContentsListView(){
+
+    private void setContentsListView() {
         listView.setAdapter(webtoonContentsAdapter);
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -159,7 +175,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                 WebtoonContentsData l = (WebtoonContentsData) listView.getItemAtPosition(position);
                 Intent intent = new Intent(WebtoonContentsListActivity.this, WebtoonViewerActivity.class);
                 l.setRead(true);
-                WebtoonDataSharedPreferenceEdit.putBoolean(comic.getComicName()+position, true);
+                WebtoonDataSharedPreferenceEdit.putBoolean(comic.getComicName() + position, true);
                 WebtoonDataSharedPreferenceEdit.commit();
                 webtoonContentsAdapter.notifyDataSetChanged();
 
@@ -170,37 +186,36 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             }
         });
     }
-    private void requestAddAttentionWebtoon(){
+
+    private void requestAddAttentionWebtoon() {
         llAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestAddAttentionData requestAddAttentionData =
-                        new RequestAddAttentionData(comic.getComicNO());
                 Call<ResponseAddAttentionWebtoonData> attentionCall =
                         Singleton.softcomicsService
-                                .addAttentionWebtoon(requestAddAttentionData, token);
+                                .addAttentionWebtoon(requestComicNoData, token);
                 attentionCall.enqueue(new Callback<ResponseAddAttentionWebtoonData>() {
                     @Override
                     public void onResponse(Call<ResponseAddAttentionWebtoonData> call, Response<ResponseAddAttentionWebtoonData> response) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(context);
                         alert.setTitle("관심웹툰");
                         alert.setPositiveButton("확인", null);
-                        if(response.isSuccessful()){
-                            switch (response.body().getCode()){
+                        if (response.isSuccessful()) {
+                            switch (response.body().getCode()) {
                                 case 100:
                                     alert.setMessage(response.body().getMessage());
                                     alert.show();
                                     break;
                                 default:
-                                    alert.setMessage("에러코드 "+response.body().getCode()+" : "+response.body().getMessage());
+                                    alert.setMessage("에러코드 " + response.body().getCode() + " : " + response.body().getMessage());
                                     alert.show();
                             }
-                        }
-                        else{
+                        } else {
                             alert.setMessage("로그인이 필요합니다.");
                             alert.show();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ResponseAddAttentionWebtoonData> call, Throwable t) {
                         Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_SHORT).show();
@@ -209,7 +224,93 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             }
         });
     }
-    private void setBackButton(){
+
+    private void requestAddLikeWebtoon() {
+        llLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseAddLikeWebtoonData> likeCall =
+                        Singleton.softcomicsService
+                                .addLikeWebtoon(requestComicNoData);
+                likeCall.enqueue(new Callback<ResponseAddLikeWebtoonData>() {
+                    @Override
+                    public void onResponse(Call<ResponseAddLikeWebtoonData> call, Response<ResponseAddLikeWebtoonData> response) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("좋아요");
+                        alert.setPositiveButton("확인", null);
+                        if (response.isSuccessful()) {
+                            switch (response.body().getCode()) {
+                                case 100://성공
+                                    alert.setMessage(response.body().getMessage());
+                                    alert.show();
+                                    break;
+                                default:
+                                    alert.setMessage("에러코드 " + response.body().getCode() + " : " + response.body().getMessage());
+                                    alert.show();
+                            }
+                        } else {
+                            alert.setMessage("로그인이 필요합니다.");
+                            alert.show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseAddLikeWebtoonData> call, Throwable t) {
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+    private void changeAttentionImageView(){
+        ivAttention.setImageResource(R.drawable.ic_attention_button_checked);
+    }
+
+    private void requestGetFirstStory(){
+        tvToFirstStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseGetFirstStoryData> getFirstStoryCall=
+                        Singleton.softcomicsService.getFirstStory(comic.getComicNO());
+                getFirstStoryCall.enqueue(new Callback<ResponseGetFirstStoryData>() {
+                    @Override
+                    public void onResponse(Call<ResponseGetFirstStoryData> call, Response<ResponseGetFirstStoryData> response) {
+                        if(response.isSuccessful()){
+                            switch (response.body().getCode()){
+                                case 100:
+                                    WebtoonContentsData first = response.body().getWebtoonContentsData();
+                                    if(first==null){
+                                        Toast.makeText(context, "웹툰이 존재하지 않음", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        Toast.makeText(context, first.getContentName() + "", Toast.LENGTH_SHORT).show();
+                                    }
+                                    break;
+                                default:
+                                    Toast.makeText(context, response.body().getCode()+"", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{
+                            Toast.makeText(context, "SQL 문법 에러", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseGetFirstStoryData> call, Throwable t) {
+                        if (t instanceof IOException) {
+                        Toast.makeText(context, "this is an actual network failure :( inform the user and possibly retry", Toast.LENGTH_SHORT).show();
+                        // logging probably not necessary
+                    }
+                    else {
+                        Toast.makeText(context, "conversion issue! big problems :(", Toast.LENGTH_SHORT).show();
+                        // todo log to some central bug tracking service
+                    }
+                    }
+                });
+            }
+        });
+    }
+    private void setBackButton() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

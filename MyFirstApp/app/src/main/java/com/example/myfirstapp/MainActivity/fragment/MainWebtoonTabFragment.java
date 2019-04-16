@@ -123,7 +123,6 @@ public class MainWebtoonTabFragment extends Fragment {
                         case 100://가져오기 성공
                             List<WebtoonData> list = response.body().getResult();
                             webtoonDataList[day] = new ArrayList<>(list);
-                            Log.d("웹툰 개수", webtoonListAdapter[day].getCount() + ":" + day + "번");
                             webtoonListAdapter[day].setDataList(webtoonDataList[day]);
                             break;
                         default:
@@ -190,6 +189,7 @@ public class MainWebtoonTabFragment extends Fragment {
         Calendar c = new GregorianCalendar(Locale.KOREA);
         int day = (c.get(c.DAY_OF_WEEK) + 5) % 7;
         tabLayout.getTabAt(day).select();
+        viewPager.setCurrentItem(day);
     }
 }
 

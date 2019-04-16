@@ -7,16 +7,14 @@ import com.example.myfirstapp.MemberInformationActivity.entities.RequestWithdraw
 import com.example.myfirstapp.MemberInformationActivity.entities.ResponseWithdrawalData;
 import com.example.myfirstapp.SignUpActivity.entities.ResponseSignUpData;
 import com.example.myfirstapp.SignUpActivity.entities.RequestSignUpData;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.RequestAddAttentionData;
+import com.example.myfirstapp.WebtoonContentsListActivity.entities.RequestComicNoData;
 import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseAddAttentionWebtoonData;
+import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseAddLikeWebtoonData;
+import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseGetFirstStoryData;
 import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseWebtoonContentsListData;
-import com.example.myfirstapp.common.entities.WebtoonData;
 
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
@@ -30,7 +28,7 @@ public interface SoftcomicsService {
 
     //API 2번 회원탈퇴
     @HTTP(method = "DELETE", path = "user", hasBody = true)
-    Call<ResponseWithdrawalData> withdrawal(@Body RequestWithdrawalData requestWithdrawalData, @Header("x-access-token") String token);
+    Call<ResponseWithdrawalData> withdrawal(@Body RequestWithdrawalData requestWithdrawalData);
 
     //API 3번 로그인
     @GET("token/{id}/{pw}")
@@ -48,12 +46,20 @@ public interface SoftcomicsService {
     @GET("comic/day/{day}")
     Call<ResponseWebtoonListData> getDaysWebtoonList(@Path("day") String day);
 
+    //API 7번 웹툰 좋아요 누르기
+    @POST("comic/like")
+    Call<ResponseAddLikeWebtoonData> addLikeWebtoon(@Body RequestComicNoData requestComicNoData);
+
     //API 9번 웹툰 컨텐츠 보기
     @GET("comic/contentAll/{comicno}")
-    Call<ResponseWebtoonContentsListData> getWebtoonContentsList(@Path("comicno") int num);
+    Call<ResponseWebtoonContentsListData> getWebtoonContentsList(@Path("comicno") int comicNo);
 
     //API 10번 관심 웹툰 등록, 아직 RequestBody 미구현
     //@HTTP(method = "POST", path = "my/comic", hasBody = true)
     @POST("my/comic")
-    Call<ResponseAddAttentionWebtoonData> addAttentionWebtoon(@Body RequestAddAttentionData requestAddAttentionData, @Header("x-access-token") String token);
+    Call<ResponseAddAttentionWebtoonData> addAttentionWebtoon(@Body RequestComicNoData requestComicNoData, @Header("x-access-token") String token);
+
+    //API 11번
+    @GET("comic/content/first/{comicno}")
+    Call<ResponseGetFirstStoryData> getFirstStory(@Path("comicno") int comicNo);
 }

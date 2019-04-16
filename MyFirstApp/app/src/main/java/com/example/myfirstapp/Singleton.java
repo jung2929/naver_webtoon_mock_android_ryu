@@ -1,11 +1,14 @@
 package com.example.myfirstapp;
 
 import android.app.Application;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.myfirstapp.common.entities.WebtoonData;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,9 +28,11 @@ public class Singleton extends Application {
 
 
     private static volatile Singleton instance = null;
+
     private static class SingletonHolder {
         public static final Singleton INSTANCE = new Singleton();
     }
+
     public static Singleton getSingletonInstance() {
         return SingletonHolder.INSTANCE;
     }
@@ -39,6 +44,40 @@ public class Singleton extends Application {
             .build();
     private OkHttpClient.Builder builder = new OkHttpClient.Builder();
     private OkHttpClient headerClient = new OkHttpClient();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = getSingletonInstance();
+
+        DataManager.initWebtoonDummyData(webtoonList);
+        //softcomics.co.kr
+        builder.addInterceptor(new AddHeaderInterceptor());
+        headerClient = builder.build();
+        softRetrofit = new Retrofit.Builder()
+                .baseUrl("http://softcomics.co.kr/")
+                .client(headerClient)//
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        softcomicsService = softRetrofit.create(SoftcomicsService.class);
+
+        //requestPost();
+
+    }
+
+    public class AddHeaderInterceptor implements Interceptor {
+        @Override
+        public Response intercept(Interceptor.Chain chain) throws IOException {
+            Request request = chain.request();
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            String token = sharedPreferences.getString("token", "");
+            Request.Builder newRequest = request.newBuilder();
+            if (!token.equals("")) {
+                newRequest.header("x-access-token", token);
+            }
+            return chain.proceed(newRequest.build());
+        }
+    }
 
     public void requestGet(int comicno) {
         Request request = new Request.Builder().url("http://softcomics.co.kr/comic/contentAll/" + comicno).get().build();
@@ -79,38 +118,4 @@ public class Singleton extends Application {
     }
 
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = getSingletonInstance();
-
-        DataManager.initWebtoonDummyData(webtoonList);
-        //softcomics.co.kr
-        builder.addInterceptor(new AddHeaderInterceptor());
-        headerClient = builder.build();
-        softRetrofit = new Retrofit.Builder()
-                .baseUrl("http://softcomics.co.kr/")
-            //    .client(headerClient) 안됨...
-                .client(client)//테스트용 클라이언트
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        softcomicsService = softRetrofit.create(SoftcomicsService.class);
-
-        //requestPost();
-
-    }
-    public class AddHeaderInterceptor implements Interceptor{
-            @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
-            Toast.makeText(getSingletonInstance(), "인터셉트!", Toast.LENGTH_SHORT).show();
-            SharedPreferences sharedPreferences = instance.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-            String token = sharedPreferences.getString("token","");
-            Request request = chain.request();
-            Request newRequest = request.newBuilder()
-                    .header("x-access-token", token)
-                    .build();
-            return chain.proceed(newRequest);
-        }
-    }
 }
