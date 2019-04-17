@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:textSize="16sp"
                 tools:text="comicName" />
 
@@ -61,7 +61,7 @@
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
-                    android:textColor="@color/webtoonStarPoint"
+                    android:textColor="@color/colorWebtoonStarPoint"
                     android:textSize="13sp"
                     android:gravity="left"
                     tools:text="별점" />
@@ -70,7 +70,7 @@
                     android:id="@+id/webtoon_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/blackfontexplain"
+                    android:textColor="@color/colorBlackfontexplain"
                     android:textSize="13sp"
                     tools:text="contentDate" />
             </LinearLayout>

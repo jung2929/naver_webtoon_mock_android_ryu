@@ -1,4 +1,4 @@
-package com.example.myfirstapp.common.entities;
+package com.example.myfirstapp.common.Entities;
 
 import com.example.myfirstapp.baseClass.BaseWebtoonData;
 

@@ -1,13 +1,10 @@
 package com.example.myfirstapp;
 
 import android.app.Application;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.myfirstapp.common.entities.WebtoonData;
+import com.example.myfirstapp.common.Entities.WebtoonData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +17,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Singleton extends Application {
 

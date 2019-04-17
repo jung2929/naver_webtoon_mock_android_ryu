@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:textColor="@color/blackfont"
+            android:textColor="@color/colorBlackfont"
             android:textSize="18sp"
             tools:text="아이디" />
 
@@ -30,11 +30,11 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/naverGreen"
+        app:tabIndicatorColor="@color/colorNaverGreen"
         app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/naverGreen"
-        app:tabTextColor="@color/blackfontexplain"
+        app:tabSelectedTextColor="@color/colorNaverGreen"
+        app:tabTextColor="@color/colorBlackfontexplain"
         app:tabUnboundedRipple="false">
 
     </android.support.design.widget.TabLayout>

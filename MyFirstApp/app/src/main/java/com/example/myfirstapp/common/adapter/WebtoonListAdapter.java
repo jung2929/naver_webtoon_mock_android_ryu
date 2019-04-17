@@ -1,4 +1,4 @@
-package com.example.myfirstapp.common.adapter;
+package com.example.myfirstapp.common.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.common.entities.WebtoonData;
+import com.example.myfirstapp.common.Entities.WebtoonData;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /***************************
  *사용처

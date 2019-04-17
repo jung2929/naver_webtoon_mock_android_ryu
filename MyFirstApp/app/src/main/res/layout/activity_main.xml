@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.example.myfirstapp.MainActivity.MainActivity">
+    tools:context="com.example.myfirstapp.Main.MainActivity">
 
     <com.example.myfirstapp.NonSwipeableViewPager
         android:id="@+id/main_viewpager"
@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/border" />
+        android:background="@color/colorBorder" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/main_menu_tab"

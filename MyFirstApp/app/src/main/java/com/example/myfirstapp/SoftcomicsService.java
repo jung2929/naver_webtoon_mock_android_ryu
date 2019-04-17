@@ -1,17 +1,17 @@
 package com.example.myfirstapp;
 
-import com.example.myfirstapp.LoginActivity.entities.ResponseLoginData;
-import com.example.myfirstapp.MainActivity.entities.ResponseMyWebtoonListData;
-import com.example.myfirstapp.MainActivity.entities.ResponseWebtoonListData;
-import com.example.myfirstapp.MemberInformationActivity.entities.RequestWithdrawalData;
-import com.example.myfirstapp.MemberInformationActivity.entities.ResponseWithdrawalData;
-import com.example.myfirstapp.SignUpActivity.entities.ResponseSignUpData;
-import com.example.myfirstapp.SignUpActivity.entities.RequestSignUpData;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.RequestComicNoData;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseAddAttentionWebtoonData;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseAddLikeWebtoonData;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseGetFirstStoryData;
-import com.example.myfirstapp.WebtoonContentsListActivity.entities.ResponseWebtoonContentsListData;
+import com.example.myfirstapp.Login.Entities.ResponseLoginData;
+import com.example.myfirstapp.Main.Entities.ResponseMyWebtoonListData;
+import com.example.myfirstapp.Main.Entities.ResponseWebtoonListData;
+import com.example.myfirstapp.MemberInformation.Entities.RequestWithdrawalData;
+import com.example.myfirstapp.MemberInformation.Entities.ResponseWithdrawalData;
+import com.example.myfirstapp.SignUp.Entities.ResponseSignUpData;
+import com.example.myfirstapp.SignUp.Entities.RequestSignUpData;
+import com.example.myfirstapp.WebtoonContentsList.entities.RequestComicNoData;
+import com.example.myfirstapp.WebtoonContentsList.entities.ResponseAddAttentionWebtoonData;
+import com.example.myfirstapp.WebtoonContentsList.entities.ResponseAddLikeWebtoonData;
+import com.example.myfirstapp.WebtoonContentsList.entities.ResponseGetFirstStoryData;
+import com.example.myfirstapp.WebtoonContentsList.entities.ResponseWebtoonContentsListData;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -59,7 +59,7 @@ public interface SoftcomicsService {
     @POST("my/comic")
     Call<ResponseAddAttentionWebtoonData> addAttentionWebtoon(@Body RequestComicNoData requestComicNoData, @Header("x-access-token") String token);
 
-    //API 11번
+    //API 11번 웹툰 첫화 얻어오기
     @GET("comic/content/first/{comicno}")
     Call<ResponseGetFirstStoryData> getFirstStory(@Path("comicno") int comicNo);
 }

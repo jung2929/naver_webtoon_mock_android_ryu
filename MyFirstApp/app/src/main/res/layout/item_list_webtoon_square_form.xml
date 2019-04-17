@@ -27,7 +27,7 @@
             android:layout_marginTop="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginBottom="0dp"
-            android:background="@color/webtoonBackground"
+            android:background="@color/colorWebtoonBackground"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/webtoonName"
+                android:textColor="@color/colorWebtoonName"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:text=""
-                    android:textColor="@color/webtoonStarPoint"
+                    android:textColor="@color/colorWebtoonStarPoint"
                     android:textSize="10sp" />
 
             </LinearLayout>
@@ -76,14 +76,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="글"
-                android:textColor="@color/blackfontexplain"
+                android:textColor="@color/colorBlackfontexplain"
                 android:textSize="10sp" />
             <TextView
                 android:id="@+id/webtoon_painter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="/그림"
-                android:textColor="@color/blackfontexplain"
+                android:textColor="@color/colorBlackfontexplain"
                 android:textSize="10sp" />
 </LinearLayout>
         </LinearLayout>

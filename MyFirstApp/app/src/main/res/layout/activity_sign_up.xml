@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity.SignUpActivity"
+    tools:context=".SignUp.SignUpActivity"
     android:background="#EEEEEE"
     android:orientation="vertical"
     >
@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:text="아이디"
                 android:textSize="16sp"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
                 />
@@ -35,7 +35,7 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:textSize="16sp"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:background="@color/colorWhite"
                 android:padding="5dp"
                 tools:text="input" />
@@ -52,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:text="비밀번호"
                 android:textSize="16sp"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
                 />
@@ -65,7 +65,7 @@
                 android:inputType="textPassword"
                 android:textSize="16sp"
                 tools:text="비밀"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:background="@color/colorWhite"
                 android:padding="5dp"
                 />
@@ -81,7 +81,7 @@
                 android:layout_height="match_parent"
                 android:text="재확인"
                 android:textSize="16sp"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
                 />
@@ -94,7 +94,7 @@
                 android:inputType="textPassword"
                 android:textSize="16sp"
                 tools:text="비밀"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:hint="비밀번호 재확인"
                 android:textColorHint="#999999"
                 android:background="@color/colorWhite"
@@ -112,7 +112,7 @@
                 android:layout_height="match_parent"
                 android:text="메일주소"
                 android:textSize="16sp"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
                 />
@@ -124,7 +124,7 @@
                 android:ems="10"
                 android:inputType="textEmailAddress"
                 android:textSize="16sp"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:background="@color/colorWhite"
                 android:padding="5dp"
                 android:hint="email@softcomics.com"
@@ -141,7 +141,7 @@
             android:layout_height="match_parent"
             android:text="연락처"
             android:textSize="16sp"
-            android:textColor="@color/blackfont"
+            android:textColor="@color/colorBlackfont"
             android:layout_marginEnd="10dp"
             android:gravity="center"
             />
@@ -153,7 +153,7 @@
             android:ems="10"
             android:inputType="phone"
             android:textSize="16sp"
-            android:textColor="@color/blackfont"
+            android:textColor="@color/colorBlackfont"
             android:background="@color/colorWhite"
             android:padding="5dp"
             android:hint="연락처"

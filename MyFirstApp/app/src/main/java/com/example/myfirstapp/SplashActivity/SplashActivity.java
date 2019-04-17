@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.myfirstapp.MainActivity.MainActivity;
+import com.example.myfirstapp.Main.MainActivity;
 
 public class SplashActivity extends Activity {
     @Override

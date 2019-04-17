@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/border"
+            android:background="@color/colorBorder"
             android:orientation="vertical">
 
             <TextView
@@ -26,7 +26,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="설정"
-                android:textColor="@color/blackfont"
+                android:textColor="@color/colorBlackfont"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -34,12 +34,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1px"
-                android:background="@color/greyfontbackground"
+                android:background="@color/colorGreyfontbackground"
                 android:paddingStart="15dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="로그인"
-                android:textColor="@color/greyfont"
+                android:textColor="@color/colorGreyfont"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -58,7 +58,7 @@
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
                     android:text="로그인 정보"
-                    android:textColor="@color/blackfont"
+                    android:textColor="@color/colorBlackfont"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:text="naverid"
-                        android:textColor="@color/blackfontexplain"
+                        android:textColor="@color/colorBlackfontexplain"
                         android:textSize="15sp" />
 
                     <TextView
@@ -89,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:text="  〉"
-                        android:textColor="@color/blackfontexplain"
+                        android:textColor="@color/colorBlackfontexplain"
                         android:textSize="15sp" />
                 </LinearLayout>
 
@@ -99,12 +99,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1px"
-                android:background="@color/greyfontbackground"
+                android:background="@color/colorGreyfontbackground"
                 android:paddingStart="15dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="부가기능"
-                android:textColor="@color/greyfont"
+                android:textColor="@color/colorGreyfont"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동 회전"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -138,7 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -171,7 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="더블탭 확대/축소"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -179,7 +179,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -212,7 +212,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="결제 후 작품 바로보기"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -220,7 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="웹툰 회차 목록에서 유료 결제시 적용"
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -253,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동 회전"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -261,7 +261,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -276,12 +276,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1px"
-                android:background="@color/greyfontbackground"
+                android:background="@color/colorGreyfontbackground"
                 android:paddingStart="15dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="부가기능"
-                android:textColor="@color/greyfont"
+                android:textColor="@color/colorGreyfont"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -307,7 +307,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동 회전"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -315,7 +315,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -348,7 +348,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="더블탭 확대/축소"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -356,7 +356,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -389,7 +389,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="결제 후 작품 바로보기"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -397,7 +397,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="웹툰 회차 목록에서 유료 결제시 적용"
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -430,7 +430,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동 회전"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -438,7 +438,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -453,12 +453,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1px"
-                android:background="@color/greyfontbackground"
+                android:background="@color/colorGreyfontbackground"
                 android:paddingStart="15dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="부가기능"
-                android:textColor="@color/greyfont"
+                android:textColor="@color/colorGreyfont"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -484,7 +484,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동 회전"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -492,7 +492,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -525,7 +525,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="더블탭 확대/축소"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -533,7 +533,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -566,7 +566,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="결제 후 작품 바로보기"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -574,7 +574,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="웹툰 회차 목록에서 유료 결제시 적용"
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
@@ -607,7 +607,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동 회전"
-                        android:textColor="@color/blackfont"
+                        android:textColor="@color/colorBlackfont"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -615,7 +615,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text=""
-                        android:textColor="@color/blackfontexplain" />
+                        android:textColor="@color/colorBlackfontexplain" />
                 </LinearLayout>
 
                 <ImageView
