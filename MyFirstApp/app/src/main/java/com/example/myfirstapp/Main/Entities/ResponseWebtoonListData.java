@@ -14,7 +14,6 @@ public class ResponseWebtoonListData extends ResponseBaseData {
     private List<WebtoonData> result = null;
 
     /**
-     *
      * @param message
      * @param result
      * @param code

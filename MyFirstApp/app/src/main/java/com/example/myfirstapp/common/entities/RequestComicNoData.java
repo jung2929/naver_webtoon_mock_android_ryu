@@ -1,4 +1,4 @@
-package com.example.myfirstapp.WebtoonContentsList.Entities;
+package com.example.myfirstapp.common.Entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -13,7 +13,6 @@ public class ResponseMyWebtoonListData extends ResponseBaseData {
     private List<WebtoonData> webtoonList = null;
 
     /**
-     *
      * @param message
      * @param code
      */
@@ -21,6 +20,7 @@ public class ResponseMyWebtoonListData extends ResponseBaseData {
         super(code, message);
         this.webtoonList = webtoonList;
     }
+
     public List<WebtoonData> getWebtoonList() {
         return webtoonList;
     }

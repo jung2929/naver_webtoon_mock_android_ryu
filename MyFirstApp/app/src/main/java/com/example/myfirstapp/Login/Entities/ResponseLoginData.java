@@ -14,6 +14,7 @@ public class ResponseLoginData extends ResponseBaseData {
         super(code, message);
         this.result = result;
     }
+
     public Result getResult() {
         return result;
     }
@@ -21,6 +22,7 @@ public class ResponseLoginData extends ResponseBaseData {
     public void setResult(Result result) {
         this.result = result;
     }
+
     public class Result {
 
         @SerializedName("jwt")

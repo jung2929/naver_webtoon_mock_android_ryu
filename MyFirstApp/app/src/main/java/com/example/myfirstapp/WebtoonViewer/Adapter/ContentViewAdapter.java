@@ -23,8 +23,8 @@ public class ContentViewAdapter extends BaseAdapter {
     public ContentViewAdapter(Context context, ArrayList<WebtoonContentViewData> list, String baseURL) {
         this.list = list;
         this.context = context;
-        this.layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        this.baseURL=baseURL;
+        this.layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        this.baseURL = baseURL;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ContentViewAdapter extends BaseAdapter {
         return position;
     }
 
-    public void setData(ArrayList<WebtoonContentViewData> list){
+    public void setData(ArrayList<WebtoonContentViewData> list) {
         this.list = list;
         this.notifyDataSetChanged();
     }
@@ -51,13 +51,12 @@ public class ContentViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         WebtoonContentViewData item = list.get(position);
         ContentViewViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             convertView = new ImageView(context);
             holder = new ContentViewViewHolder();
             holder.content = (ImageView) convertView;
             convertView.setTag(holder);
-        }
-        else{
+        } else {
             holder = (ContentViewViewHolder) convertView.getTag();
         }
         Glide.with(context).load(baseURL + item.getContentContent()).into(holder.content);

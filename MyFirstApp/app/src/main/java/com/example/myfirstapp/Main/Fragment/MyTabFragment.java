@@ -39,7 +39,7 @@ public class MyTabFragment extends Fragment {
     private ViewPager viewPager;
     private MyTabPagerAdapter myTabPagerAdapter;
     private ArrayList<ListView> listViewList;
-    private WebtoonListAdapter webtoonListAdapter[] =new WebtoonListAdapter[5];
+    private WebtoonListAdapter webtoonListAdapter[] = new WebtoonListAdapter[5];
     private ArrayList<WebtoonData> webtoonDataList[] = new ArrayList[5];
 
     private TextView tvLoginID;
@@ -49,7 +49,7 @@ public class MyTabFragment extends Fragment {
     private Context context;
     private SharedPreferences sharedPreferences;
 
-    private String tabNames[] = {"관심웹툰","최근 본 웹툰","임시저장 웹툰","보관함","결제내역"};
+    private String tabNames[] = {"관심웹툰", "최근 본 웹툰", "임시저장 웹툰", "보관함", "결제내역"};
     private final int ATTENTION = 0;
 
 
@@ -62,16 +62,18 @@ public class MyTabFragment extends Fragment {
         bindViewPagerWithTabLayout();
         return v;
     }
+
     @Override
     public void onResume() {
         super.onResume();
         LoginCheck();
         getWebtoonListByMyAttention();
     }
-    private void init(@NotNull View v){
+
+    private void init(@NotNull View v) {
         context = getContext();
         sharedPreferences = context
-                .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename),Context.MODE_PRIVATE);
+                .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
 
         tvLoginID = v.findViewById(R.id.my_tab_login_id);
         tabLayout = v.findViewById(R.id.my_tab_layout);
@@ -79,7 +81,7 @@ public class MyTabFragment extends Fragment {
         listViewList = new ArrayList<>();
         myTabPagerAdapter = new MyTabPagerAdapter(listViewList, getContext());
 
-        for(int tabIndex = 0; tabIndex< tabNames.length; tabIndex++) {
+        for (int tabIndex = 0; tabIndex < tabNames.length; tabIndex++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabNames[tabIndex]));
             webtoonListAdapter[tabIndex] =
                     new WebtoonListAdapter(getContext(), webtoonDataList[tabIndex], R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
@@ -88,7 +90,8 @@ public class MyTabFragment extends Fragment {
         }
         viewPager.setAdapter(myTabPagerAdapter);
     }
-    private  void bindViewPagerWithTabLayout(){
+
+    private void bindViewPagerWithTabLayout() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -123,19 +126,19 @@ public class MyTabFragment extends Fragment {
         });
     }
 
-    private void LoginCheck(){
-        token=sharedPreferences.getString("token","");
-        userId = sharedPreferences.getString("user_id","");
-        if(token.length()==0){
+    private void LoginCheck() {
+        token = sharedPreferences.getString("token", "");
+        userId = sharedPreferences.getString("user_id", "");
+        if (token.length() == 0) {
             tvLoginID.setText("로그인하세요.");
             tvLoginID.setTextColor(context.getResources().getColor(R.color.colorBlackfontexplain));
-        }else{
-            tvLoginID.setText(userId+"님");
+        } else {
+            tvLoginID.setText(userId + "님");
             tvLoginID.setTextColor(context.getResources().getColor(R.color.colorBlackfont));
         }
     }
 
-    private void tabListViewSetting(@NotNull ListView listView, final int tabIndex){
+    private void tabListViewSetting(@NotNull ListView listView, final int tabIndex) {
         listView.setAdapter(webtoonListAdapter[tabIndex]);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -148,13 +151,14 @@ public class MyTabFragment extends Fragment {
             }
         });
     }
-    private void getWebtoonListByMyAttention(){
+
+    private void getWebtoonListByMyAttention() {
         Call<ResponseMyWebtoonListData> getAttentionList =
                 Singleton.softcomicsService.getMyWebtoonList(token);
         getAttentionList.enqueue(new Callback<ResponseMyWebtoonListData>() {
             @Override
             public void onResponse(Call<ResponseMyWebtoonListData> call, Response<ResponseMyWebtoonListData> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     switch (response.body().getCode()) {
                         case 100://성공적
                             List<WebtoonData> myList = response.body().getWebtoonList();

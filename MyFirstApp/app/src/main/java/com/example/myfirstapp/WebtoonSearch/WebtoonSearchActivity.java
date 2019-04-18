@@ -28,19 +28,20 @@ public class WebtoonSearchActivity extends AppCompatActivity {
     private WebtoonListAdapter adapter;
     private ListView listView;
     private ArrayAdapter<String> arrayAdapter;
-    private ArrayList<WebtoonData> searchResultList=new ArrayList<>();
+    private ArrayList<WebtoonData> searchResultList = new ArrayList<>();
 
-    private void search(){
+    private void search() {
         String str = atvSearch.getText().toString();
-        for(WebtoonData webtoon : webtoonList){
-            if(webtoon.getComicName().contains(str)){
+        for (WebtoonData webtoon : webtoonList) {
+            if (webtoon.getComicName().contains(str)) {
                 adapter.addItem(webtoon);
             }
         }
-        if(adapter.getCount()==0){
+        if (adapter.getCount() == 0) {
             Toast.makeText(this, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,13 +49,13 @@ public class WebtoonSearchActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.result_search);
 
-        adapter=new WebtoonListAdapter(WebtoonSearchActivity.this,searchResultList, R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
+        adapter = new WebtoonListAdapter(WebtoonSearchActivity.this, searchResultList, R.layout.item_list_webtoon_loose_form, WebtoonListAdapter.TYPE_LIST);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BaseWebtoonData item = (BaseWebtoonData)listView.getItemAtPosition(position);
-                String webtoonName=item.getComicName();
+                BaseWebtoonData item = (BaseWebtoonData) listView.getItemAtPosition(position);
+                String webtoonName = item.getComicName();
                 Intent intent = new Intent(WebtoonSearchActivity.this, WebtoonContentsListActivity.class);
                 intent.putExtra("webtoonName", webtoonName);
                 startActivity(intent);
@@ -62,10 +63,9 @@ public class WebtoonSearchActivity extends AppCompatActivity {
         });
 
 
-
         ArrayList<String> webtoonNameList = new ArrayList<>();
 
-        for(BaseWebtoonData e : webtoonList){
+        for (BaseWebtoonData e : webtoonList) {
             webtoonNameList.add(e.getComicName());
         }
 

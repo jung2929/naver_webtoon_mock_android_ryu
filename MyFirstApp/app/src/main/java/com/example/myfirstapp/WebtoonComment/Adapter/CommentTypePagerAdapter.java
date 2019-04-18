@@ -1,4 +1,4 @@
-package com.example.myfirstapp.Main.Adpater;
+package com.example.myfirstapp.WebtoonComment.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,15 +9,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.myfirstapp.Main.Fragment.MainWebtoonTabFragment;
 import com.example.myfirstapp.Main.Fragment.MyTabFragment;
 import com.example.myfirstapp.Main.Fragment.SettingTabFragment;
+import com.example.myfirstapp.WebtoonComment.Fragment.WebtoonBestCommentFragment;
 
-public class MainPagerAdapter extends FragmentPagerAdapter {
+public class CommentTypePagerAdapter extends FragmentPagerAdapter {
     private int numOfTab;
     private Context context;
+    private int contentNo;
 
-    public MainPagerAdapter(FragmentManager fm, int numOfTab, Context context) {
+    public CommentTypePagerAdapter(FragmentManager fm, int numOfTab, Context context, int contentNo) {
         super(fm);
         this.numOfTab = numOfTab;
         this.context = context;
+        this.contentNo = contentNo;
     }
 
     @Override
@@ -27,22 +30,17 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle(1);
+        bundle.putInt("content_no", contentNo);
         switch (i) {
             case 0:
-                return new MainWebtoonTabFragment();
+                WebtoonBestCommentFragment best = new WebtoonBestCommentFragment();
+                best.setArguments(bundle);
+                return best;
             case 1:
-                SettingTabFragment t1 = new SettingTabFragment();
-                return t1;
-            case 2:
-                SettingTabFragment t2 = new SettingTabFragment();
-                return t2;
-            case 3:
-                MyTabFragment t3 = new MyTabFragment();
-                return t3;
-            case 4:
-                SettingTabFragment t4 = new SettingTabFragment();
-                return t4;
+                WebtoonBestCommentFragment best2 = new WebtoonBestCommentFragment();
+                best2.setArguments(bundle);
+                return best2;
             default:
                 return null;
         }

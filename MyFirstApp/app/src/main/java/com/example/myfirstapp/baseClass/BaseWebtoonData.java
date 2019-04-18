@@ -35,8 +35,8 @@ public class BaseWebtoonData implements Serializable {
     private String comicRating;
 
 
-    public BaseWebtoonData(){
-        thumbnail=null;
+    public BaseWebtoonData() {
+        thumbnail = null;
     }
 
     public BaseWebtoonData(String thumbnail, String comicName, String comicRating, String storyWriter) {
@@ -113,6 +113,7 @@ public class BaseWebtoonData implements Serializable {
     public void setComicRating(String comicRating) {
         this.comicRating = comicRating;
     }
+
     public String getStoryWriter() {
         return storyWriter;
     }

@@ -34,6 +34,7 @@ public class MemberInformationActivity extends AppCompatActivity {
     private TextView tvUserId;
     private Intent intentGet;
     private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +46,11 @@ public class MemberInformationActivity extends AppCompatActivity {
         setWithdrawalButton();
         setLogoutButton();
     }
-    void init(){
-        context=MemberInformationActivity.this;
 
-        tvUserId=findViewById(R.id.member_information_id);
+    void init() {
+        context = MemberInformationActivity.this;
+
+        tvUserId = findViewById(R.id.member_information_id);
         btnWithdrawal = findViewById(R.id.softcomics_withdrawal_button);
         btnLogout = findViewById(R.id.softcomics_logout_button);
 
@@ -57,14 +59,16 @@ public class MemberInformationActivity extends AppCompatActivity {
 
         sharedPreferences = context
                 .getSharedPreferences(context.getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token","");
+        token = sharedPreferences.getString("token", "");
         edit = sharedPreferences.edit();
 
     }
-    private void userInformationSetting(){
+
+    private void userInformationSetting() {
         tvUserId.setText(userId);
     }
-    private void setWithdrawalButton(){
+
+    private void setWithdrawalButton() {
 
         btnWithdrawal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +92,8 @@ public class MemberInformationActivity extends AppCompatActivity {
             }
         });
     }
-    private void requestWithdrawal(EditText etPassword){
+
+    private void requestWithdrawal(EditText etPassword) {
         String pw = etPassword.getText().toString();
         RequestWithdrawalData requestWithdrawalData =
                 new RequestWithdrawalData(pw);
@@ -98,8 +103,8 @@ public class MemberInformationActivity extends AppCompatActivity {
         withdrawal.enqueue(new Callback<ResponseWithdrawalData>() {
             @Override
             public void onResponse(Call<ResponseWithdrawalData> call, Response<ResponseWithdrawalData> response) {
-                if(response.isSuccessful()){
-                    switch (response.body().getCode()){
+                if (response.isSuccessful()) {
+                    switch (response.body().getCode()) {
                         case 100://회원탈퇴 완료
                             Toast.makeText(MemberInformationActivity.this, "회원탈퇴가 정상적으로 이루어졌습니다.", Toast.LENGTH_SHORT).show();
                             finish();
@@ -118,8 +123,7 @@ public class MemberInformationActivity extends AppCompatActivity {
                             finish();
                             break;
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(MemberInformationActivity.this, "회원탈퇴 에러", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -131,7 +135,8 @@ public class MemberInformationActivity extends AppCompatActivity {
         });
 
     }
-    private void withdrawalPassWordConfirm(){
+
+    private void withdrawalPassWordConfirm() {
         AlertDialog.Builder pwMsg = new AlertDialog.Builder(MemberInformationActivity.this);
         pwMsg.setTitle("정보 입력");
         pwMsg.setMessage("정보확인을 위해 비밀번호를 입력해 주세요.");
@@ -151,7 +156,8 @@ public class MemberInformationActivity extends AppCompatActivity {
         });
         pwMsg.show();
     }
-    private void setLogoutButton(){
+
+    private void setLogoutButton() {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -21,44 +21,48 @@ import java.util.ArrayList;
  *SearchActivity
  ***************************/
 public class WebtoonListAdapter extends BaseAdapter {
-    public final static int TYPE_GRID=0;
-    public final static int TYPE_LIST=1;
+    public final static int TYPE_GRID = 0;
+    public final static int TYPE_LIST = 1;
 
     private Context context;
     private ArrayList<WebtoonData> list;
     private LayoutInflater layoutInflater;
     private int webtoonNum, layout;
     private int viewType;
-    public WebtoonListAdapter(Context context, ArrayList<WebtoonData> list,int layoutID, int viewType) {
-        this.webtoonNum=0;
+
+    public WebtoonListAdapter(Context context, ArrayList<WebtoonData> list, int layoutID, int viewType) {
+        this.webtoonNum = 0;
         this.list = list;
         this.layout = layoutID;
-        this.layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        this.layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.viewType = viewType;
         this.context = context;
     }
-    public ArrayList<String> getWebtoonNames(){
-        ArrayList<String> str=new ArrayList<>();
-        for(int i=0; i<list.size(); i++)
+
+    public ArrayList<String> getWebtoonNames() {
+        ArrayList<String> str = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++)
             str.add(list.get(i).getComicName());
         return str;
     }
-    public void setDataList(ArrayList<WebtoonData> list){
+
+    public void setDataList(ArrayList<WebtoonData> list) {
         this.list = list;
-        if(viewType==TYPE_GRID) {
+        if (viewType == TYPE_GRID) {
             setGridColumn(3);
         }
         this.notifyDataSetChanged();
     }
-    public void clear(){
+
+    public void clear() {
         list.clear();
     }
+
     @Override
     public int getCount() {
-        if(list==null){
+        if (list == null) {
             return 0;
-        }
-        else {
+        } else {
             return list.size();
         }
     }
@@ -72,14 +76,16 @@ public class WebtoonListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    private void setGridColumn(int col){
-        while(list.size()%col != 0){
+
+    private void setGridColumn(int col) {
+        while (list.size() % col != 0) {
             WebtoonData item = new WebtoonData();
             item.setNone(true);
             list.add(item);
         }
     }
-    public void addItem(WebtoonData item){
+
+    public void addItem(WebtoonData item) {
         switch (viewType) {
             case TYPE_GRID:
                 if (list.size() == webtoonNum) {
@@ -99,27 +105,28 @@ public class WebtoonListAdapter extends BaseAdapter {
         }
         webtoonNum++;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         WebtoonData item = list.get(position);
         WebtoonDataViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             convertView = layoutInflater.inflate(layout, null);
             holder = new WebtoonDataViewHolder();
-            holder.thumbnail=convertView.findViewById(R.id.webtoon_thumbnail);
-            holder.title=convertView.findViewById(R.id.webtoon_title);
-            holder.starPoint=convertView.findViewById(R.id.webtoon_starpoint);
+            holder.thumbnail = convertView.findViewById(R.id.webtoon_thumbnail);
+            holder.title = convertView.findViewById(R.id.webtoon_title);
+            holder.starPoint = convertView.findViewById(R.id.webtoon_starpoint);
             holder.star = convertView.findViewById(R.id.webtoon_star);
             holder.storyWriter = convertView.findViewById(R.id.webtoon_story_writer);
             holder.painter = convertView.findViewById(R.id.webtoon_painter);
-            if(viewType==TYPE_GRID) {
+            if (viewType == TYPE_GRID) {
             }
             convertView.setTag(holder);
-        }else{
-            holder = (WebtoonDataViewHolder)convertView.getTag();
+        } else {
+            holder = (WebtoonDataViewHolder) convertView.getTag();
         }
 
-        if(item.getThumbnail()!=null)
+        if (item.getThumbnail() != null)
             Glide.with(context)
                     .load(item.getThumbnail())
                     .into(holder.thumbnail);
@@ -131,13 +138,12 @@ public class WebtoonListAdapter extends BaseAdapter {
         holder.storyWriter.setText(item.getStoryWriter());
 
         //그림작가 없는 경우
-        if(item.getPainter()==null) holder.painter.setText("");
-        else holder.painter.setText("/"+item.getPainter());
-        if(viewType==TYPE_GRID){
-            if(item.isNone()){
+        if (item.getPainter() == null) holder.painter.setText("");
+        else holder.painter.setText("/" + item.getPainter());
+        if (viewType == TYPE_GRID) {
+            if (item.isNone()) {
                 holder.star.setVisibility(View.INVISIBLE);
-            }
-            else {
+            } else {
                 holder.star.setVisibility(View.VISIBLE);
             }
         }

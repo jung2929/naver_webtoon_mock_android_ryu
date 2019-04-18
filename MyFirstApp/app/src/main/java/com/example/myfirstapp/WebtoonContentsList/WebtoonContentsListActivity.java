@@ -14,14 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.WebtoonContentsList.Entities.RequestComicNoData;
+import com.example.myfirstapp.common.Entities.RequestComicNoData;
 import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseAddLikeWebtoonData;
 import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseGetFirstStoryData;
 import com.example.myfirstapp.WebtoonViewer.WebtoonViewerActivity;
@@ -122,7 +121,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
 
 
         tvcomicName.setText(comic.getComicName());
-        tvLike.setText(comic.getComicHeart()+"");
+        tvLike.setText(comic.getComicHeart() + "");
 
         WebtoonDataSharedPreference =
                 context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
@@ -144,7 +143,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                             List<WebtoonContentsData> list = response.body().getResult();
                             SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
                             for (int i = 0; i < list.size(); i++) {
-                                boolean read = sharedPreferences.getBoolean(list.get(i).getContentNo()+"", false);
+                                boolean read = sharedPreferences.getBoolean(list.get(i).getContentNo() + "", false);
                                 list.get(i).setRead(read);
                             }
                             contentsList = new ArrayList<>(list);
@@ -178,16 +177,18 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             }
         });
     }
-    private void toWebtoonViewerActivity(WebtoonContentsData contentData){
+
+    private void toWebtoonViewerActivity(WebtoonContentsData contentData) {
         Intent intent = new Intent(WebtoonContentsListActivity.this, WebtoonViewerActivity.class);
         contentData.setRead(true);
-        WebtoonDataSharedPreferenceEdit.putBoolean(contentData.getContentNo()+"", true);//ContentNo은 primary key임
+        WebtoonDataSharedPreferenceEdit.putBoolean(contentData.getContentNo() + "", true);//ContentNo은 primary key임
         WebtoonDataSharedPreferenceEdit.commit();
         webtoonContentsAdapter.notifyDataSetChanged();
 
         intent.putExtra("content", contentData);
         startActivity(intent);
     }
+
     private void requestAddAttentionWebtoon() {
         llAttention.setOnClickListener(new View.OnClickListener() {
             @Override

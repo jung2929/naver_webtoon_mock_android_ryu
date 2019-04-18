@@ -14,6 +14,8 @@ MyFirstApp
                 - Adapter
                     -WebtoonListAdapter.java # WebtoonData를 뿌려주는 Adapter
                 - Entities
+                    - RequestComicNoData.java # 서버에 comicno을 넘겨줄 때 사용
+                    - RequestContentNoData.java # 서버에 contentno을 넘겨줄 때 사용
                     - WebtoonData.java
             - Login # 로그인
                 - Entities
@@ -46,8 +48,9 @@ MyFirstApp
             - Splash # 스플래시
                 -SplashActivity.java
             - Login # 로그인
-                - Adapter #
-                - Activity #
+                - Entities
+                    - ResponseLoginData.java # 서버에서 받아오는 로그인 응답
+                - LoginActivity.java
 |
 |
 |

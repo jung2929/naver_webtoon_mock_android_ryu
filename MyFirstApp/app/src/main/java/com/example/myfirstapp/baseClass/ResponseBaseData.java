@@ -12,7 +12,6 @@ public class ResponseBaseData {
     private String message;
 
     /**
-     *
      * @param message
      * @param code
      */

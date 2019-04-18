@@ -32,7 +32,7 @@ public class SettingTabFragment extends Fragment {
     @NotNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.fragment_setting_tab, container, false);
+        View v = inflater.inflate(R.layout.fragment_setting_tab, container, false);
 
         init(v);
 
@@ -45,37 +45,40 @@ public class SettingTabFragment extends Fragment {
         loginCheck();
         setLoginInfo();
     }
+
     @NotNull
-    private void init(View v){
+    private void init(View v) {
         context = getContext();
-        sharedPreferences = context.getSharedPreferences("UserData",Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
 
         tvLoginID = v.findViewById(R.id.tvLoginID);
         tvGotoLoginInfo = v.findViewById(R.id.goto_login_info_button);
 
     }
-    private void loginCheck(){
-        token=sharedPreferences.getString("token","");
-        userId = sharedPreferences.getString("user_id","");
-        if(token.length()==0){
+
+    private void loginCheck() {
+        token = sharedPreferences.getString("token", "");
+        userId = sharedPreferences.getString("user_id", "");
+        if (token.length() == 0) {
             tvLoginID.setText("로그인하세요.");
-            loggedIn=false;
-        }else{
+            loggedIn = false;
+        } else {
             tvLoginID.setText(userId);
-            loggedIn=true;
+            loggedIn = true;
         }
     }
-    private void setLoginInfo(){
+
+    private void setLoginInfo() {
         tvGotoLoginInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if(loggedIn==false){//비로그인 상태
+                if (loggedIn == false) {//비로그인 상태
                     intent = new Intent(getContext(), LoginActivity.class);
 
-                }else{//로그인한 상태
-                    intent=new Intent(getContext(), MemberInformationActivity.class);
-                    intent.putExtra("user_id",userId);
+                } else {//로그인한 상태
+                    intent = new Intent(getContext(), MemberInformationActivity.class);
+                    intent.putExtra("user_id", userId);
                 }
                 startActivity(intent);
             }

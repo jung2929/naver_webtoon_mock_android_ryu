@@ -29,14 +29,15 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
         this.webtoonContentsDataList = list;
         this.context = context;
     }
-    public void setDataList(ArrayList<WebtoonContentsData> list){
+
+    public void setDataList(ArrayList<WebtoonContentsData> list) {
         this.webtoonContentsDataList = list;
         this.notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        if(webtoonContentsDataList==null){
+        if (webtoonContentsDataList == null) {
             return 0;
         }
         return webtoonContentsDataList.size();
@@ -83,8 +84,8 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
         if (item.getContentImg().equals(""))//이미지가 없을 때
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
         else Glide.with(context)
-                    .load(item.getContentImg())
-                    .into(holder.thumbnail);
+                .load(item.getContentImg())
+                .into(holder.thumbnail);
 
         holder.title.setText(item.getContentName());
         holder.date.setText(item.getContentDate());

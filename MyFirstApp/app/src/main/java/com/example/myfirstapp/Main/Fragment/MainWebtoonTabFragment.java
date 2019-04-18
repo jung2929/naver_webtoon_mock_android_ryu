@@ -76,7 +76,7 @@ public class MainWebtoonTabFragment extends Fragment {
         return v;
     }
 
-    private void init(@NotNull View v){
+    private void init(@NotNull View v) {
         context = getContext();
         searchButton = v.findViewById(R.id.searchButton);
         viewPager = v.findViewById(R.id.viewpager_webtoonlist);
@@ -85,40 +85,44 @@ public class MainWebtoonTabFragment extends Fragment {
         webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewList, context);
 
         for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
-            webtoonListAdapter[mDay] = new WebtoonListAdapter(getContext(), webtoonDataList[mDay],R.layout.item_list_webtoon_square_form, WebtoonListAdapter.TYPE_GRID);
+            webtoonListAdapter[mDay] = new WebtoonListAdapter(getContext(), webtoonDataList[mDay], R.layout.item_list_webtoon_square_form, WebtoonListAdapter.TYPE_GRID);
             gridViewList.add(new GridView(context));
             setTabLayout(mDay);
         }
     }
-    private void setTabLayout(int day){
+
+    private void setTabLayout(int day) {
         TabLayout.Tab t = tabLayout.newTab();
         t.setText(DAYS[day]);
         tabLayout.addTab(t);
     }
-    private void setWebtoonGridView(){
-    for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
-        gridViewList.get(mDay).setNumColumns(3);
-        gridViewList.get(mDay).setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-        gridViewList.get(mDay).setBackgroundResource(R.color.colorBorder);
-        gridViewList.get(mDay).setAdapter(webtoonListAdapter[mDay]);
 
-        final int day = mDay;
-        gridViewList.get(mDay).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                toWebtoonContentsListActivity(position, day);
-            }
-        });
+    private void setWebtoonGridView() {
+        for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
+            gridViewList.get(mDay).setNumColumns(3);
+            gridViewList.get(mDay).setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+            gridViewList.get(mDay).setBackgroundResource(R.color.colorBorder);
+            gridViewList.get(mDay).setAdapter(webtoonListAdapter[mDay]);
+
+            final int day = mDay;
+            gridViewList.get(mDay).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    toWebtoonContentsListActivity(position, day);
+                }
+            });
+        }
+        viewPager.setAdapter(webtoonDaysPageAdapter);
     }
-    viewPager.setAdapter(webtoonDaysPageAdapter);
-}
-private void toWebtoonContentsListActivity(int position, final int day){
-    WebtoonData item = (WebtoonData) gridViewList.get(day).getItemAtPosition(position);
-    if (item.isNone()) return;
-    Intent intent = new Intent(context, WebtoonContentsListActivity.class);
-    intent.putExtra("comic", item);
-    startActivity(intent);
-}
+
+    private void toWebtoonContentsListActivity(int position, final int day) {
+        WebtoonData item = (WebtoonData) gridViewList.get(day).getItemAtPosition(position);
+        if (item.isNone()) return;
+        Intent intent = new Intent(context, WebtoonContentsListActivity.class);
+        intent.putExtra("comic", item);
+        startActivity(intent);
+    }
+
     private void getWebtoonListBy(final int day) {
         Call<ResponseWebtoonListData> webtoonListDataCall = Singleton.softcomicsService.getDaysWebtoonList(mDaysEng[day]);
         webtoonListDataCall.enqueue(new Callback<ResponseWebtoonListData>() {
@@ -139,13 +143,15 @@ private void toWebtoonContentsListActivity(int position, final int day){
                     Toast.makeText(getContext(), "문제생김", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseWebtoonListData> call, Throwable t) {
                 Toast.makeText(getContext(), "서버로부터 웹툰 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private void toSearchActivitySetting(){
+
+    private void toSearchActivitySetting() {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +161,8 @@ private void toWebtoonContentsListActivity(int position, final int day){
         });
 
     }
-    private void bindViewPagerAndTabLayout(){
+
+    private void bindViewPagerAndTabLayout() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -191,7 +198,8 @@ private void toWebtoonContentsListActivity(int position, final int day){
         });
 
     }
-    private void selectTabByCurrentTime(){
+
+    private void selectTabByCurrentTime() {
         Calendar c = new GregorianCalendar(Locale.KOREA);
         int day = (c.get(c.DAY_OF_WEEK) + 5) % 7;
         tabLayout.getTabAt(day).select();

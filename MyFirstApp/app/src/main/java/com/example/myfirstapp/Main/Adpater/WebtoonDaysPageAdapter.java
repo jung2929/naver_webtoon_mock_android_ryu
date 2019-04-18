@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class WebtoonDaysPageAdapter extends PagerAdapter {
     private Context context;
     ArrayList<GridView> list;
+
     public WebtoonDaysPageAdapter(ArrayList<GridView> list, Context context) {
         this.context = context;
         this.list = list;
@@ -31,7 +32,7 @@ public class WebtoonDaysPageAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View)object);
+        container.removeView((View) object);
     }
 
     @Override

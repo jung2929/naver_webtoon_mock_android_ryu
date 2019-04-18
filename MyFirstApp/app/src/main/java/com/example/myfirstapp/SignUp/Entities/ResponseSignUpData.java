@@ -15,14 +15,14 @@ public class ResponseSignUpData extends ResponseBaseData {
         this.id = id;
     }
 
- /*
-    @SerializedName("code")
-    @Expose
-    private Integer code;
-    @SerializedName("message")
-    @Expose
-    private String message;
-*/
+    /*
+       @SerializedName("code")
+       @Expose
+       private Integer code;
+       @SerializedName("message")
+       @Expose
+       private String message;
+   */
     public String getId() {
         return id;
     }

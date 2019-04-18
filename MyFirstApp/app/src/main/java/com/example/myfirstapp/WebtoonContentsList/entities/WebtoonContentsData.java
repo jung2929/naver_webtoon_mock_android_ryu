@@ -38,10 +38,11 @@ public class WebtoonContentsData implements Serializable {
 
     private boolean isRead;
 
-    public WebtoonContentsData(String contentName, String contentImg){
+    public WebtoonContentsData(String contentName, String contentImg) {
         this.contentName = contentName;
         this.contentImg = contentImg;
     }
+
     public WebtoonContentsData(String contentImg, String contentName, String contentRating, String contentDate, boolean isRead) {
         this.contentImg = contentImg;
         this.contentName = contentName;
@@ -53,6 +54,7 @@ public class WebtoonContentsData implements Serializable {
     public String getContentImg() {
         return contentImg;
     }
+
     public String getContentName() {
         return contentName;
     }
