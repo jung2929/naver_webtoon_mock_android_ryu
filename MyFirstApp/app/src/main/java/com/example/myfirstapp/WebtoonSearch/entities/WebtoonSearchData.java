@@ -1,4 +1,4 @@
-package com.example.myfirstapp.WebtoonSearch.entities;
+package com.example.myfirstapp.WebtoonSearch.Entities;
 
 import com.example.myfirstapp.baseClass.BaseWebtoonData;
 

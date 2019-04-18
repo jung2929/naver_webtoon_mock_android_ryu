@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
+import com.example.myfirstapp.ViewHolder.WebtoonDataViewHolder;
 import com.example.myfirstapp.common.Entities.WebtoonData;
 
 import java.util.ArrayList;
@@ -98,17 +99,13 @@ public class WebtoonListAdapter extends BaseAdapter {
         }
         webtoonNum++;
     }
-    public static class ViewHolder {
-        TextView title; TextView storyWriter; TextView painter;
-        ImageView thumbnail; ImageView star; TextView starPoint;
-    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         WebtoonData item = list.get(position);
-        ViewHolder holder;
+        WebtoonDataViewHolder holder;
         if(convertView == null){
             convertView = layoutInflater.inflate(layout, null);
-            holder = new ViewHolder();
+            holder = new WebtoonDataViewHolder();
             holder.thumbnail=convertView.findViewById(R.id.webtoon_thumbnail);
             holder.title=convertView.findViewById(R.id.webtoon_title);
             holder.starPoint=convertView.findViewById(R.id.webtoon_starpoint);
@@ -119,7 +116,7 @@ public class WebtoonListAdapter extends BaseAdapter {
             }
             convertView.setTag(holder);
         }else{
-            holder = (ViewHolder)convertView.getTag();
+            holder = (WebtoonDataViewHolder)convertView.getTag();
         }
 
         if(item.getThumbnail()!=null)

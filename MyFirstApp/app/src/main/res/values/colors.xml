@@ -7,7 +7,7 @@
     <color name="colorUnclickedMenuBar">#ABB5BA</color>
     <color name="colorWebtoonName">#191919</color>
     <color name="colorWebtoonCartoonist">#9c9c9c</color>
-    <color name="colorWebtoonStarPoint">#f12727</color>
+    <color name="colorWebtoonRating">#f12727</color>
     <color name="colorBorder">#dfdfdf</color>
     <color name="colorWebtoonBackground">#f7f7f7</color>
     <color name="colorBlackfont">#333333</color>

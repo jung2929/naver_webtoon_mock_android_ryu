@@ -7,4 +7,6 @@
     <string name="kakao_app_key">367572aeac50364facb72400162065b8</string>
     <string name="kakao_scheme">kakao367572aeac50364facb72400162065b8</string>
     <string name="sharedpreference_userdata_filename">UserData</string>
+
+    <string name="softcomics_url">http://softcomics.co.kr/</string>
 </resources>

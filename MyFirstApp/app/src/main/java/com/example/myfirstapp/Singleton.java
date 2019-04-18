@@ -51,7 +51,7 @@ public class Singleton extends Application {
         builder.addInterceptor(new AddHeaderInterceptor());
         headerClient = builder.build();
         softRetrofit = new Retrofit.Builder()
-                .baseUrl("http://softcomics.co.kr/")
+                .baseUrl(getString(R.string.softcomics_url))
                 .client(headerClient)//
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

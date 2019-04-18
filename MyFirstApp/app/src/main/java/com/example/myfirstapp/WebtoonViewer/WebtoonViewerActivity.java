@@ -1,31 +1,76 @@
 package com.example.myfirstapp.WebtoonViewer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myfirstapp.R;
+import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.WebtoonComment.WebtoonCommentActivity;
+import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
+import com.example.myfirstapp.WebtoonViewer.Adapter.ContentViewAdapter;
+import com.example.myfirstapp.WebtoonViewer.Entities.RequestPutRatingData;
+import com.example.myfirstapp.WebtoonViewer.Entities.ResponsePutRatingData;
+import com.example.myfirstapp.WebtoonViewer.Entities.ResponseWebtoonContentViewData;
+import com.example.myfirstapp.WebtoonViewer.Entities.WebtoonContentViewData;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WebtoonViewerActivity extends AppCompatActivity {
 
     private Context context;
+    private Intent intentGet;
 
     private TextView tvContentName;
-    private Intent intentGet;
+    private TextView tvPutRating;
     private LinearLayout llContentLike;
     private LinearLayout llComment;
+    private RatingBar rbDisableRatingBar;
+    private TextView tvRatingPoint;
+
+    private ListView lvViewer;
+    private ContentViewAdapter contentViewAdapter;
+    private ArrayList<WebtoonContentViewData> webtoonImageDataList;
+
+    private WebtoonContentsData content;
+
 
     private void init(){
         tvContentName = findViewById(R.id.content_name);
+        tvPutRating = findViewById(R.id.webtoon_viewer_rating);
         llContentLike = findViewById(R.id.webtoon_viewer_linear_layout_like);
         llComment = findViewById(R.id.webtoon_viewer_linear_layout_comment);
+        rbDisableRatingBar = findViewById(R.id.webtoon_viewer_rating_bar);
+        tvRatingPoint = findViewById(R.id.webtoon_viewer_rating_point);
+        lvViewer = findViewById(R.id.webtoon_viewer_list_view);
+
+        webtoonImageDataList = new ArrayList<>();
+        contentViewAdapter = new ContentViewAdapter(context, webtoonImageDataList, getString(R.string.softcomics_url));
 
         getIntentAndSet();
+        tvPutRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createRatingDialog();
+            }
+        });
         llComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,15 +78,51 @@ public class WebtoonViewerActivity extends AppCompatActivity {
             }
         });
     }
-
     private void getIntentAndSet(){
         intentGet = getIntent();
-        String str = intentGet.getExtras().getString("content_name");
-        tvContentName.setText(str);
+        content = (WebtoonContentsData) intentGet.getExtras().getSerializable("content");
+        tvContentName.setText(content.getContentName());
+
+        float rating = Float.parseFloat(content.getContentRating());
+        //별의 개수로 들어가므로 /2
+        rbDisableRatingBar.setRating(rating/2);
+        tvRatingPoint.setText(rating+"");
+
     }
     private void toWebtoonCommentActivity(){
         Intent intent = new Intent(context, WebtoonCommentActivity.class);
         startActivity(intent);
+    }
+    private void getContentImage(){
+        Call<ResponseWebtoonContentViewData> getImage = Singleton.softcomicsService.getContentImage(5);
+        getImage.enqueue(new Callback<ResponseWebtoonContentViewData>() {
+            @Override
+            public void onResponse(Call<ResponseWebtoonContentViewData> call, Response<ResponseWebtoonContentViewData> response) {
+                if(response.isSuccessful()){
+                    switch (response.body().getCode()){
+                        case 100://성공
+                            try {
+                                List<WebtoonContentViewData> imageList = response.body().getResult();
+                                webtoonImageDataList = new ArrayList<>(imageList);
+                                contentViewAdapter.setData(webtoonImageDataList);
+                            }catch (Exception e){
+                                Toast.makeText(context, "불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                            default:
+                                Toast.makeText(context, "에러?", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseWebtoonContentViewData> call, Throwable t) {
+                Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +131,68 @@ public class WebtoonViewerActivity extends AppCompatActivity {
 
         context=this;
         init();
+        getContentImage();
+
+    }
+
+    private void createRatingDialog(){
+        AlertDialog.Builder ratingDialog = new AlertDialog.Builder(context);
+        View ratingView = createRatingView();
+        ratingDialog.setView(ratingView);
+        ratingDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                TextView tvRate= ratingView.findViewById(R.id.rating_view_text);
+                final int rate = Integer.parseInt(tvRate.getText().toString());
+                requestPutRating(rate);
+            }
+        });
+        ratingDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        ratingDialog.show();
+    }
+    private View createRatingView(){
+        View view = LayoutInflater.from(context).inflate(R.layout.item_rating_view, null);
+        RatingBar ratingBar = view.findViewById(R.id.rating_view_rating_bar);
+        TextView textView = view.findViewById(R.id.rating_view_text);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                //별의 개수로 따지므로 *2
+                textView.setText(rating*2+"");
+            }
+        });
+        return view;
+    }
+    private void requestPutRating(final int rate){
+        RequestPutRatingData putRatingData = new RequestPutRatingData(content.getContentNo(), rate);
+        Call<ResponsePutRatingData> putRatingDataCall
+                = Singleton.softcomicsService.putRating(putRatingData);
+        putRatingDataCall.enqueue(new Callback<ResponsePutRatingData>() {
+            @Override
+            public void onResponse(Call<ResponsePutRatingData> call, Response<ResponsePutRatingData> response) {
+                if(response.isSuccessful()){
+                    switch (response.body().getCode()){
+                        case 100 ://성공
+                            Toast.makeText(context, "별 "+rate+"개를 주었습니다!", Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Toast.makeText(context, response.body().getMessage()+"", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(context, "에러 : "+call.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponsePutRatingData> call, Throwable t) {
+                Toast.makeText(context, "서버연결실패 : "+ call.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }

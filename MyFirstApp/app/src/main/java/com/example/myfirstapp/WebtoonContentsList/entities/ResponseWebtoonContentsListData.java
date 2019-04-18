@@ -1,4 +1,4 @@
-package com.example.myfirstapp.WebtoonContentsList.entities;
+package com.example.myfirstapp.WebtoonContentsList.Entities;
 
 import java.util.List;
 

@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
-                    android:textColor="@color/colorWebtoonStarPoint"
+                    android:textColor="@color/colorWebtoonRating"
                     android:textSize="13sp"
                     tools:text="별점" />
 

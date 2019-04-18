@@ -1,4 +1,4 @@
-package com.example.myfirstapp.WebtoonContentsList.adapter;
+package com.example.myfirstapp.WebtoonContentsList.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.WebtoonContentsList.entities.WebtoonContentsData;
+import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
 
 import java.util.ArrayList;
 

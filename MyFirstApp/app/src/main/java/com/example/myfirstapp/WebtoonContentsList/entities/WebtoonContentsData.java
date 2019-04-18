@@ -1,9 +1,11 @@
-package com.example.myfirstapp.WebtoonContentsList.entities;
+package com.example.myfirstapp.WebtoonContentsList.Entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class WebtoonContentsData {
+import java.io.Serializable;
+
+public class WebtoonContentsData implements Serializable {
     //WebtoonContentsListActivity ListView 사용
 
     @SerializedName("Content_No")

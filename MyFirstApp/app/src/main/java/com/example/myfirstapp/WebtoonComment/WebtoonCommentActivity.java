@@ -69,6 +69,5 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_webtoon_comment);
 
         init();
-        setTabLayout();
     }
 }

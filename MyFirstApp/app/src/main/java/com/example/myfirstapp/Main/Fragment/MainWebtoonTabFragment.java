@@ -102,19 +102,22 @@ public class MainWebtoonTabFragment extends Fragment {
         gridViewList.get(mDay).setBackgroundResource(R.color.colorBorder);
         gridViewList.get(mDay).setAdapter(webtoonListAdapter[mDay]);
 
-        final int finalDay = mDay;
+        final int day = mDay;
         gridViewList.get(mDay).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                WebtoonData item = (WebtoonData)  gridViewList.get(finalDay).getItemAtPosition(position);
-                if (item.isNone()) return;
-                Intent intent = new Intent(context, WebtoonContentsListActivity.class);
-                intent.putExtra("comic", item);
-                startActivity(intent);
+                toWebtoonContentsListActivity(position, day);
             }
         });
     }
     viewPager.setAdapter(webtoonDaysPageAdapter);
+}
+private void toWebtoonContentsListActivity(int position, final int day){
+    WebtoonData item = (WebtoonData) gridViewList.get(day).getItemAtPosition(position);
+    if (item.isNone()) return;
+    Intent intent = new Intent(context, WebtoonContentsListActivity.class);
+    intent.putExtra("comic", item);
+    startActivity(intent);
 }
     private void getWebtoonListBy(final int day) {
         Call<ResponseWebtoonListData> webtoonListDataCall = Singleton.softcomicsService.getDaysWebtoonList(mDaysEng[day]);

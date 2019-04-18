@@ -14,20 +14,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.WebtoonContentsList.entities.RequestComicNoData;
-import com.example.myfirstapp.WebtoonContentsList.entities.ResponseAddLikeWebtoonData;
-import com.example.myfirstapp.WebtoonContentsList.entities.ResponseGetFirstStoryData;
+import com.example.myfirstapp.WebtoonContentsList.Entities.RequestComicNoData;
+import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseAddLikeWebtoonData;
+import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseGetFirstStoryData;
 import com.example.myfirstapp.WebtoonViewer.WebtoonViewerActivity;
-import com.example.myfirstapp.WebtoonContentsList.adapter.WebtoonContentsListAdapter;
-import com.example.myfirstapp.WebtoonContentsList.entities.ResponseAddAttentionWebtoonData;
-import com.example.myfirstapp.WebtoonContentsList.entities.ResponseWebtoonContentsListData;
-import com.example.myfirstapp.WebtoonContentsList.entities.WebtoonContentsData;
+import com.example.myfirstapp.WebtoonContentsList.Adapter.WebtoonContentsListAdapter;
+import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseAddAttentionWebtoonData;
+import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseWebtoonContentsListData;
+import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
 import com.example.myfirstapp.common.Entities.WebtoonData;
 
 import java.io.IOException;
@@ -121,7 +122,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
 
 
         tvcomicName.setText(comic.getComicName());
-        tvLike.setText(Integer.toString(comic.getComicHeart()));
+        tvLike.setText(comic.getComicHeart()+"");
 
         WebtoonDataSharedPreference =
                 context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
@@ -143,7 +144,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                             List<WebtoonContentsData> list = response.body().getResult();
                             SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
                             for (int i = 0; i < list.size(); i++) {
-                                boolean read = sharedPreferences.getBoolean(comic.getComicName() + i, false);
+                                boolean read = sharedPreferences.getBoolean(list.get(i).getContentNo()+"", false);
                                 list.get(i).setRead(read);
                             }
                             contentsList = new ArrayList<>(list);
@@ -172,20 +173,19 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                toWebtoonViewerActivity(position);
+                WebtoonContentsData contentData = (WebtoonContentsData) listView.getItemAtPosition(position);
+                toWebtoonViewerActivity(contentData);
             }
         });
     }
-    private void toWebtoonViewerActivity(int position){
-        WebtoonContentsData l = (WebtoonContentsData) listView.getItemAtPosition(position);
+    private void toWebtoonViewerActivity(WebtoonContentsData contentData){
         Intent intent = new Intent(WebtoonContentsListActivity.this, WebtoonViewerActivity.class);
-        l.setRead(true);
-        WebtoonDataSharedPreferenceEdit.putBoolean(comic.getComicName() + position, true);
+        contentData.setRead(true);
+        WebtoonDataSharedPreferenceEdit.putBoolean(contentData.getContentNo()+"", true);//ContentNo은 primary key임
         WebtoonDataSharedPreferenceEdit.commit();
         webtoonContentsAdapter.notifyDataSetChanged();
 
-        String str = l.getContentName();
-        intent.putExtra("content_name", str);//웹툰 회차 이름 전송
+        intent.putExtra("content", contentData);
         startActivity(intent);
     }
     private void requestAddAttentionWebtoon() {
@@ -194,7 +194,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Call<ResponseAddAttentionWebtoonData> attentionCall =
                         Singleton.softcomicsService
-                                .addAttentionWebtoon(requestComicNoData, token);
+                                .addAttentionWebtoon(requestComicNoData);
                 attentionCall.enqueue(new Callback<ResponseAddAttentionWebtoonData>() {
                     @Override
                     public void onResponse(Call<ResponseAddAttentionWebtoonData> call, Response<ResponseAddAttentionWebtoonData> response) {
@@ -284,7 +284,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                                     if (first == null) {
                                         Toast.makeText(context, "웹툰이 존재하지 않음", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        toWebtoonViewerActivity(0);
+                                        toWebtoonViewerActivity(first);
                                     }
                                     break;
                                 default:

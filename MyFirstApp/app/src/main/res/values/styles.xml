@@ -10,4 +10,9 @@
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:background">@drawable/splash_naver</item>
     </style>
+
+    <style name="RatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="colorControlNormal">@color/colorGreyfont</item>
+        <item name="colorControlActivated">@color/colorWebtoonRating</item>
+    </style>
 </resources>
