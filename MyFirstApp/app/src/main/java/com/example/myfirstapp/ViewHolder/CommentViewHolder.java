@@ -10,6 +10,15 @@ public class CommentViewHolder {
     private TextView like;
     private TextView dislike;
     private TextView bestText;
+    private TextView deleteButton;
+
+    public TextView getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(TextView deleteButton) {
+        this.deleteButton = deleteButton;
+    }
 
     public TextView getBestText() {
         return bestText;

@@ -25,6 +25,7 @@ import com.example.myfirstapp.common.Entities.RequestContentNoData;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
@@ -98,11 +99,15 @@ public interface SoftcomicsService {
     @GET("/comic/content/bestcomment/{contentno}")
     Call<ResponseCommentData> getBestComment(@Path("contentno") int contentno);
 
-    //API 18번 컨텐츠 좋아요 누르기
+    //API 18번 컨텐츠 댓글 삭제
+    @HTTP(method = "DELETE", path = "/comic/content/comment", hasBody = true)
+    Call<ResponseCommentBehaviorData> deleteComment(@Body RequestCommentNoData requestCommentNoData);
+
+    //API 19번 컨텐츠 댓글 좋아요 누르기
     @POST("/comic/content/comentLike")
     Call<ResponseCommentBehaviorData> addLikeComment(@Body RequestCommentNoData requestCommentNoData);
 
-    //API 18번 컨텐츠 싫어요 누르기
+    //API 20번 컨텐츠 댓글 싫어요 누르기
     @POST("/comic/content/coment/dislike")
     Call<ResponseCommentBehaviorData> addDislikeComment(@Body RequestCommentNoData requestCommentNoData);
 }

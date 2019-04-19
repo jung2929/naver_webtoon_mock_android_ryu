@@ -3,6 +3,8 @@ package com.example.myfirstapp.WebtoonContentsList.Entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public class WebtoonContentsData implements Serializable {
@@ -55,6 +57,7 @@ public class WebtoonContentsData implements Serializable {
         return contentImg;
     }
 
+    @NotNull
     public String getContentName() {
         return contentName;
     }

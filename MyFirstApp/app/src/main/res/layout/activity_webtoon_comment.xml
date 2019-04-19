@@ -10,7 +10,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:background="@color/colorBlackfont">
 
         <TextView
@@ -104,7 +104,8 @@
         <TextView
             android:id="@+id/webtoon_comment_add_comment"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
             android:gravity="center"
             android:text="등록"
             android:textColor="@color/colorBlackfontexplain"

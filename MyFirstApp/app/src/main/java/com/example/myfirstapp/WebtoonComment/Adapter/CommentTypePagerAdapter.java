@@ -4,11 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.myfirstapp.WebtoonComment.Fragment.WebtoonCommentFragment;
 
-public class CommentTypePagerAdapter extends FragmentPagerAdapter {
+public class CommentTypePagerAdapter extends FragmentStatePagerAdapter {
     private int numOfTab;
     private Context context;
     private int contentNo;
@@ -19,7 +19,10 @@ public class CommentTypePagerAdapter extends FragmentPagerAdapter {
         this.context = context;
         this.contentNo = contentNo;
     }
-
+    @Override
+    public int getItemPosition(Object object) {
+            return POSITION_NONE;
+    }
     @Override
     public int getCount() {
         return numOfTab;

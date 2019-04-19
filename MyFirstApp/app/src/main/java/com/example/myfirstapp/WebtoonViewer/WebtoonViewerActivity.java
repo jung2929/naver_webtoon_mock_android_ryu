@@ -46,6 +46,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
     private LinearLayout llComment;
     private RatingBar rbDisableRatingBar;
     private TextView tvRatingPoint;
+    private TextView tvLikeNum;
 
     private ListView lvViewer;
     private ContentViewAdapter contentViewAdapter;
@@ -62,6 +63,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
         rbDisableRatingBar = findViewById(R.id.webtoon_viewer_rating_bar);
         tvRatingPoint = findViewById(R.id.webtoon_viewer_rating_point);
         lvViewer = findViewById(R.id.webtoon_viewer_list_view);
+        tvLikeNum = findViewById(R.id.webtoon_viewer_like_num);
 
         webtoonImageDataList = new ArrayList<>();
         contentViewAdapter = new ContentViewAdapter(context, webtoonImageDataList, getString(R.string.softcomics_url));
@@ -85,56 +87,6 @@ public class WebtoonViewerActivity extends AppCompatActivity {
                 toWebtoonCommentActivity();
             }
         });
-    }
-
-    private void getIntentAndSet() {
-        intentGet = getIntent();
-        content = (WebtoonContentsData) intentGet.getExtras().getSerializable("content");
-        tvContentName.setText(content.getContentName());
-
-        float rating = Float.parseFloat(content.getContentRating());
-        //별의 개수로 들어가므로 /2
-        rbDisableRatingBar.setRating(rating / 2);
-        tvRatingPoint.setText(rating + "");
-
-    }
-
-    private void toWebtoonCommentActivity() {
-        Intent intent = new Intent(context, WebtoonCommentActivity.class);
-        intent.putExtra("content", content);
-        startActivity(intent);
-    }
-
-    private void getContentImage() {
-        Call<ResponseWebtoonContentViewData> getImage = Singleton.softcomicsService.getContentImage(5);
-        getImage.enqueue(new Callback<ResponseWebtoonContentViewData>() {
-            @Override
-            public void onResponse(Call<ResponseWebtoonContentViewData> call, Response<ResponseWebtoonContentViewData> response) {
-                if (response.isSuccessful()) {
-                    switch (response.body().getCode()) {
-                        case 100://성공
-                            try {
-                                List<WebtoonContentViewData> imageList = response.body().getResult();
-                                webtoonImageDataList = new ArrayList<>(imageList);
-                                contentViewAdapter.setData(webtoonImageDataList);
-                            } catch (Exception e) {
-                                Toast.makeText(context, "불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        default:
-                            Toast.makeText(context, "에러?", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseWebtoonContentViewData> call, Throwable t) {
-                Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     @Override
@@ -238,4 +190,63 @@ public class WebtoonViewerActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getIntentAndSet() {
+        intentGet = getIntent();
+        content = (WebtoonContentsData) intentGet.getExtras().getSerializable("content");
+        if (content != null) {
+            tvContentName.setText(content.getContentName());
+        }
+        if (content != null) {
+            tvLikeNum.setText(content.getContentHeart() + "");
+        }
+
+        float rating = 0;
+        if (content != null) {
+            rating = Float.parseFloat(content.getContentRating());
+        }
+        //별의 개수로 들어가므로 /2
+        rbDisableRatingBar.setRating(rating / 2);
+        tvRatingPoint.setText(rating + "");
+
+    }
+
+    private void toWebtoonCommentActivity() {
+        Intent intent = new Intent(context, WebtoonCommentActivity.class);
+        intent.putExtra("content", content);
+        startActivity(intent);
+    }
+
+    private void getContentImage() {
+        Call<ResponseWebtoonContentViewData> getImage = Singleton.softcomicsService.getContentImage(5);
+        getImage.enqueue(new Callback<ResponseWebtoonContentViewData>() {
+            @Override
+            public void onResponse(Call<ResponseWebtoonContentViewData> call, Response<ResponseWebtoonContentViewData> response) {
+                if (response.isSuccessful()) {
+                    switch (response.body().getCode()) {
+                        case 100://성공
+                            try {
+                                List<WebtoonContentViewData> imageList = response.body().getResult();
+                                webtoonImageDataList = new ArrayList<>(imageList);
+                                contentViewAdapter.setData(webtoonImageDataList);
+                            } catch (Exception e) {
+                                Toast.makeText(context, "불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        default:
+                            Toast.makeText(context, "에러?", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWebtoonContentViewData> call, Throwable t) {
+                Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
 }

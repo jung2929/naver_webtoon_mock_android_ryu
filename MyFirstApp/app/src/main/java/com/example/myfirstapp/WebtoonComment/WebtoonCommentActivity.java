@@ -9,15 +9,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.Singleton;
+import com.example.myfirstapp.WebtoonComment.Adapter.CommentListAdapter;
 import com.example.myfirstapp.WebtoonComment.Adapter.CommentTypePagerAdapter;
+import com.example.myfirstapp.WebtoonComment.Entities.CommentData;
 import com.example.myfirstapp.WebtoonComment.Entities.RequestAddCommentData;
 import com.example.myfirstapp.WebtoonComment.Entities.ResponseAddCommentData;
 import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,9 +30,13 @@ import retrofit2.Response;
 
 public class WebtoonCommentActivity extends AppCompatActivity {
 
+    private final int COMMENT_TYPE_BEST = 0;
+    private final int COMMENT_TYPE_ALL = 1;
+
     private Context context;
-    private SharedPreferences userDataShardPref;
+    private SharedPreferences userDataPref;
     private Intent intentGet;
+    private String user_id;
 
     private int commentNum;
     private TextView tvAllCommentsNum;
@@ -39,12 +48,16 @@ public class WebtoonCommentActivity extends AppCompatActivity {
     private TextView tvCommentWriterId;
     private TextView tvAddComment;
 
-    CommentTypePagerAdapter commentAdapter;
-    WebtoonContentsData content;
+    private ArrayList<ListView> commentListViewArrayList = new ArrayList<>();
+    private ArrayList<CommentListAdapter> commentListAdapterArrayList = new ArrayList<>();
+    private ArrayList<ArrayList<CommentData>> commentDataListArrayList = new ArrayList<>();
+
+    private CommentTypePagerAdapter commentAdapter;
+    private WebtoonContentsData content;
 
     private void init() {
         context = this;
-        userDataShardPref =
+        userDataPref =
                 context.getSharedPreferences(getResources().getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
         getIntentAndSet();
 
@@ -55,8 +68,15 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         tvCommentWriterId = findViewById(R.id.webtoon_comment_writer_id);
         tvAddComment = findViewById(R.id.webtoon_comment_add_comment);
 
-        commentAdapter = new CommentTypePagerAdapter(getSupportFragmentManager(), 2, context, content.getContentNo());
-
+           commentAdapter = new CommentTypePagerAdapter(getSupportFragmentManager(), 2, context, content.getContentNo());
+        /*for(int commentType = 0; commentType<2; commentType++){
+            commentListViewArrayList.add(new ListView(context));
+            commentDataListArrayList.add(new ArrayList<>());
+            commentListAdapterArrayList
+                    .add(new CommentListAdapter(commentDataListArrayList.get(commentType), context, commentType));
+        }
+        commentAdapter = new CommentTypePagerAdapter(commentListViewArrayList, context);
+*/
         setTabLayout();
         setViewPager();
         bindTabLayoutAndViewPager();
@@ -64,81 +84,30 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         setCommentWriteLayout();
 
     }
-
+    private void refresh(){
+        commentAdapter.notifyDataSetChanged();
+    }
     private void getIntentAndSet() {
         intentGet = getIntent();
         content = (WebtoonContentsData) intentGet.getExtras().getSerializable("content");
     }
 
-    private void setCommentWriteLayout() {
-        String id = userDataShardPref.getString("user_id", "로그인하세요.");
-        tvCommentWriterId.setText(id);
-        etComment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                changeCommentEditText(hasFocus);
-            }
-        });
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_webtoon_comment);
 
-        tvAddComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String myComment = etComment.getText().toString();
-                if (myComment.equals("")) {
-                    Toast.makeText(context, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                etComment.setText("");
-                etComment.clearFocus();
-                requestAddComment(myComment);
-            }
-        });
-    }
-
-    private void requestAddComment(String myComment) {
-        RequestAddCommentData requestAddCommentData =
-                new RequestAddCommentData(content.getContentNo(), myComment);
-        Call<ResponseAddCommentData> addCommentDataCall =
-                Singleton.softcomicsService.addComment(requestAddCommentData);
-        addCommentDataCall.enqueue(new Callback<ResponseAddCommentData>() {
-            @Override
-            public void onResponse(Call<ResponseAddCommentData> call, Response<ResponseAddCommentData> response) {
-                if (response.isSuccessful()) {
-                    switch (response.body().getCode()) {
-                        case 100: //성공
-                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(context, call.toString() + "", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseAddCommentData> call, Throwable t) {
-                Toast.makeText(context, "에러 : " + call.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        init();
+        setCommentNum();
     }
 
     private void changeCommentEditText(boolean focus) {
-        if (focus == true) {
+        if (focus) {
             tvCommentWriterId.setVisibility(View.VISIBLE);
         } else {
             tvCommentWriterId.setVisibility(View.GONE);
         }
-    }
-
-    private void setTabLayout() {
-        tlComments.addTab(tlComments.newTab().setText("베스트댓글"));
-        tlComments.addTab(tlComments.newTab().setText("전체댓글"));
-    }
-
-    private void setViewPager() {
-        vpComments.setAdapter(commentAdapter);
     }
 
     private void bindTabLayoutAndViewPager() {
@@ -177,22 +146,73 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         });
     }
 
-    private void setCommentNum(){
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            commentNum = bundle.getInt("comments_num");
-            tvAllCommentsNum.setText("전체 댓글 "+commentNum);
-        }
-        else{
-            tvAllCommentsNum.setText("전체 댓글");
-        }
+    private void setViewPager() {
+        vpComments.setAdapter(commentAdapter);
     }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webtoon_comment);
 
-        init();
-        setCommentNum();
+    private void setTabLayout() {
+        tlComments.addTab(tlComments.newTab().setText("베스트댓글"));
+        tlComments.addTab(tlComments.newTab().setText("전체댓글"));
     }
+
+
+    private void setCommentWriteLayout() {
+        user_id = userDataPref.getString("user_id", "로그인하세요.");
+        tvCommentWriterId.setText(user_id);
+        etComment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                changeCommentEditText(hasFocus);
+            }
+        });
+
+
+        tvAddComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String myComment = etComment.getText().toString();
+                if (myComment.equals("")) {
+                    Toast.makeText(context, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                etComment.setText("");
+                etComment.clearFocus();
+                requestAddComment(myComment);
+            }
+        });
+    }
+
+
+    private void setCommentNum() {
+            tvAllCommentsNum.setText("전체 댓글");
+    }
+    private void requestAddComment(String myComment) {
+        RequestAddCommentData requestAddCommentData =
+                new RequestAddCommentData(content.getContentNo(), myComment);
+        Call<ResponseAddCommentData> addCommentDataCall =
+                Singleton.softcomicsService.addComment(requestAddCommentData);
+        addCommentDataCall.enqueue(new Callback<ResponseAddCommentData>() {
+            @Override
+            public void onResponse(Call<ResponseAddCommentData> call, Response<ResponseAddCommentData> response) {
+                if (response.isSuccessful()) {
+                    switch (response.body().getCode()) {
+                        case 100: //성공
+                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
+                            refresh();
+                            break;
+                        default:
+                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, call.toString() + "", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAddCommentData> call, Throwable t) {
+                Toast.makeText(context, "에러 : " + call.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

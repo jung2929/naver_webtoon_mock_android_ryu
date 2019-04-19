@@ -46,6 +46,24 @@
                 android:textSize="12sp"
                 tools:text="신고" />
 
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/item_comment_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="X"
+                android:textColor="@color/colorBlackfont"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:background="@drawable/button"
+                />
+
         </LinearLayout>
 
         <FrameLayout
@@ -89,10 +107,13 @@
                 android:padding="5dp"
                 android:layout_marginRight="5dp"
                 >
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_like"
+                    android:layout_marginRight="5dp" />
                 <TextView
                     android:id="@+id/item_comment_like_text"
                     android:layout_width="wrap_content"
@@ -114,10 +135,13 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:padding="5dp"
                 >
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_dislike"
+                    android:layout_marginRight="5dp"/>
                 <TextView
                     android:id="@+id/item_comment_dislike_text"
                     android:layout_width="wrap_content"

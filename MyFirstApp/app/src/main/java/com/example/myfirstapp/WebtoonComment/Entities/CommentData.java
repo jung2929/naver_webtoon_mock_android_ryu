@@ -24,6 +24,8 @@ public class CommentData {
     @Expose
     private String commentDate;
 
+    private boolean isWrittenMe=false;
+
     public String getUserId() {
         return userId;
     }
@@ -46,5 +48,13 @@ public class CommentData {
 
     public String getCommentDate() {
         return commentDate;
+    }
+
+    public boolean isWrittenMe() {
+        return isWrittenMe;
+    }
+
+    public void setWrittenMe(boolean writtenMe) {
+        isWrittenMe = writtenMe;
     }
 }
