@@ -8,8 +8,11 @@ import com.example.myfirstapp.MemberInformation.Entities.ResponseWithdrawalData;
 import com.example.myfirstapp.SignUp.Entities.ResponseSignUpData;
 import com.example.myfirstapp.SignUp.Entities.RequestSignUpData;
 import com.example.myfirstapp.WebtoonComment.Entities.RequestAddCommentData;
+import com.example.myfirstapp.WebtoonComment.Entities.RequestCommentNoData;
 import com.example.myfirstapp.WebtoonComment.Entities.ResponseAddCommentData;
+import com.example.myfirstapp.WebtoonComment.Entities.ResponseCommentBehaviorData;
 import com.example.myfirstapp.WebtoonViewer.Entities.ResponseAddLikeContentData;
+import com.example.myfirstapp.WebtoonComment.Entities.ResponseCommentData;
 import com.example.myfirstapp.common.Entities.RequestComicNoData;
 import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseAddAttentionWebtoonData;
 import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseAddLikeWebtoonData;
@@ -86,4 +89,20 @@ public interface SoftcomicsService {
     //API 15번 컨텐츠 댓글 쓰기
     @POST("comic/content/comment")
     Call<ResponseAddCommentData> addComment(@Body RequestAddCommentData requestAddCommentData);
+
+    //API 16번 컨텐츠 댓글 전체보기
+    @GET("/comic/content/comment/{contentno}")
+    Call<ResponseCommentData> getAllComment(@Path("contentno") int contentno);
+
+    //API 17번 컨텐츠 댓글 베스트 보기
+    @GET("/comic/content/bestcomment/{contentno}")
+    Call<ResponseCommentData> getBestComment(@Path("contentno") int contentno);
+
+    //API 18번 컨텐츠 좋아요 누르기
+    @POST("/comic/content/comentLike")
+    Call<ResponseCommentBehaviorData> addLikeComment(@Body RequestCommentNoData requestCommentNoData);
+
+    //API 18번 컨텐츠 싫어요 누르기
+    @POST("/comic/content/coment/dislike")
+    Call<ResponseCommentBehaviorData> addDislikeComment(@Body RequestCommentNoData requestCommentNoData);
 }

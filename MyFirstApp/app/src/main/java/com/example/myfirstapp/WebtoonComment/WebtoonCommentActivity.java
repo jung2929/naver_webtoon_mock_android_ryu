@@ -7,10 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,15 +25,19 @@ import retrofit2.Response;
 
 public class WebtoonCommentActivity extends AppCompatActivity {
 
-    Context context;
-    SharedPreferences userDataShardPref;
-    Intent intentGet;
+    private Context context;
+    private SharedPreferences userDataShardPref;
+    private Intent intentGet;
 
-    TabLayout tlComments;
-    ViewPager vpComments;
-    EditText etComment;
-    TextView tvCommentWriterId;
-    TextView tvAddComment;
+    private int commentNum;
+    private TextView tvAllCommentsNum;
+
+    private TabLayout tlComments;
+    private ViewPager vpComments;
+
+    private EditText etComment;
+    private TextView tvCommentWriterId;
+    private TextView tvAddComment;
 
     CommentTypePagerAdapter commentAdapter;
     WebtoonContentsData content;
@@ -44,16 +46,17 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         context = this;
         userDataShardPref =
                 context.getSharedPreferences(getResources().getString(R.string.sharedpreference_userdata_filename), Context.MODE_PRIVATE);
+        getIntentAndSet();
 
+        tvAllCommentsNum = findViewById(R.id.webtoon_comment_all_comments_num);
         tlComments = findViewById(R.id.webtoon_comment_tab_layout);
         vpComments = findViewById(R.id.webtoon_comment_view_pager);
         etComment = findViewById(R.id.webtoon_comment_edittext);
         tvCommentWriterId = findViewById(R.id.webtoon_comment_writer_id);
         tvAddComment = findViewById(R.id.webtoon_comment_add_comment);
 
-        commentAdapter=new CommentTypePagerAdapter(getSupportFragmentManager(),2, context, content.getContentNo());
+        commentAdapter = new CommentTypePagerAdapter(getSupportFragmentManager(), 2, context, content.getContentNo());
 
-        getIntentAndSet();
         setTabLayout();
         setViewPager();
         bindTabLayoutAndViewPager();
@@ -81,13 +84,19 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         tvAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestAddComment();
+                String myComment = etComment.getText().toString();
+                if (myComment.equals("")) {
+                    Toast.makeText(context, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                etComment.setText("");
+                etComment.clearFocus();
+                requestAddComment(myComment);
             }
         });
     }
 
-    private void requestAddComment() {
-        String myComment = etComment.getText().toString();
+    private void requestAddComment(String myComment) {
         RequestAddCommentData requestAddCommentData =
                 new RequestAddCommentData(content.getContentNo(), myComment);
         Call<ResponseAddCommentData> addCommentDataCall =
@@ -115,7 +124,7 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         });
     }
 
-    private void changeCommentEditText(final boolean focus) {
+    private void changeCommentEditText(boolean focus) {
         if (focus == true) {
             tvCommentWriterId.setVisibility(View.VISIBLE);
         } else {
@@ -129,7 +138,7 @@ public class WebtoonCommentActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
-
+        vpComments.setAdapter(commentAdapter);
     }
 
     private void bindTabLayoutAndViewPager() {
@@ -168,11 +177,22 @@ public class WebtoonCommentActivity extends AppCompatActivity {
         });
     }
 
+    private void setCommentNum(){
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            commentNum = bundle.getInt("comments_num");
+            tvAllCommentsNum.setText("전체 댓글 "+commentNum);
+        }
+        else{
+            tvAllCommentsNum.setText("전체 댓글");
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webtoon_comment);
 
         init();
+        setCommentNum();
     }
 }

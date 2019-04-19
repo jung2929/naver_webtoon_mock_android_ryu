@@ -14,17 +14,17 @@
         android:background="@color/colorBlackfont">
 
         <TextView
-            android:id="@+id/webtoon_comment_text_view_title"
+            android:id="@+id/webtoon_comment_all_comments_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
+            android:text="전체 댓글"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="전체 댓글" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/webtoon_comment_frame_layout_reload"
@@ -104,11 +104,10 @@
         <TextView
             android:id="@+id/webtoon_comment_add_comment"
             android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="등록"
-            android:textColor="@color/colorBlackfont"
+            android:textColor="@color/colorBlackfontexplain"
             android:textSize="15sp" />
     </LinearLayout>
 </LinearLayout>

@@ -6,10 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.myfirstapp.Main.Fragment.MainWebtoonTabFragment;
-import com.example.myfirstapp.Main.Fragment.MyTabFragment;
-import com.example.myfirstapp.Main.Fragment.SettingTabFragment;
-import com.example.myfirstapp.WebtoonComment.Fragment.WebtoonBestCommentFragment;
+import com.example.myfirstapp.WebtoonComment.Fragment.WebtoonCommentFragment;
 
 public class CommentTypePagerAdapter extends FragmentPagerAdapter {
     private int numOfTab;
@@ -32,15 +29,19 @@ public class CommentTypePagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         Bundle bundle = new Bundle(1);
         bundle.putInt("content_no", contentNo);
+
+        // 0 : BEST COMMENT
+        // 1 : ALL COMMENT
+        bundle.putInt("comment_type", i);
         switch (i) {
             case 0:
-                WebtoonBestCommentFragment best = new WebtoonBestCommentFragment();
+                WebtoonCommentFragment best = new WebtoonCommentFragment();
                 best.setArguments(bundle);
                 return best;
             case 1:
-                WebtoonBestCommentFragment best2 = new WebtoonBestCommentFragment();
-                best2.setArguments(bundle);
-                return best2;
+                WebtoonCommentFragment all = new WebtoonCommentFragment();
+                all.setArguments(bundle);
+                return all;
             default:
                 return null;
         }
