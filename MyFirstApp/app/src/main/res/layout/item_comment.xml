@@ -95,32 +95,34 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:id="@+id/item_comment_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/button"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/item_comment_dislike"
-                android:padding="5dp"
-                android:layout_marginRight="5dp"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_margin="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_like"
-                    android:layout_marginRight="5dp" />
+                    android:src="@drawable/ic_like" />
+
                 <TextView
                     android:id="@+id/item_comment_like_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlackfont"
-                    android:textSize="11sp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="12sp"
                     tools:text="좋아요수"
+                    android:layout_gravity="center_vertical"
                     />
             </LinearLayout>
 
@@ -130,25 +132,26 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:padding="5dp"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_margin="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_dislike"
-                    android:layout_marginRight="5dp"/>
+                    android:src="@drawable/ic_dislike" />
+
                 <TextView
                     android:id="@+id/item_comment_dislike_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlackfont"
-                    android:textSize="11sp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="12sp"
                     tools:text="싫어요수"
+                    android:layout_gravity="center_vertical"
                     />
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

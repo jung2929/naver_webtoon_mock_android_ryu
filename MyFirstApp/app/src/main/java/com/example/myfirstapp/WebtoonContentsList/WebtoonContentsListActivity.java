@@ -6,14 +6,18 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +44,8 @@ import retrofit2.Response;
 
 public class WebtoonContentsListActivity extends AppCompatActivity {
     private Intent intentGet;
+    private SharedPreferences webtoonPref;
+
     private TextView tvcomicName;
     private TextView tvLike;
     private LinearLayout llAttention;
@@ -54,7 +60,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
 
     private ListView listView;
     private WebtoonContentsListAdapter webtoonContentsAdapter;
-    private ArrayList<WebtoonContentsData> contentsList;
+    private ArrayList<WebtoonContentsData> contentsList = new ArrayList<>();
 
     private Context context;
 
@@ -62,7 +68,13 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
     private SharedPreferences.Editor WebtoonDataSharedPreferenceEdit;
     private SharedPreferences userDataSharedPreferences;
     private String token;
-    RequestComicNoData requestComicNoData;
+    private RequestComicNoData requestComicNoData;
+
+    private int mLastContentNo;  //페이징 처리 request로 보낼 변수
+    private boolean isLastItem = false; //리스트뷰의 끝인지
+    private boolean isSendPagingRequest = false;   //페이징처리 요청을 보냈는지
+    private ProgressBar progressBar;
+    private final int PAGING_OFFSET = 3;    //페이징으로 한번에 불러오는 데이터 수
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -70,12 +82,13 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_webtoon_contents_list);
 
         init();
-        getWebtoonContentsList();
+        requestGetWebtoonContentsList();
         setContentsListView();
         requestAddAttentionWebtoon();
         requestAddLikeWebtoon();
         requestGetFirstStory();
         setBackButton();
+
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -110,6 +123,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         tvLike = findViewById(R.id.number_of_like);
         tvToFirstStory = findViewById(R.id.text_view_first_story);
         back = findViewById(R.id.btn_back_webtoon_list);
+        progressBar = findViewById(R.id.webtoon_contentslist_progressbar);
 
         webtoonContentsAdapter = new WebtoonContentsListAdapter(this, contentsList);
 
@@ -131,7 +145,19 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         token = userDataSharedPreferences.getString("token", "");
     }
 
-    private void getWebtoonContentsList() {
+    private void setReadTagAndSyncWithAdapter(List<WebtoonContentsData> list) {
+        webtoonPref = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
+        for (int i = 0; i < list.size(); i++) {
+            boolean read = webtoonPref.getBoolean(list.get(i).getContentNo() + "", false);
+            list.get(i).setRead(read);
+        }
+        contentsList.addAll(list);
+        mLastContentNo = contentsList.get(contentsList.size() - 1).getContentNo();
+        webtoonContentsAdapter.setDataList(contentsList);
+      //  setListViewHeightBasedOnChildren(listView);
+    }
+
+    private void requestGetWebtoonContentsList() {
         Call<ResponseWebtoonContentsListData> responseWebtoonContentsListDataCall =
                 Singleton.softcomicsService.getWebtoonContentsList(comic.getComicNO());
         responseWebtoonContentsListDataCall.enqueue(new Callback<ResponseWebtoonContentsListData>() {
@@ -141,14 +167,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                     switch (response.body().getCode()) {
                         case 100://성공
                             List<WebtoonContentsData> list = response.body().getResult();
-                            SharedPreferences sharedPreferences = context.getSharedPreferences("WebtoonTemporaryData", Context.MODE_PRIVATE);
-                            for (int i = 0; i < list.size(); i++) {
-                                boolean read = sharedPreferences.getBoolean(list.get(i).getContentNo() + "", false);
-                                list.get(i).setRead(read);
-                            }
-                            contentsList = new ArrayList<>(list);
-                            webtoonContentsAdapter.setDataList(contentsList);
-                            setListViewHeightBasedOnChildren(listView);
+                            setReadTagAndSyncWithAdapter(list);
                             break;
                         default:
                             Toast.makeText(WebtoonContentsListActivity.this, "에러코드 : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
@@ -161,11 +180,43 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseWebtoonContentsListData> call, Throwable t) {
                 Toast.makeText(WebtoonContentsListActivity.this, "서버로부터 가져오지 못함", Toast.LENGTH_SHORT).show();
-                System.out.println("실패원인 " + t.toString());
             }
         });
     }
 
+    private void requestGetPagingContentList() {
+        Call<ResponseWebtoonContentsListData> getPaging =
+                Singleton.softcomicsService.getPagingContentList(mLastContentNo);
+        getPaging.enqueue(new Callback<ResponseWebtoonContentsListData>() {
+            @Override
+            public void onResponse(Call<ResponseWebtoonContentsListData> call, Response<ResponseWebtoonContentsListData> response) {
+                if (response.isSuccessful()) {
+                    switch (response.body().getCode()) {
+                        case 100://성공
+                            List<WebtoonContentsData> list = response.body().getResult();
+                            if (list.size() == PAGING_OFFSET) {
+                                isSendPagingRequest = false;
+                            }
+                            if (list != null) {
+                                list.remove(0);
+                            }
+                            setReadTagAndSyncWithAdapter(list);
+                            progressBar.setVisibility(View.GONE);
+                            break;
+                        default:
+                            Toast.makeText(WebtoonContentsListActivity.this, "에러코드 : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(WebtoonContentsListActivity.this, "못불러옴", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWebtoonContentsListData> call, Throwable t) {
+                Toast.makeText(WebtoonContentsListActivity.this, "서버로부터 가져오지 못함", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void setContentsListView() {
         listView.setAdapter(webtoonContentsAdapter);
         listView.setClickable(true);
@@ -174,6 +225,27 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 WebtoonContentsData contentData = (WebtoonContentsData) listView.getItemAtPosition(position);
                 toWebtoonViewerActivity(contentData);
+            }
+        });
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && isLastItem && !isSendPagingRequest) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    isSendPagingRequest = true;
+                    requestGetPagingContentList();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                isLastItem = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
+                if (isLastItem && !isSendPagingRequest) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    isSendPagingRequest = true;
+                    requestGetPagingContentList();
+                }
+                Log.d("스크롤 마지막임? : ", firstVisibleItem + ", " + visibleItemCount + ", " + totalItemCount + ", " + isLastItem);
             }
         });
     }

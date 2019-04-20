@@ -104,10 +104,14 @@ public interface SoftcomicsService {
     Call<ResponseCommentBehaviorData> deleteComment(@Body RequestCommentNoData requestCommentNoData);
 
     //API 19번 컨텐츠 댓글 좋아요 누르기
-    @POST("/comic/content/comentLike")
+    @POST("/comic/content/comment/like")
     Call<ResponseCommentBehaviorData> addLikeComment(@Body RequestCommentNoData requestCommentNoData);
 
     //API 20번 컨텐츠 댓글 싫어요 누르기
-    @POST("/comic/content/coment/dislike")
+    @POST("/comic/content/comment/dislike")
     Call<ResponseCommentBehaviorData> addDislikeComment(@Body RequestCommentNoData requestCommentNoData);
+
+    //API 21번 컨텐츠 리스트 페이징
+    @GET("/comic/contents/{contentno}")
+    Call<ResponseWebtoonContentsListData> getPagingContentList(@Path("contentno") int contentno);
 }

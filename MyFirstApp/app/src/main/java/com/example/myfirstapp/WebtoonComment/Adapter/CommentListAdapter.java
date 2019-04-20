@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,10 +69,13 @@ public class CommentListAdapter extends BaseAdapter {
         Call<ResponseCommentBehaviorData> commentbehaviorDataCall;
         RequestCommentNoData commentNoData = new RequestCommentNoData(commentNo);
         TextView textViewLike;
+        LinearLayout borderLayout;
         if (like) {
+            borderLayout = holder.getLlLike();
             textViewLike = holder.getLike();
             commentbehaviorDataCall = Singleton.softcomicsService.addLikeComment(commentNoData);
         } else {
+            borderLayout = holder.getLlDislike();
             textViewLike=holder.getDislike();
             commentbehaviorDataCall = Singleton.softcomicsService.addDislikeComment(commentNoData);
         }
@@ -83,14 +87,14 @@ public class CommentListAdapter extends BaseAdapter {
                         case 100://성공
                             Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
                             if(like){
-                                textViewLike.setBackgroundResource(R.drawable.button_liked);
+                                borderLayout.setBackgroundResource(R.drawable.button_liked);
                                 textViewLike.setTextColor(context.getResources().getColor(R.color.colorWebtoonRating));
                                 textViewLike.setText(Integer.parseInt(textViewLike.getText().toString())+1+"");
                             }
                             else{
-                                textViewLike.setBackgroundResource(R.drawable.button_disliked);
+                                borderLayout.setBackgroundResource(R.drawable.button_disliked);
                                 textViewLike.setTextColor(context.getResources().getColor(R.color.design_default_color_primary));
-                                textViewLike.setText(Integer.parseInt(textViewLike.getText().toString())-1+"");
+                                textViewLike.setText(Integer.parseInt(textViewLike.getText().toString())+1+"");
                             }
                             break;
                         default:
@@ -137,13 +141,13 @@ public class CommentListAdapter extends BaseAdapter {
         });
     }
     private void setCommentBehavior(final CommentViewHolder holder, final int commentNo ,final int position) {
-        holder.getLike().setOnClickListener(new View.OnClickListener() {
+        holder.getLlLike().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestCommentLikeOrDisLike(true, holder, commentNo);
             }
         });
-        holder.getDislike().setOnClickListener(new View.OnClickListener() {
+        holder.getLlDislike().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestCommentLikeOrDisLike(false, holder,commentNo);
@@ -171,6 +175,8 @@ public class CommentListAdapter extends BaseAdapter {
             holder.setDislike(convertView.findViewById(R.id.item_comment_dislike_text));
             holder.setBestText(convertView.findViewById(R.id.item_comment_best));
             holder.setDeleteButton(convertView.findViewById(R.id.item_comment_delete));
+            holder.setLlLike(convertView.findViewById(R.id.item_comment_like));
+            holder.setLlDislike(convertView.findViewById(R.id.item_comment_dislike));
 
             setCommentBehavior(holder, item.getCommentNo(), position);
 

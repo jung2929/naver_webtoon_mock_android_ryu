@@ -1,5 +1,6 @@
 package com.example.myfirstapp.ViewHolder;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -11,6 +12,24 @@ public class CommentViewHolder {
     private TextView dislike;
     private TextView bestText;
     private TextView deleteButton;
+    private LinearLayout llLike;
+    private LinearLayout llDislike;
+
+    public LinearLayout getLlLike() {
+        return llLike;
+    }
+
+    public void setLlLike(LinearLayout llLike) {
+        this.llLike = llLike;
+    }
+
+    public LinearLayout getLlDislike() {
+        return llDislike;
+    }
+
+    public void setLlDislike(LinearLayout llDislike) {
+        this.llDislike = llDislike;
+    }
 
     public TextView getDeleteButton() {
         return deleteButton;

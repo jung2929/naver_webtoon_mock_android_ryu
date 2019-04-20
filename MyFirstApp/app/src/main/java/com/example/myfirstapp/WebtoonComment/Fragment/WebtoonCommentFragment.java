@@ -101,7 +101,6 @@ public class WebtoonCommentFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_webtoon_comment, container, false);
         init(v);
-        Log.d("프래그먼트", COMMENT_TYPE+"");
         requestGetCommentList();
         return v;
     }
