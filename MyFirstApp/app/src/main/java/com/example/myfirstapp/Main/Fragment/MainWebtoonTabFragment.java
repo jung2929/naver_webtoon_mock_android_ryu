@@ -38,7 +38,7 @@ import retrofit2.Response;
 public class MainWebtoonTabFragment extends Fragment {
 
     private Context context;
-    private View searchButton;
+    private View SearchButton;
 
     private String DAYS[] = {"월", "화", "수", "목", "금", "토", "일", "신작", "완결"};
     private final String mDaysEng[] = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
@@ -66,7 +66,6 @@ public class MainWebtoonTabFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main_webtoonlist_tab, container, false);
 
         init(v);
-        toSearchActivitySetting();
         setWebtoonGridView();
         selectTabByCurrentTime();
         for (int day = MONDAY; day <= SUNDAY; day++) {
@@ -78,17 +77,19 @@ public class MainWebtoonTabFragment extends Fragment {
 
     private void init(@NotNull View v) {
         context = getContext();
-        searchButton = v.findViewById(R.id.searchButton);
+        SearchButton = v.findViewById(R.id.searchButton);
         viewPager = v.findViewById(R.id.viewpager_webtoonlist);
         tabLayout = v.findViewById(R.id.tlWebtoonDays);
         gridViewList = new ArrayList<>();
         webtoonDaysPageAdapter = new WebtoonDaysPageAdapter(gridViewList, context);
 
         for (mDay = MONDAY; mDay < DAYS.length; mDay++) {
-            webtoonListAdapter[mDay] = new WebtoonListAdapter(getContext(), webtoonDataList[mDay], R.layout.item_list_webtoon_square_form, WebtoonListAdapter.TYPE_GRID);
+            webtoonListAdapter[mDay] = new WebtoonListAdapter(context, webtoonDataList[mDay], R.layout.item_list_webtoon_square_form, WebtoonListAdapter.TYPE_GRID);
             gridViewList.add(new GridView(context));
             setTabLayout(mDay);
         }
+
+        toSearchActivitySetting();
     }
 
     private void setTabLayout(int day) {
@@ -116,6 +117,10 @@ public class MainWebtoonTabFragment extends Fragment {
     }
 
     private void toWebtoonContentsListActivity(int position, final int day) {
+        if(Singleton.isStartActivity){
+            return;
+        }
+        Singleton.isStartActivity = true;
         WebtoonData item = (WebtoonData) gridViewList.get(day).getItemAtPosition(position);
         if (item.isNone()) return;
         Intent intent = new Intent(context, WebtoonContentsListActivity.class);
@@ -136,30 +141,33 @@ public class MainWebtoonTabFragment extends Fragment {
                             webtoonListAdapter[day].setDataList(webtoonDataList[day]);
                             break;
                         default:
-                            Toast.makeText(getContext(), "code : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "code : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.d("에러내용 ", call.toString());
-                    Toast.makeText(getContext(), "문제생김", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "문제생김", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseWebtoonListData> call, Throwable t) {
-                Toast.makeText(getContext(), "서버로부터 웹툰 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "서버로부터 웹툰 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void toSearchActivitySetting() {
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        SearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), WebtoonSearchActivity.class);
+                if(Singleton.isStartActivity){
+                    return;
+                }
+                Singleton.isStartActivity = true;
+                Intent intent = new Intent(context, WebtoonSearchActivity.class);
                 startActivity(intent);
             }
         });
-
     }
 
     private void bindViewPagerAndTabLayout() {

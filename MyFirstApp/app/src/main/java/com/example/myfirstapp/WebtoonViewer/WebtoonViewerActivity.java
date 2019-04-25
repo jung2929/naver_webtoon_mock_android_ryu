@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -26,8 +27,6 @@ import com.example.myfirstapp.WebtoonViewer.Entities.ResponseWebtoonContentViewD
 import com.example.myfirstapp.WebtoonViewer.Entities.WebtoonContentViewData;
 import com.example.myfirstapp.common.Entities.RequestContentNoData;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +41,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
 
     private TextView tvContentName;
     private TextView tvPutRating;
+    private ImageView ivContentLike;
     private LinearLayout llContentLike;
     private LinearLayout llComment;
     private RatingBar rbDisableRatingBar;
@@ -58,6 +58,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
     private void init() {
         tvContentName = findViewById(R.id.content_name);
         tvPutRating = findViewById(R.id.webtoon_viewer_rating);
+        ivContentLike = findViewById(R.id.webtoon_veiwer_content_like_image);
         llContentLike = findViewById(R.id.webtoon_viewer_linear_layout_like);
         llComment = findViewById(R.id.webtoon_viewer_linear_layout_comment);
         rbDisableRatingBar = findViewById(R.id.webtoon_viewer_rating_bar);
@@ -93,13 +94,23 @@ public class WebtoonViewerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webtoon_viewer);
+        Singleton.isStartActivity = false;
 
         context = this;
         init();
         getContentImage();
+        setContentLike(content.getContentHeart());
 
     }
-
+    private void setContentLike(int like){
+        if(content.getCheck() == 1) {
+            ivContentLike.setImageResource(R.drawable.ic_like_checked);
+        }
+        else{
+            ivContentLike.setImageResource(R.drawable.ic_like_unchecked);
+        }
+        tvLikeNum.setText(like+"");
+    }
     private void createRatingDialog() {
         AlertDialog.Builder ratingDialog = new AlertDialog.Builder(context);
         View ratingView = createRatingView();
@@ -174,7 +185,8 @@ public class WebtoonViewerActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     switch (response.body().getCode()) {
                         case 100: //성공
-                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
+                            content.setCheck((content.getCheck()+1)%2);
+                            setContentLike(response.body().getLike());
                             break;
                         default:
                             Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
@@ -197,9 +209,6 @@ public class WebtoonViewerActivity extends AppCompatActivity {
         if (content != null) {
             tvContentName.setText(content.getContentName());
         }
-        if (content != null) {
-            tvLikeNum.setText(content.getContentHeart() + "");
-        }
 
         float rating = 0;
         if (content != null) {
@@ -212,6 +221,10 @@ public class WebtoonViewerActivity extends AppCompatActivity {
     }
 
     private void toWebtoonCommentActivity() {
+        if(Singleton.isStartActivity){
+            return;
+        }
+        Singleton.isStartActivity = true;
         Intent intent = new Intent(context, WebtoonCommentActivity.class);
         intent.putExtra("content", content);
         startActivity(intent);

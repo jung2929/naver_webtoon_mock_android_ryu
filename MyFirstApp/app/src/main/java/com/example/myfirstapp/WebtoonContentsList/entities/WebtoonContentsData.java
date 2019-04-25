@@ -38,7 +38,13 @@ public class WebtoonContentsData implements Serializable {
     @Expose
     private String contentRating;
 
+    //좋아요 눌렀는지 확인
+    @SerializedName("check")
+    @Expose
+    private int check;
+
     private boolean isRead;
+
 
     public WebtoonContentsData(String contentName, String contentImg) {
         this.contentName = contentName;
@@ -132,6 +138,14 @@ public class WebtoonContentsData implements Serializable {
 
     public void setContentType(int contentType) {
         this.contentType = contentType;
+    }
+
+    public int getCheck() {
+        return check;
+    }
+
+    public void setCheck(int check) {
+        this.check = check;
     }
 
 }

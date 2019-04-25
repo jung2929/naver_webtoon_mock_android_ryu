@@ -13,28 +13,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".WebtoonComment.WebtoonCommentActivity"></activity>
-        <activity android:name=".MemberInformation.MemberInformationActivity" />
-        <activity android:name=".SignUp.SignUpActivity" />
-        <activity android:name=".activities.FacebookLoginActivity" />
-        <activity android:name=".activities.NaverLoginActivity" />
-        <activity android:name=".activities.KaKaoLoginActivity" />
+        <activity android:name=".WebtoonComment.WebtoonCommentActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""></activity>
+        <activity android:name=".MemberInformation.MemberInformationActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""/>
+        <activity android:name=".SignUp.SignUpActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""/>
 
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakao_app_key" />
-
-        <activity
-            android:name="com.kakao.auth.authorization.authcode.KakaoWebViewActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Login.LoginActivity" />
+        <activity android:name=".Login.LoginActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity="" />
         <activity
             android:name=".SplashActivity.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -44,9 +39,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main.MainActivity" />
+        <activity android:name=".Main.MainActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            />
         <activity
             android:name=".WebtoonSearch.WebtoonSearchActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
             android:parentActivityName=".Main.MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
@@ -56,6 +58,9 @@
         </activity>
         <activity
             android:name=".WebtoonContentsList.WebtoonContentsListActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
             android:parentActivityName=".Main.MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
@@ -65,6 +70,9 @@
         </activity>
         <activity
             android:name=".WebtoonViewer.WebtoonViewerActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
             android:parentActivityName=".WebtoonContentsList.WebtoonContentsListActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
@@ -72,27 +80,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".WebtoonContentsList.WebtoonContentsListActivity" />
         </activity>
-
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/fb_login_protocol_scheme" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </activity>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
     </application>
 
 </manifest>

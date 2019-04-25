@@ -1,5 +1,6 @@
 package com.example.myfirstapp;
 
+import com.example.myfirstapp.Login.Entities.RequestLoginData;
 import com.example.myfirstapp.Login.Entities.ResponseLoginData;
 import com.example.myfirstapp.Main.Entities.ResponseMyWebtoonListData;
 import com.example.myfirstapp.Main.Entities.ResponseWebtoonListData;
@@ -11,6 +12,7 @@ import com.example.myfirstapp.WebtoonComment.Entities.RequestAddCommentData;
 import com.example.myfirstapp.WebtoonComment.Entities.RequestCommentNoData;
 import com.example.myfirstapp.WebtoonComment.Entities.ResponseAddCommentData;
 import com.example.myfirstapp.WebtoonComment.Entities.ResponseCommentBehaviorData;
+import com.example.myfirstapp.WebtoonSearch.Entities.ResponseWebtoonSearchData;
 import com.example.myfirstapp.WebtoonViewer.Entities.ResponseAddLikeContentData;
 import com.example.myfirstapp.WebtoonComment.Entities.ResponseCommentData;
 import com.example.myfirstapp.common.Entities.RequestComicNoData;
@@ -42,9 +44,9 @@ public interface SoftcomicsService {
     @HTTP(method = "DELETE", path = "/user", hasBody = true)
     Call<ResponseWithdrawalData> withdrawal(@Body RequestWithdrawalData requestWithdrawalData);
 
-    //API 3번 로그인
-    @GET("/token/{id}/{pw}")
-    Call<ResponseLoginData> login(@Path("id") String id, @Path("pw") String pw);
+    //API 22번 로그인
+    @POST("/user/fcm")
+    Call<ResponseLoginData> login(@Body RequestLoginData requestLoginData);
 
     //API 4번 마이 관심웹툰리스트 보기
     @GET("/my/comic/list")
@@ -61,6 +63,10 @@ public interface SoftcomicsService {
     //API 7번 웹툰 좋아요 누르기
     @POST("/comic/like")
     Call<ResponseAddLikeWebtoonData> addLikeWebtoon(@Body RequestComicNoData requestComicNoData);
+
+    //API 8번 웹툰 검색
+    @GET("/comics/{input}")
+    Call<ResponseWebtoonSearchData> getSearchResult(@Path("input") String query);
 
     //API 9번 웹툰 컨텐츠 보기
     @GET("/comic/contentAll/{comicno}")

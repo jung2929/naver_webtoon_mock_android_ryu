@@ -12,6 +12,7 @@ import com.example.myfirstapp.R;
 import com.example.myfirstapp.ViewHolder.ContentViewViewHolder;
 import com.example.myfirstapp.WebtoonViewer.Entities.WebtoonContentViewData;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class ContentViewAdapter extends BaseAdapter {
@@ -59,7 +60,13 @@ public class ContentViewAdapter extends BaseAdapter {
         } else {
             holder = (ContentViewViewHolder) convertView.getTag();
         }
-        Glide.with(context).load(baseURL + item.getContentContent()).into(holder.content);
+        try {
+            String encodeURL = URLEncoder.encode(baseURL + item.getContentContent(), "UTF-8");
+            Glide.with(context)
+                    .load(encodeURL)
+                    .into(holder.content);
+        } catch (Exception e) {
+        }
         return convertView;
     }
 }

@@ -22,6 +22,8 @@ public class Singleton extends Application {
 
     public static ArrayList<WebtoonData> webtoonList = new ArrayList<>();
 
+    public static boolean isStartActivity = false;
+
 
     private static volatile Singleton instance = null;
 
@@ -33,6 +35,8 @@ public class Singleton extends Application {
         return SingletonHolder.INSTANCE;
     }
 
+    public static
+    MyFirebaseMessagingService firebaseMessagingService;
 
     public static Retrofit softRetrofit;
     public static SoftcomicsService softcomicsService;
@@ -59,6 +63,8 @@ public class Singleton extends Application {
 
         //requestPost();
 
+        //fcm
+        firebaseMessagingService = new MyFirebaseMessagingService();
     }
 
     public class AddHeaderInterceptor implements Interceptor {

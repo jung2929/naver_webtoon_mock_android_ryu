@@ -1,17 +1,27 @@
 package com.example.myfirstapp.Main;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myfirstapp.Main.Entities.MenuTabItem;
 import com.example.myfirstapp.NonSwipeableViewPager;
 import com.example.myfirstapp.Main.Adpater.MainPagerAdapter;
 import com.example.myfirstapp.R;
+import com.example.myfirstapp.Singleton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,12 +38,11 @@ public class MainActivity extends AppCompatActivity {
         init();
         setMenuTabLayout();
         setMainViewPager();
-
     }
     @Override
     protected void onResume() {
         super.onResume();
-
+        Singleton.isStartActivity = false;
     }
     private void init(){
         menuTabLayout= findViewById(R.id.main_menu_tab);

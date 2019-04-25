@@ -80,7 +80,6 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webtoon_contents_list);
-
         init();
         requestGetWebtoonContentsList();
         setContentsListView();
@@ -89,6 +88,12 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         requestGetFirstStory();
         setBackButton();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Singleton.isStartActivity = false;
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -152,6 +157,10 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             list.get(i).setRead(read);
         }
         contentsList.addAll(list);
+        if(contentsList.size()==0){
+            isSendPagingRequest = true;
+            return;
+        }
         mLastContentNo = contentsList.get(contentsList.size() - 1).getContentNo();
         webtoonContentsAdapter.setDataList(contentsList);
       //  setListViewHeightBasedOnChildren(listView);
@@ -251,6 +260,11 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
     }
 
     private void toWebtoonViewerActivity(WebtoonContentsData contentData) {
+        if(Singleton.isStartActivity){
+            return;
+        }
+        Singleton.isStartActivity = true;
+
         Intent intent = new Intent(WebtoonContentsListActivity.this, WebtoonViewerActivity.class);
         contentData.setRead(true);
         WebtoonDataSharedPreferenceEdit.putBoolean(contentData.getContentNo() + "", true);//ContentNo은 primary key임

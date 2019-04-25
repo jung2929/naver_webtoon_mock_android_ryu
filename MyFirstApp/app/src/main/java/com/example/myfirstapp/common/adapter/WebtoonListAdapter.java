@@ -13,6 +13,7 @@ import com.example.myfirstapp.R;
 import com.example.myfirstapp.ViewHolder.WebtoonDataViewHolder;
 import com.example.myfirstapp.common.Entities.WebtoonData;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /***************************
@@ -30,6 +31,8 @@ public class WebtoonListAdapter extends BaseAdapter {
     private int webtoonNum, layout;
     private int viewType;
 
+    private String baseURL;
+
     public WebtoonListAdapter(Context context, ArrayList<WebtoonData> list, int layoutID, int viewType) {
         this.webtoonNum = 0;
         this.list = list;
@@ -37,6 +40,7 @@ public class WebtoonListAdapter extends BaseAdapter {
         this.layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.viewType = viewType;
         this.context = context;
+        baseURL = context.getResources().getString(R.string.softcomics_url);
     }
 
     public ArrayList<String> getWebtoonNames() {
@@ -53,11 +57,6 @@ public class WebtoonListAdapter extends BaseAdapter {
         }
         this.notifyDataSetChanged();
     }
-
-    public void clear() {
-        list.clear();
-    }
-
     @Override
     public int getCount() {
         if (list == null) {
@@ -126,10 +125,14 @@ public class WebtoonListAdapter extends BaseAdapter {
             holder = (WebtoonDataViewHolder) convertView.getTag();
         }
 
-        if (item.getThumbnail() != null)
-            Glide.with(context)
-                    .load(item.getThumbnail())
-                    .into(holder.thumbnail);
+        if (item.getThumbnail() != null) {
+            try {
+                String encodeURL = URLEncoder.encode(baseURL + item.getThumbnail(), "UTF-8");
+                Glide.with(context)
+                        .load(encodeURL)
+                        .into(holder.thumbnail);
+            }catch (Exception e){}
+        }
         else
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
 

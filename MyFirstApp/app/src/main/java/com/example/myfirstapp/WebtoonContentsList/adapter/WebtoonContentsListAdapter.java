@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /***************************
@@ -20,14 +21,15 @@ import java.util.ArrayList;
  *WebtoonContentsListActivity
  ***************************/
 public class WebtoonContentsListAdapter extends BaseAdapter {
-    Context context;
-    ArrayList<WebtoonContentsData> webtoonContentsDataList;
-    LayoutInflater layoutInflater;
-
+    private Context context;
+    private ArrayList<WebtoonContentsData> webtoonContentsDataList;
+    private LayoutInflater layoutInflater;
+    private String baseURL;
     public WebtoonContentsListAdapter(Context context, ArrayList<WebtoonContentsData> list) {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.webtoonContentsDataList = list;
         this.context = context;
+        baseURL =context.getResources().getString(R.string.softcomics_url);
     }
 
     public void setDataList(ArrayList<WebtoonContentsData> list) {
@@ -81,11 +83,17 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
         }
 
 
-        if (item.getContentImg().equals(""))//이미지가 없을 때
+        if (item.getContentImg().equals("")) {//이미지가 없을 때
             holder.thumbnail.setImageResource(R.drawable.thumbnail_not_loaded);
-        else Glide.with(context)
-                .load(item.getContentImg())
-                .into(holder.thumbnail);
+        }
+        else {
+            try {
+                String encodeURL = URLEncoder.encode(item.getContentImg(), "UTF-8");
+                Glide.with(context)
+                        .load(baseURL+encodeURL)
+                        .into(holder.thumbnail);
+            }catch (Exception e){}
+        }
 
         holder.title.setText(item.getContentName());
         holder.date.setText(item.getContentDate());

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.Login.LoginActivity;
 import com.example.myfirstapp.MemberInformation.MemberInformationActivity;
+import com.example.myfirstapp.Singleton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +73,10 @@ public class SettingTabFragment extends Fragment {
         tvGotoLoginInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Singleton.isStartActivity){
+                    return;
+                }
+                Singleton.isStartActivity = true;
                 Intent intent;
                 if (loggedIn == false) {//비로그인 상태
                     intent = new Intent(getContext(), LoginActivity.class);

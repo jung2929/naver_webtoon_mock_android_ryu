@@ -57,7 +57,10 @@
         <ListView
             android:id="@+id/result_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:divider="@color/colorBorder"
+            android:dividerHeight="1dp"
+            />
 
     </FrameLayout>
 </LinearLayout>

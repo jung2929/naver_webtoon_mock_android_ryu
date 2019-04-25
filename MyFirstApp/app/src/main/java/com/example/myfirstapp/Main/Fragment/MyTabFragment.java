@@ -138,16 +138,23 @@ public class MyTabFragment extends Fragment {
         }
     }
 
+    private void toWebtoonContentsListActivity(final ListView listView, final int position){
+        if(Singleton.isStartActivity){
+            return;
+        }
+        Singleton.isStartActivity = true;
+        WebtoonData item = (WebtoonData) listView.getItemAtPosition(position);
+        if (item.isNone()) return;
+        Intent intent = new Intent(getContext(), WebtoonContentsListActivity.class);
+        intent.putExtra("comic", item);
+        startActivity(intent);
+    }
     private void tabListViewSetting(@NotNull ListView listView, final int tabIndex) {
         listView.setAdapter(webtoonListAdapter[tabIndex]);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                WebtoonData item = (WebtoonData) listView.getItemAtPosition(position);
-                if (item.isNone()) return;
-                Intent intent = new Intent(getContext(), WebtoonContentsListActivity.class);
-                intent.putExtra("comic", item);
-                startActivity(intent);
+             toWebtoonContentsListActivity(listView, position);
             }
         });
     }
