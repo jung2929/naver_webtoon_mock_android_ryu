@@ -85,7 +85,6 @@ public class CommentListAdapter extends BaseAdapter {
                 if (response.isSuccessful()) {
                     switch (response.body().getCode()) {
                         case 100://성공
-                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
                             if(like){
                                 borderLayout.setBackgroundResource(R.drawable.button_liked);
                                 textViewLike.setTextColor(context.getResources().getColor(R.color.colorWebtoonRating));
@@ -122,7 +121,6 @@ public class CommentListAdapter extends BaseAdapter {
                 if (response.isSuccessful()) {
                     switch (response.body().getCode()) {
                         case 100://성공
-                            Toast.makeText(context, response.body().getMessage() + "", Toast.LENGTH_SHORT).show();
                             commentList.remove(position);
                             notifyDataSetChanged();
                             break;

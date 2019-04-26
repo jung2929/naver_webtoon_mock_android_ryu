@@ -10,6 +10,12 @@ public class ResponseWebtoonContentViewData extends ResponseBaseData {
     @SerializedName("result")
     @Expose
     private List<WebtoonContentViewData> result = null;
+    @SerializedName("check")
+    @Expose
+    private int check;
+    @SerializedName("comment")
+    @Expose
+    private int comment;
 
     public ResponseWebtoonContentViewData(Integer code, String message, List<WebtoonContentViewData> result) {
         super(code, message);
@@ -20,7 +26,11 @@ public class ResponseWebtoonContentViewData extends ResponseBaseData {
         return result;
     }
 
-    public void setResult(List<WebtoonContentViewData> result) {
-        this.result = result;
+    public int getCheck() {
+        return check;
+    }
+
+    public int getComment() {
+        return comment;
     }
 }

@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.myfirstapp.R;
 import com.example.myfirstapp.Singleton;
 import com.example.myfirstapp.WebtoonComment.WebtoonCommentActivity;
-import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
+import com.example.myfirstapp.common.Entities.WebtoonContentsData;
 import com.example.myfirstapp.WebtoonViewer.Adapter.ContentViewAdapter;
 import com.example.myfirstapp.WebtoonViewer.Entities.RequestPutRatingData;
 import com.example.myfirstapp.WebtoonViewer.Entities.ResponseAddLikeContentData;
@@ -47,6 +47,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
     private RatingBar rbDisableRatingBar;
     private TextView tvRatingPoint;
     private TextView tvLikeNum;
+    private TextView tvCommentNum;
 
     private ListView lvViewer;
     private ContentViewAdapter contentViewAdapter;
@@ -65,6 +66,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
         tvRatingPoint = findViewById(R.id.webtoon_viewer_rating_point);
         lvViewer = findViewById(R.id.webtoon_viewer_list_view);
         tvLikeNum = findViewById(R.id.webtoon_viewer_like_num);
+        tvCommentNum = findViewById(R.id.webtoon_viewer_comment_num);
 
         webtoonImageDataList = new ArrayList<>();
         contentViewAdapter = new ContentViewAdapter(context, webtoonImageDataList, getString(R.string.softcomics_url));
@@ -98,8 +100,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
 
         context = this;
         init();
-        getContentImage();
-        setContentLike(content.getContentHeart());
+        requestGetContentViewData();
 
     }
     private void setContentLike(int like){
@@ -230,7 +231,7 @@ public class WebtoonViewerActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void getContentImage() {
+    private void requestGetContentViewData() {
         Call<ResponseWebtoonContentViewData> getImage = Singleton.softcomicsService.getContentImage(5);
         getImage.enqueue(new Callback<ResponseWebtoonContentViewData>() {
             @Override
@@ -242,6 +243,11 @@ public class WebtoonViewerActivity extends AppCompatActivity {
                                 List<WebtoonContentViewData> imageList = response.body().getResult();
                                 webtoonImageDataList = new ArrayList<>(imageList);
                                 contentViewAdapter.setData(webtoonImageDataList);
+
+                                content.setCheck(response.body().getCheck());
+                                setContentLike(content.getContentHeart());
+
+                                tvCommentNum.setText(response.body().getComment()+"");
                             } catch (Exception e) {
                                 Toast.makeText(context, "불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                             }

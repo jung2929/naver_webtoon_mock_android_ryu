@@ -65,9 +65,11 @@
             >
 
             <ImageView
+                android:id="@+id/webtoon_contentslist_like_image"
                 android:layout_width="30dp"
                 android:layout_height="27dp"
                 android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_like_unchecked" />
 
             <TextView

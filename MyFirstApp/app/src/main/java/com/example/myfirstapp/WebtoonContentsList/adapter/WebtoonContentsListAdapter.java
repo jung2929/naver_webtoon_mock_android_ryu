@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfirstapp.R;
-import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
+import com.example.myfirstapp.common.Entities.WebtoonContentsData;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -24,12 +24,10 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<WebtoonContentsData> webtoonContentsDataList;
     private LayoutInflater layoutInflater;
-    private String baseURL;
     public WebtoonContentsListAdapter(Context context, ArrayList<WebtoonContentsData> list) {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.webtoonContentsDataList = list;
         this.context = context;
-        baseURL =context.getResources().getString(R.string.softcomics_url);
     }
 
     public void setDataList(ArrayList<WebtoonContentsData> list) {
@@ -90,7 +88,7 @@ public class WebtoonContentsListAdapter extends BaseAdapter {
             try {
                 String encodeURL = URLEncoder.encode(item.getContentImg(), "UTF-8");
                 Glide.with(context)
-                        .load(baseURL+encodeURL)
+                        .load(encodeURL)
                         .into(holder.thumbnail);
             }catch (Exception e){}
         }

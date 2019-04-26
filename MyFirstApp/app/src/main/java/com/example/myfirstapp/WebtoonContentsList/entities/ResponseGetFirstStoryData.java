@@ -1,6 +1,7 @@
 package com.example.myfirstapp.WebtoonContentsList.Entities;
 
 import com.example.myfirstapp.baseClass.ResponseBaseData;
+import com.example.myfirstapp.common.Entities.WebtoonContentsData;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

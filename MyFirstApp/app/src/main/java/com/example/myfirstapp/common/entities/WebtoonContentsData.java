@@ -1,4 +1,4 @@
-package com.example.myfirstapp.WebtoonContentsList.Entities;
+package com.example.myfirstapp.common.Entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -39,8 +39,6 @@ public class WebtoonContentsData implements Serializable {
     private String contentRating;
 
     //좋아요 눌렀는지 확인
-    @SerializedName("check")
-    @Expose
     private int check;
 
     private boolean isRead;

@@ -3,6 +3,7 @@ package com.example.myfirstapp.WebtoonContentsList.Entities;
 import java.util.List;
 
 import com.example.myfirstapp.baseClass.ResponseBaseData;
+import com.example.myfirstapp.common.Entities.WebtoonContentsData;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +12,9 @@ public class ResponseWebtoonContentsListData extends ResponseBaseData {
     @SerializedName("result")
     @Expose
     private List<WebtoonContentsData> result = null;
-
+    @SerializedName("check")
+    @Expose
+    private int check;
     /**
      * @param message
      * @param result
@@ -30,4 +33,7 @@ public class ResponseWebtoonContentsListData extends ResponseBaseData {
         return result;
     }
 
+    public int getCheck() {
+        return check;
+    }
 }

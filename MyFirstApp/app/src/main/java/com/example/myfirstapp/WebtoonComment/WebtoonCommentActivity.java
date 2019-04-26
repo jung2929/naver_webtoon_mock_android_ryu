@@ -20,7 +20,7 @@ import com.example.myfirstapp.WebtoonComment.Adapter.CommentTypePagerAdapter;
 import com.example.myfirstapp.WebtoonComment.Entities.CommentData;
 import com.example.myfirstapp.WebtoonComment.Entities.RequestAddCommentData;
 import com.example.myfirstapp.WebtoonComment.Entities.ResponseAddCommentData;
-import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
+import com.example.myfirstapp.common.Entities.WebtoonContentsData;
 
 import java.util.ArrayList;
 

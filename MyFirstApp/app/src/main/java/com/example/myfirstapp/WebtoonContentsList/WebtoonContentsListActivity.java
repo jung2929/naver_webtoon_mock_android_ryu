@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -31,7 +30,7 @@ import com.example.myfirstapp.WebtoonViewer.WebtoonViewerActivity;
 import com.example.myfirstapp.WebtoonContentsList.Adapter.WebtoonContentsListAdapter;
 import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseAddAttentionWebtoonData;
 import com.example.myfirstapp.WebtoonContentsList.Entities.ResponseWebtoonContentsListData;
-import com.example.myfirstapp.WebtoonContentsList.Entities.WebtoonContentsData;
+import com.example.myfirstapp.common.Entities.WebtoonContentsData;
 import com.example.myfirstapp.common.Entities.WebtoonData;
 
 import java.io.IOException;
@@ -90,12 +89,6 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Singleton.isStartActivity = false;
-    }
-
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -129,6 +122,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
         tvToFirstStory = findViewById(R.id.text_view_first_story);
         back = findViewById(R.id.btn_back_webtoon_list);
         progressBar = findViewById(R.id.webtoon_contentslist_progressbar);
+        ivLike = findViewById(R.id.webtoon_contentslist_like_image);
 
         webtoonContentsAdapter = new WebtoonContentsListAdapter(this, contentsList);
 
@@ -157,13 +151,21 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             list.get(i).setRead(read);
         }
         contentsList.addAll(list);
-        if(contentsList.size()==0){
+        if (contentsList.size() == 0) {
             isSendPagingRequest = true;
             return;
         }
         mLastContentNo = contentsList.get(contentsList.size() - 1).getContentNo();
         webtoonContentsAdapter.setDataList(contentsList);
-      //  setListViewHeightBasedOnChildren(listView);
+        //  setListViewHeightBasedOnChildren(listView);
+    }
+
+    private void setComicLikeImage() {
+        if (comic.getCheck() == 1) {
+            ivLike.setImageResource(R.drawable.ic_like_checked);
+        } else {
+            ivLike.setImageResource(R.drawable.ic_like_unchecked);
+        }
     }
 
     private void requestGetWebtoonContentsList() {
@@ -177,6 +179,8 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                         case 100://성공
                             List<WebtoonContentsData> list = response.body().getResult();
                             setReadTagAndSyncWithAdapter(list);
+                            comic.setCheck(response.body().getCheck());
+                            setComicLikeImage();
                             break;
                         default:
                             Toast.makeText(WebtoonContentsListActivity.this, "에러코드 : " + response.body().getCode(), Toast.LENGTH_SHORT).show();
@@ -226,6 +230,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setContentsListView() {
         listView.setAdapter(webtoonContentsAdapter);
         listView.setClickable(true);
@@ -260,7 +265,7 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
     }
 
     private void toWebtoonViewerActivity(WebtoonContentsData contentData) {
-        if(Singleton.isStartActivity){
+        if (Singleton.isStartActivity) {
             return;
         }
         Singleton.isStartActivity = true;
@@ -329,11 +334,11 @@ public class WebtoonContentsListActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             switch (response.body().getCode()) {
                                 case 100://성공
-                                    alert.setMessage(response.body().getMessage());
-                                    alert.show();
+                                    comic.setCheck((comic.getCheck()+1)%2);
+                                    setComicLikeImage();
                                     break;
                                 default:
-                                    alert.setMessage("에러코드 " + response.body().getCode() + " : " + response.body().getMessage());
+                                    alert.setMessage(response.body().getCode() + " : " + response.body().getMessage());
                                     alert.show();
                             }
                         } else {

@@ -31,7 +31,6 @@ public class WebtoonListAdapter extends BaseAdapter {
     private int webtoonNum, layout;
     private int viewType;
 
-    private String baseURL;
 
     public WebtoonListAdapter(Context context, ArrayList<WebtoonData> list, int layoutID, int viewType) {
         this.webtoonNum = 0;
@@ -40,7 +39,6 @@ public class WebtoonListAdapter extends BaseAdapter {
         this.layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         this.viewType = viewType;
         this.context = context;
-        baseURL = context.getResources().getString(R.string.softcomics_url);
     }
 
     public ArrayList<String> getWebtoonNames() {
@@ -127,7 +125,7 @@ public class WebtoonListAdapter extends BaseAdapter {
 
         if (item.getThumbnail() != null) {
             try {
-                String encodeURL = URLEncoder.encode(baseURL + item.getThumbnail(), "UTF-8");
+                String encodeURL = URLEncoder.encode(item.getThumbnail(), "UTF-8");
                 Glide.with(context)
                         .load(encodeURL)
                         .into(holder.thumbnail);
